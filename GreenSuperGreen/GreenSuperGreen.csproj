@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{31F7CF88-4A1A-499B-98BF-07D02615D7F5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GreenSuperGreen</RootNamespace>
+    <AssemblyName>GreenSuperGreen</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Console\ConsoleUC.cs" />
+    <Compile Include="Contexts\ExecutionContextExtensions\ExecutionContextExtensions.cs" />
+    <Compile Include="Async\ICompletionUC\CompletionFromTaskUC.Generic.cs" />
+    <Compile Include="Async\ICompletionUC\CompletionFromTaskUC.cs" />
+    <Compile Include="Async\ICompletionUC\CompletionUC.FromTask.cs" />
+    <Compile Include="Async\ICompletionUC\CompletionUC.FromExceptionWithResult.cs" />
+    <Compile Include="Async\ICompletionUC\CompletionUC.FromException.cs" />
+    <Compile Include="Async\ICompletionUC\ExceptionCompletionUC.Generic.cs" />
+    <Compile Include="Async\ICompletionUC\ExceptionCompletionUC.cs" />
+    <Compile Include="Async\ICompletionUC\CompletedCompletionUC.Generic.cs" />
+    <Compile Include="Async\ICompletionUC\CompletedCompletionUC.cs" />
+    <Compile Include="Async\ICompletionUC\CompletionUC.FromResult.cs" />
+    <Compile Include="Async\ICompletionUC\CompletionUC.Completed.cs" />
+    <Compile Include="Async\ICompletionUC\ACompletionUC.Generic.cs" />
+    <Compile Include="Async\ICompletionUC\ACompletionUC.cs" />
+    <Compile Include="Async\ICompletionUC\ICompletionUC.Generic.cs" />
+    <Compile Include="Async\ICompletionUC\ICompletionUC.cs" />
+    <Compile Include="Async\ISimpleCompletionUC\ISimpleCompletionUC.cs" />
+    <Compile Include="Diagnostics\DiagnosticsUC.cs" />
+    <Compile Include="Diagnostics\PerfCounters\IPerfCounterCollectorUC.cs" />
+    <Compile Include="Diagnostics\PerfCounters\IPerfCounterUC.cs" />
+    <Compile Include="Exceptions\StackTraceExceptionUC\StackTraceExceptionUC.cs" />
+    <Compile Include="GeneralExtensions\Assign\AssignGeneralExtensions.Assign.cs" />
+    <Compile Include="IdentifierGenerators\IUniqueID\AUniqueID.cs" />
+    <Compile Include="IdentifierGenerators\IUniqueID\IUniqueID.cs" />
+    <Compile Include="IdentifierGenerators\IUniqueID\UniqueID.cs" />
+    <Compile Include="Diagnostics\PerfCounters\PerfCounterTypeUC.cs" />
+    <Compile Include="Diagnostics\PerfCounters\ProcessorTimePerfCounterUC.cs" />
+    <Compile Include="Queues\IEnqueuedCompletionUC\EnqueuedCompletionUC.cs" />
+    <Compile Include="Queues\IEnqueuedCompletionUC\IEnqueuedCompletionUC.cs" />
+    <Compile Include="Queues\PriorityQueues\IPriorityQueueNotifierUC\IPriorityQueueNotifierUC.cs" />
+    <Compile Include="Queues\PriorityQueues\IPriorityQueueUC\IPriorityQueueUC.cs" />
+    <Compile Include="Queues\PriorityQueues\IPriorityQueueUC\PriorityQueueUC.cs" />
+    <Compile Include="Queues\PriorityQueues\IPriorityQueueNotifierUC\PriorityQueueNotifierUC.cs" />
+    <Compile Include="Queues\PriorityQueues\PriorityEnumCheckerUC\PriorityEnumCheckerUC.cs" />
+    <Compile Include="Reporting\ReportUC\ReportUC.cs" />
+    <Compile Include="Sequencing\ConditionalCheckUC\ConditionalCheckUC.cs" />
+    <Compile Include="Sequencing\ISequencerPointUC\SeqPointTypeUC.Enum.cs" />
+    <Compile Include="Sequencing\ICompletionUC\IProductionPointUC\SeqContinuationUC.Enum.cs" />
+    <Compile Include="Sequencing\ICompletionUC\IProductionPointUC\ProductionPointUC.cs" />
+    <Compile Include="Sequencing\ICompletionUC\IProductionPointUC\IProductionPointUC.cs" />
+    <Compile Include="Sequencing\ICompletionUC\ITestPointUC\TestPointUCc.cs" />
+    <Compile Include="Sequencing\ICompletionUC\ITestPointUC\ITestPointUC.cs" />
+    <Compile Include="Sequencing\ISequencerPointUC\ASequencerPointUC.cs" />
+    <Compile Include="Sequencing\ISequencerStrategyUC\StrategyOneOnOneUC.cs" />
+    <Compile Include="Sequencing\ISequencerStrategyUC\ASequencerStrategyUC.cs" />
+    <Compile Include="Sequencing\ISequencerStrategyUC\ISequencerStrategyUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\CompletedSequencerEventUC\CompletedSequencerEventUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\ConditionalSequencerUC\ConditionalSequencerUC.Throw.cs" />
+    <Compile Include="Sequencing\ISequencerUC\ISequencerExceptionRegister\ISequencerExceptionRegister.cs" />
+    <Compile Include="Sequencing\ISequencerUC\ISequencerExceptionRegister\SequencerExceptionRegister.cs" />
+    <Compile Include="Sequencing\ISequencerUC\ConditionalSequencerUC\ConditionalSequencerUC.Point.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.PointAsync.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Throw.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.WhenAll.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.TryReThrowException.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Run.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Point.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.TestPointAsync.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Register.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerRegisterUC\ISequencerEventMapperUC\SequencerEventMapperUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerRegisterUC\ISequencerEventMapperUC\ISequencerEventMapperUC.cs" />
+    <Compile Include="Sequencing\ISequencerPointUC\ISequencerPointUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerRegisterUC\ISequencerEventTypeMapperUC\ISequencerEventTypeMapperUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerRegisterUC\ISequencerEventTypeMapperUC\SequencerEventTypeMapperUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\ISequencerTaskRegister\SequencerTaskRegister.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerRegisterUC\SequencerRegisterUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.CompletedAwaiter.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Construct.cs" />
+    <Compile Include="Sequencing\ISequencerUC\ISequencerUC.cs" />
+    <Compile Include="Sequencing\ISequencerUC\ISequencerTaskRegister\ISequencerTaskRegister.cs" />
+    <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSpinLockUC\AsyncSpinLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncEntryBlockUC.cs" />
+    <Compile Include="UnifiedConcurrency\IAsyncLockUC\IAsyncLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncLockUC\AsyncLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncTicketSpinLockUC\AsyncTicketSpinLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\IEntryCompletionUC\IEntryCompletion.cs" />
+    <Compile Include="UnifiedConcurrency\IEntryBlockUC\EntryBlockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\ISimpleLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\IEntryBlockUC\IEntryBlockUC.cs" />
+    <Compile Include="UnifiedConcurrency\IEntryBlockUC\EntryTypeUC.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockCancellableUC\LockCancellableUC.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockUC\LockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockCancellableUC\SpinLockCancellableUC.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\MonitorLockUC\MonitorLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\TicketSpinLockUC\TicketSpinLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\SyncPrimitiveCapabilityUC\SyncPrimitiveCapabilityUC.Enum.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockCancellableUC\ReadMe.txt" />
+    <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
