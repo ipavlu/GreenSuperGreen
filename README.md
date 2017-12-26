@@ -1,5 +1,3 @@
-# GreenSuperGreen
-
 1) Unified Concurrency
 The main mission is to unify usage of heterogeneous synchronization primitives with interface/pattern based Object Oriented approach. Switching between multiple synchronization primitives with one code line change! Agile Development ready solution to synchronization. Easy upgrade from general threading to async/await thanks to the pattern based design! Reduced code complexity. Easy correctness testing. Simplified performance optimization. Currently implemented synchronization primitives cover:
 - wrapper for the .Net SpinLock,
