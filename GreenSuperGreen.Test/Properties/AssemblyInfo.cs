@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FFastFill.UnifiedConcurrency.Test")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("GreenSuperGreen.Test")]
+[assembly: AssemblyDescription("GreenSuperGreen.Test")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FFastFill.UnifiedConcurrency.Test")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("ipavlu")]
+[assembly: AssemblyProduct("GreenSuperGreen.Test")]
+[assembly: AssemblyCopyright("Copyright © ipavlu 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

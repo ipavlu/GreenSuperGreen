@@ -9,7 +9,6 @@ using GreenSuperGreen.Diagnostics;
 using GreenSuperGreen.Queues;
 using GreenSuperGreen.Reporting;
 using GreenSuperGreen.UnifiedConcurrency;
-using NUnit.Framework;
 
 // ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable LoopCanBeConvertedToQuery
@@ -49,7 +48,7 @@ namespace GreenSuperGreen.Benchmarking
 
 	public static class BenchTest
 	{
-		public static Action<string> WriteContext = TestContext.WriteLine;
+		public static Action<string> WriteContext = System.Console.WriteLine;
 		public static void WriteLine(this string msg) => WriteContext?.Invoke(msg);
 
 		private static IDictionary<string, BenchInfo> Tests { get; } = new[]
