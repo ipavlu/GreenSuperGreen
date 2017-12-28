@@ -64,15 +64,28 @@ namespace GreenSuperGreen.Queues
 		}
 
 		/// <summary>
-		/// With multiple readers this servers only as notification about Enquing data
-		/// or already enqueued data, but other readers could be faster to get the data.
-		/// Thus for some readers queues could be already empty.
+		/// Use only with TryDequeue without overridden priority!
+		/// Awaitable returns completed as long as there are any items for any priority!
 		/// </summary>
 		public ICompletionUC EnqueuedItemsAsync()
 		{
 			using (Lock.Enter())
 			{
 				if (HasItems()) return EnqueuedCompletionUC.AlreadyEnqueued;
+				IEnqueuedCompletionUC enqueued;
+				NotifyQueue.Enqueue(enqueued = new EnqueuedCompletionUC());
+				return enqueued;
+			}
+		}
+
+		/// <summary>
+		/// Use only with TryDequeue with same priority!
+		/// </summary>
+		public ICompletionUC EnqueuedItemsAsync(TPrioritySelectorEnum prioritySelector)
+		{
+			using (Lock.Enter())
+			{
+				if (HasItems(prioritySelector)) return EnqueuedCompletionUC.AlreadyEnqueued;
 				IEnqueuedCompletionUC enqueued;
 				NotifyQueue.Enqueue(enqueued = new EnqueuedCompletionUC());
 				return enqueued;

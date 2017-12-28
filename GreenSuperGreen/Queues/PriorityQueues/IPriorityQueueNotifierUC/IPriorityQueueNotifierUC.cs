@@ -14,5 +14,6 @@ namespace GreenSuperGreen.Queues
 	where TPrioritySelectorEnum : struct
 	{
 		ICompletionUC EnqueuedItemsAsync();
+		ICompletionUC EnqueuedItemsAsync(TPrioritySelectorEnum prioritySelector);
 	}
 }
