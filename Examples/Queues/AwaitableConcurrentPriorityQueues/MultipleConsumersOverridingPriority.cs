@@ -57,16 +57,22 @@ namespace AwaitableConcurrentPriorityQueues
 		{
 			string dequeued;
 
-			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Higher)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Higher);//awaiting first not required, TryDequeue can come first as wel
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Higher)) await pQueue.EnqueuedItemsAsync(QueuePriority.Higher);
 			Assert.AreEqual("1Higher", dequeued);
 
-			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Higher)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Higher);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Higher)) await pQueue.EnqueuedItemsAsync(QueuePriority.Higher);
 			Assert.AreEqual("2Higher", dequeued);
 
-			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Higher)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Higher);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Higher)) await pQueue.EnqueuedItemsAsync(QueuePriority.Higher);
 			Assert.AreEqual("3Higher", dequeued);
 		}
 
@@ -74,16 +80,22 @@ namespace AwaitableConcurrentPriorityQueues
 		{
 			string dequeued;
 
-			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Normal);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync(QueuePriority.Normal);
 			Assert.AreEqual("1Normal", dequeued);
 
-			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Normal);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync(QueuePriority.Normal);
 			Assert.AreEqual("2Normal", dequeued);
 
-			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Normal);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync(QueuePriority.Normal);
 			Assert.AreEqual("3Normal", dequeued);
 		}
 
@@ -91,13 +103,22 @@ namespace AwaitableConcurrentPriorityQueues
 		{
 			string dequeued;
 
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Lower)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Lower);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Lower)) await pQueue.EnqueuedItemsAsync(QueuePriority.Lower);
 			Assert.AreEqual("1Lower", dequeued);
 
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Lower)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Lower);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Lower)) await pQueue.EnqueuedItemsAsync(QueuePriority.Lower);
 			Assert.AreEqual("2Lower", dequeued);
 
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Lower)) await pQueue.EnqueuedItemsAsync();
+			await pQueue.EnqueuedItemsAsync(QueuePriority.Lower);//awaiting first not required, TryDequeue can come first as well
+			//Overriding priority in while cycles with awaiting can come with CPU heavy costs
+			//if TryDequeue priority and EnqueuedItemsAsync priority are different or one method takes default descending priorities and other not
+			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Lower)) await pQueue.EnqueuedItemsAsync(QueuePriority.Lower);
 			Assert.AreEqual("3Lower", dequeued);
 		}
 	}

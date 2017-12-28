@@ -48,35 +48,51 @@ namespace AwaitableConcurrentPriorityQueues
 		{
 			string dequeued;
 
-			//while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync(QueuePriority.Normal);
-			//Assert.AreEqual("1Normal", dequeued);
-
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync();
-			Assert.AreEqual("2Normal", dequeued);
-
-			while (!pQueue.TryDequeu(out dequeued, QueuePriority.Normal)) await pQueue.EnqueuedItemsAsync();
-			Assert.AreEqual("3Normal", dequeued);
-
-
-
-			pQueue.TryDequeu(out dequeued);
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
 			Assert.AreEqual("1Higher", dequeued);
 
-			pQueue.TryDequeu(out dequeued);
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
 			Assert.AreEqual("2Higher", dequeued);
 
-			pQueue.TryDequeu(out dequeued);
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
 			Assert.AreEqual("3Higher", dequeued);
 
 
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
+			Assert.AreEqual("1Normal", dequeued);
 
-			pQueue.TryDequeu(out dequeued);
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
+			Assert.AreEqual("2Normal", dequeued);
+
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
+			Assert.AreEqual("3Normal", dequeued);
+
+
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
 			Assert.AreEqual("1Lower", dequeued);
 
-			pQueue.TryDequeu(out dequeued);
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
 			Assert.AreEqual("2Lower", dequeued);
 
-			pQueue.TryDequeu(out dequeued);
+			await pQueue.EnqueuedItemsAsync();//awaiting first not required, TryDequeue can come first as well
+			//awaiting EnqueuedItemsAsync must match priority with TryDequeue, here default descending order, otherwise CPU cycles can be burned needlesly
+			while (!pQueue.TryDequeu(out dequeued)) await pQueue.EnqueuedItemsAsync();
 			Assert.AreEqual("3Lower", dequeued);
 
 			await Task.CompletedTask;

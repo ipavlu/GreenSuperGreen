@@ -48,6 +48,16 @@ namespace AwaitableConcurrentPriorityQueues
 		{
 			string dequeued;
 
+			pQueue.TryDequeu(out dequeued, QueuePriority.Normal);
+			Assert.AreEqual("1Normal", dequeued);
+
+			pQueue.TryDequeu(out dequeued, QueuePriority.Normal);
+			Assert.AreEqual("2Normal", dequeued);
+
+			pQueue.TryDequeu(out dequeued, QueuePriority.Normal);
+			Assert.AreEqual("3Normal", dequeued);
+
+
 			pQueue.TryDequeu(out dequeued);
 			Assert.AreEqual("1Higher", dequeued);
 
@@ -57,17 +67,7 @@ namespace AwaitableConcurrentPriorityQueues
 			pQueue.TryDequeu(out dequeued);
 			Assert.AreEqual("3Higher", dequeued);
 
-
-			pQueue.TryDequeu(out dequeued);
-			Assert.AreEqual("1Normal", dequeued);
-
-			pQueue.TryDequeu(out dequeued);
-			Assert.AreEqual("2Normal", dequeued);
-
-			pQueue.TryDequeu(out dequeued);
-			Assert.AreEqual("3Normal", dequeued);
-
-
+			
 			pQueue.TryDequeu(out dequeued);
 			Assert.AreEqual("1Lower", dequeued);
 
