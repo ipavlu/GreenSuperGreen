@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Queues", "Queues", "{1037F9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcurrentPriorityQueues", "Examples\Queues\ConcurrentPriorityQueues\ConcurrentPriorityQueues.csproj", "{BDAAE856-5646-4629-8581-27D9C321BDC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwaitableConcurrentPriorityQueues", "Examples\Queues\AwaitableConcurrentPriorityQueues\AwaitableConcurrentPriorityQueues.csproj", "{C81D2520-5E42-4D3A-9F80-D927FC419FA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{BDAAE856-5646-4629-8581-27D9C321BDC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDAAE856-5646-4629-8581-27D9C321BDC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDAAE856-5646-4629-8581-27D9C321BDC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81D2520-5E42-4D3A-9F80-D927FC419FA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81D2520-5E42-4D3A-9F80-D927FC419FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81D2520-5E42-4D3A-9F80-D927FC419FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81D2520-5E42-4D3A-9F80-D927FC419FA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1037F9B2-6409-42A5-BA90-853F608A112D} = {0E073002-86BD-46A6-98EC-68E7CFA76F9D}
 		{BDAAE856-5646-4629-8581-27D9C321BDC9} = {1037F9B2-6409-42A5-BA90-853F608A112D}
+		{C81D2520-5E42-4D3A-9F80-D927FC419FA0} = {1037F9B2-6409-42A5-BA90-853F608A112D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D462E7A6-0681-4AC8-8F89-20D03F33AD82}
