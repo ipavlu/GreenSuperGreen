@@ -122,7 +122,6 @@
     <Compile Include="UnifiedConcurrency\SyncPrimitiveCapabilityUC\SyncPrimitiveCapabilityUC.Enum.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockCancellableUC\ReadMe.txt" />
     <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
