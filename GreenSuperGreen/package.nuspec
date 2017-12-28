@@ -4,63 +4,37 @@
     <!--*-->
     <id>$id$</id>
     <!--*-->
-    <version>1.0.0.2</version>
+    <version>1.0.0.3</version>
     <title>GreenSuperGreen</title>
     <!--*-->
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</licenseUrl>
+	<projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
     <!--
-    <projectUrl></projectUrl>
     <iconUrl></iconUrl>
--->
+    -->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <!--*-->
     <description>
-		https://github.com/ipavlu/GreenSuperGreen
+    1) Unified Concurrency
+    The main mission is to unify usage of heterogeneous synchronization primitives with interface/pattern based Object Oriented approach. Switching between multiple synchronization primitives with one code line change! Agile Development ready solution to synchronization. Easy upgrade from general threading to async/await thanks to the pattern based design! Reduced code complexity. Easy correctness testing. Simplified performance optimization. Currently implemented synchronization primitives cover:
 
-		GreenSuperGreen:
+    - wrapper for the .Net SpinLock,
+    - TicketSpinLock,
+    - Lock replacement of C# lock (Monitor),
+    - wrapper around C# lock (monitor) benchmarking only,
+    - async/await AsyncLock,
+    - async/await AsyncSpinLock,
+    - async/await AsyncTicketSpinLock.
 
-		Unified Concurrency The main mission is to unify usage of heterogeneous synchronization primitives with interface/pattern based Object Oriented approach. Switching between multiple synchronization primitives with one code line change! Agile Development ready solution to synchronization. Easy upgrade from general threading to async/await thanks to the pattern based design! Reduced code complexity. Easy correctness testing. Simplified performance optimization. Currently implemented synchronization primitives cover:
-
-		wrapper for the .Net SpinLock,
-		TicketSpinLock,
-		Lock replacement of C# lock (Monitor),
-		wrapper around C# lock (monitor) benchmarking only,
-		async/await AsyncLock,
-		async/await AsyncSpinLock,
-		async/await AsyncTicketSpinLock.
-		AsyncTesting: SequencerUC A strongly typed Sequencer is a powerful threading or async/await based unit testing tool to simplify and test correctness in asynchronous and/or parallel code. The Sequencer allows to simplify control/detection of one or many testing thread flows and allows to deterministically setup testing scenario from unit test method and optionally inject data into the tested code to ensure required state.
-
-		MIT License
-
-		Copyright (c) 2017 ipavlu
-
-		Permission is hereby granted, free of charge, to any person obtaining a copy
-		of this software and associated documentation files (the "Software"), to deal
-		in the Software without restriction, including without limitation the rights
-		to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-		copies of the Software, and to permit persons to whom the Software is
-		furnished to do so, subject to the following conditions:
-
-		The above copyright notice and this permission notice shall be included in all
-		copies or substantial portions of the Software.
-
-		THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-		IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-		FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-		AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-		LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-		OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-		SOFTWARE.
-
+    2) AsyncTesting SequencerUC
+    A strongly typed Sequencer is a powerful threading or async/await based unit testing tool to simplify and test correctness in asynchronous and/or parallel code. The Sequencer allows to simplify control/detection of one or many testing thread flows and allows to deterministically setup testing scenario from unit test method and optionally inject data into the tested code to ensure required state.
 	</description>
     <!--*-->
-    <releaseNotes>https://github.com/ipavlu/GreenSuperGreen&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;GreenSuperGreen:&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;Unified&amp;#x0020;Concurrency&amp;#x0020;The&amp;#x0020;main&amp;#x0020;mission&amp;#x0020;is&amp;#x0020;to&amp;#x0020;unify&amp;#x0020;usage&amp;#x0020;of&amp;#x0020;heterogeneous&amp;#x0020;synchronization&amp;#x0020;primitives&amp;#x0020;with&amp;#x0020;interface/pattern&amp;#x0020;based&amp;#x0020;Object&amp;#x0020;Oriented&amp;#x0020;approach.&amp;#x0020;Switching&amp;#x0020;between&amp;#x0020;multiple&amp;#x0020;synchronization&amp;#x0020;primitives&amp;#x0020;with&amp;#x0020;one&amp;#x0020;code&amp;#x0020;line&amp;#x0020;change!&amp;#x0020;Agile&amp;#x0020;Development&amp;#x0020;ready&amp;#x0020;solution&amp;#x0020;to&amp;#x0020;synchronization.&amp;#x0020;Easy&amp;#x0020;upgrade&amp;#x0020;from&amp;#x0020;general&amp;#x0020;threading&amp;#x0020;to&amp;#x0020;async/await&amp;#x0020;thanks&amp;#x0020;to&amp;#x0020;the&amp;#x0020;pattern&amp;#x0020;based&amp;#x0020;design!&amp;#x0020;Reduced&amp;#x0020;code&amp;#x0020;complexity.&amp;#x0020;Easy&amp;#x0020;correctness&amp;#x0020;testing.&amp;#x0020;Simplified&amp;#x0020;performance&amp;#x0020;optimization.&amp;#x0020;Currently&amp;#x0020;implemented&amp;#x0020;synchronization&amp;#x0020;primitives&amp;#x0020;cover:&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;wrapper&amp;#x0020;for&amp;#x0020;the&amp;#x0020;.Net&amp;#x0020;SpinLock,&amp;#x000D;&amp;#x000A;TicketSpinLock,&amp;#x000D;&amp;#x000A;Lock&amp;#x0020;replacement&amp;#x0020;of&amp;#x0020;C#&amp;#x0020;lock&amp;#x0020;(Monitor),&amp;#x000D;&amp;#x000A;wrapper&amp;#x0020;around&amp;#x0020;C#&amp;#x0020;lock&amp;#x0020;(monitor)&amp;#x0020;benchmarking&amp;#x0020;only,&amp;#x000D;&amp;#x000A;async/await&amp;#x0020;AsyncLock,&amp;#x000D;&amp;#x000A;async/await&amp;#x0020;AsyncSpinLock,&amp;#x000D;&amp;#x000A;async/await&amp;#x0020;AsyncTicketSpinLock.&amp;#x000D;&amp;#x000A;AsyncTesting:&amp;#x0020;SequencerUC&amp;#x0020;A&amp;#x0020;strongly&amp;#x0020;typed&amp;#x0020;Sequencer&amp;#x0020;is&amp;#x0020;a&amp;#x0020;powerful&amp;#x0020;threading&amp;#x0020;or&amp;#x0020;async/await&amp;#x0020;based&amp;#x0020;unit&amp;#x0020;testing&amp;#x0020;tool&amp;#x0020;to&amp;#x0020;simplify&amp;#x0020;and&amp;#x0020;test&amp;#x0020;correctness&amp;#x0020;in&amp;#x0020;asynchronous&amp;#x0020;and/or&amp;#x0020;parallel&amp;#x0020;code.&amp;#x0020;The&amp;#x0020;Sequencer&amp;#x0020;allows&amp;#x0020;to&amp;#x0020;simplify&amp;#x0020;control/detection&amp;#x0020;of&amp;#x0020;one&amp;#x0020;or&amp;#x0020;many&amp;#x0020;testing&amp;#x0020;thread&amp;#x0020;flows&amp;#x0020;and&amp;#x0020;allows&amp;#x0020;to&amp;#x0020;deterministically&amp;#x0020;setup&amp;#x0020;testing&amp;#x0020;scenario&amp;#x0020;from&amp;#x0020;unit&amp;#x0020;test&amp;#x0020;method&amp;#x0020;and&amp;#x0020;optionally&amp;#x0020;inject&amp;#x0020;data&amp;#x0020;into&amp;#x0020;the&amp;#x0020;tested&amp;#x0020;code&amp;#x0020;to&amp;#x0020;ensure&amp;#x0020;required&amp;#x0020;state.&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;MIT&amp;#x0020;License&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;Copyright&amp;#x0020;(c)&amp;#x0020;2017&amp;#x0020;ipavlu&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;Permission&amp;#x0020;is&amp;#x0020;hereby&amp;#x0020;granted,&amp;#x0020;free&amp;#x0020;of&amp;#x0020;charge,&amp;#x0020;to&amp;#x0020;any&amp;#x0020;person&amp;#x0020;obtaining&amp;#x0020;a&amp;#x0020;copy&amp;#x000D;&amp;#x000A;of&amp;#x0020;this&amp;#x0020;software&amp;#x0020;and&amp;#x0020;associated&amp;#x0020;documentation&amp;#x0020;files&amp;#x0020;(the&amp;#x0020;"Software"),&amp;#x0020;to&amp;#x0020;deal&amp;#x000D;&amp;#x000A;in&amp;#x0020;the&amp;#x0020;Software&amp;#x0020;without&amp;#x0020;restriction,&amp;#x0020;including&amp;#x0020;without&amp;#x0020;limitation&amp;#x0020;the&amp;#x0020;rights&amp;#x000D;&amp;#x000A;to&amp;#x0020;use,&amp;#x0020;copy,&amp;#x0020;modify,&amp;#x0020;merge,&amp;#x0020;publish,&amp;#x0020;distribute,&amp;#x0020;sublicense,&amp;#x0020;and/or&amp;#x0020;sell&amp;#x000D;&amp;#x000A;copies&amp;#x0020;of&amp;#x0020;the&amp;#x0020;Software,&amp;#x0020;and&amp;#x0020;to&amp;#x0020;permit&amp;#x0020;persons&amp;#x0020;to&amp;#x0020;whom&amp;#x0020;the&amp;#x0020;Software&amp;#x0020;is&amp;#x000D;&amp;#x000A;furnished&amp;#x0020;to&amp;#x0020;do&amp;#x0020;so,&amp;#x0020;subject&amp;#x0020;to&amp;#x0020;the&amp;#x0020;following&amp;#x0020;conditions:&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;The&amp;#x0020;above&amp;#x0020;copyright&amp;#x0020;notice&amp;#x0020;and&amp;#x0020;this&amp;#x0020;permission&amp;#x0020;notice&amp;#x0020;shall&amp;#x0020;be&amp;#x0020;included&amp;#x0020;in&amp;#x0020;all&amp;#x000D;&amp;#x000A;copies&amp;#x0020;or&amp;#x0020;substantial&amp;#x0020;portions&amp;#x0020;of&amp;#x0020;the&amp;#x0020;Software.&amp;#x000D;&amp;#x000A;&amp;#x000D;&amp;#x000A;THE&amp;#x0020;SOFTWARE&amp;#x0020;IS&amp;#x0020;PROVIDED&amp;#x0020;"AS&amp;#x0020;IS",&amp;#x0020;WITHOUT&amp;#x0020;WARRANTY&amp;#x0020;OF&amp;#x0020;ANY&amp;#x0020;KIND,&amp;#x0020;EXPRESS&amp;#x0020;OR&amp;#x000D;&amp;#x000A;IMPLIED,&amp;#x0020;INCLUDING&amp;#x0020;BUT&amp;#x0020;NOT&amp;#x0020;LIMITED&amp;#x0020;TO&amp;#x0020;THE&amp;#x0020;WARRANTIES&amp;#x0020;OF&amp;#x0020;MERCHANTABILITY,&amp;#x000D;&amp;#x000A;FITNESS&amp;#x0020;FOR&amp;#x0020;A&amp;#x0020;PARTICULAR&amp;#x0020;PURPOSE&amp;#x0020;AND&amp;#x0020;NONINFRINGEMENT.&amp;#x0020;IN&amp;#x0020;NO&amp;#x0020;EVENT&amp;#x0020;SHALL&amp;#x0020;THE&amp;#x000D;&amp;#x000A;AUTHORS&amp;#x0020;OR&amp;#x0020;COPYRIGHT&amp;#x0020;HOLDERS&amp;#x0020;BE&amp;#x0020;LIABLE&amp;#x0020;FOR&amp;#x0020;ANY&amp;#x0020;CLAIM,&amp;#x0020;DAMAGES&amp;#x0020;OR&amp;#x0020;OTHER&amp;#x000D;&amp;#x000A;LIABILITY,&amp;#x0020;WHETHER&amp;#x0020;IN&amp;#x0020;AN&amp;#x0020;ACTION&amp;#x0020;OF&amp;#x0020;CONTRACT,&amp;#x0020;TORT&amp;#x0020;OR&amp;#x0020;OTHERWISE,&amp;#x0020;ARISING&amp;#x0020;FROM,&amp;#x000D;&amp;#x000A;OUT&amp;#x0020;OF&amp;#x0020;OR&amp;#x0020;IN&amp;#x0020;CONNECTION&amp;#x0020;WITH&amp;#x0020;THE&amp;#x0020;SOFTWARE&amp;#x0020;OR&amp;#x0020;THE&amp;#x0020;USE&amp;#x0020;OR&amp;#x0020;OTHER&amp;#x0020;DEALINGS&amp;#x0020;IN&amp;#x0020;THE&amp;#x000D;&amp;#x000A;SOFTWARE.&amp;#x000D;&amp;#x000A;</releaseNotes>
+    <releaseNotes></releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>
-    </tags>
-    <dependencies>
-    </dependencies>
+    <tags></tags>
+    <dependencies></dependencies>
   </metadata>
 </package>
