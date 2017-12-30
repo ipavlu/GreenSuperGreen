@@ -41,7 +41,7 @@ namespace GreenSuperGreen.Queues
 		public static bool IsFlaggedEnum => PriorityEnumCheckerUC<TPrioritySelectorEnum>.IsFlaggedEnum;
 		public static void TestEnum() => PriorityEnumCheckerUC<TPrioritySelectorEnum>.TestEnum($"{nameof(PriorityQueueUC<TPrioritySelectorEnum, TItem>)}");
 
-		private TPrioritySelectorEnum[] DescendingPriorities { get; }
+		protected TPrioritySelectorEnum[] DescendingPriorities { get; }
 
 		private
 		Dictionary<TPrioritySelectorEnum, ConcurrentQueue<TItem>> PriorityQueues { get; }

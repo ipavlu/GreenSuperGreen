@@ -1,5 +1,5 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using GreenSuperGreen.Async;
 using GreenSuperGreen.UnifiedConcurrency;
 
@@ -30,9 +30,8 @@ namespace GreenSuperGreen.Queues
 	{
 		private ISimpleLockUC Lock { get; } = new SpinLockUC();
 
-		private ConcurrentQueue<IEnqueuedCompletionUC> NotifyQueue { get; } 
-		= new ConcurrentQueue<IEnqueuedCompletionUC>()
-		;
+		private Queue<IEnqueuedCompletionUC> NotifyAnyPriority { get; } = new Queue<IEnqueuedCompletionUC>();
+		private Dictionary<TPrioritySelectorEnum, Queue<IEnqueuedCompletionUC>> NotifyPriority { get; }
 
 		/// <summary>
 		/// <para/> Concurrent non-blocking priority queue with optional priority based dequeue.
@@ -44,6 +43,7 @@ namespace GreenSuperGreen.Queues
 		public PriorityQueueNotifierUC(IEnumerable<TPrioritySelectorEnum> descendingPriorities)
 			: base(descendingPriorities)
 		{
+			NotifyPriority = DescendingPriorities.ToDictionary(p => p, p => new Queue<IEnqueuedCompletionUC>());
 		}
 
 		/// <summary>
@@ -55,11 +55,12 @@ namespace GreenSuperGreen.Queues
 
 			using (Lock.Enter())
 			{
-				IEnqueuedCompletionUC enqueued;
-				while (NotifyQueue.TryDequeue(out enqueued))
-				{
-					enqueued?.Enqueued();
-				}
+				int iMax = NotifyAnyPriority.Count;
+				for (int i = 0; i < iMax; i++) NotifyAnyPriority.Dequeue()?.Enqueued();
+
+				Queue<IEnqueuedCompletionUC> priorityQueue = NotifyPriority[prioritySelector];
+				iMax = priorityQueue.Count;
+				for (int i = 0; i < iMax; i++) priorityQueue.Dequeue()?.Enqueued();
 			}
 		}
 
@@ -73,7 +74,7 @@ namespace GreenSuperGreen.Queues
 			{
 				if (HasItems()) return EnqueuedCompletionUC.AlreadyEnqueued;
 				IEnqueuedCompletionUC enqueued;
-				NotifyQueue.Enqueue(enqueued = new EnqueuedCompletionUC());
+				NotifyAnyPriority.Enqueue(enqueued = new EnqueuedCompletionUC());
 				return enqueued;
 			}
 		}
@@ -87,7 +88,7 @@ namespace GreenSuperGreen.Queues
 			{
 				if (HasItems(prioritySelector)) return EnqueuedCompletionUC.AlreadyEnqueued;
 				IEnqueuedCompletionUC enqueued;
-				NotifyQueue.Enqueue(enqueued = new EnqueuedCompletionUC());
+				NotifyPriority[prioritySelector].Enqueue(enqueued = new EnqueuedCompletionUC());
 				return enqueued;
 			}
 		}

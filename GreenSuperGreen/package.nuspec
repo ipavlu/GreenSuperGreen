@@ -4,7 +4,7 @@
     <!--*-->
     <id>$id$</id>
     <!--*-->
-    <version>1.0.0.3</version>
+    <version>1.0.0.4</version>
     <title>GreenSuperGreen</title>
     <!--*-->
     <authors>$author$</authors>
@@ -32,7 +32,7 @@
     A strongly typed Sequencer is a powerful threading or async/await based unit testing tool to simplify and test correctness in asynchronous and/or parallel code. The Sequencer allows to simplify control/detection of one or many testing thread flows and allows to deterministically setup testing scenario from unit test method and optionally inject data into the tested code to ensure required state.
 	</description>
     <!--*-->
-    <releaseNotes>nuget&amp;#x0020;changes</releaseNotes>
+    <releaseNotes>...</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>
     </tags>
