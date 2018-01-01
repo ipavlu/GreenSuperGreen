@@ -14,7 +14,7 @@ namespace GreenSuperGreen.Async
 	/// it has everything the await keyword needs. Making own awaitable class
 	/// is greatly simplified with <see cref="ACompletionUC{TImplementer}"/>.
 	/// </summary>
-	public interface ICompletionUC : ISimpleCompletionUC, INotifyCompletion, IUniqueID
+	public interface ICompletionUC : ISimpleCompletionUC, INotifyCompletion, ICriticalNotifyCompletion, IUniqueID
 	{
 		void GetResult();
 		ICompletionUC GetAwaiter();

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Security;
 using System.Threading.Tasks;
 using GreenSuperGreen.Async;
 
+// ReSharper disable ArrangeThisQualifier
 // ReSharper disable RedundantExtendsListEntry
 // ReSharper disable UnusedMember.Local
 // ReSharper disable StaticMemberInGenericType
@@ -12,23 +14,19 @@ using GreenSuperGreen.Async;
 namespace GreenSuperGreen.UnifiedConcurrency
 {
 	/// <summary> Awaitable with <see cref="EntryBlockUC"/> result </summary>
-	public struct AsyncEntryBlockUC : ISimpleCompletionUC, INotifyCompletion
+	public struct AsyncEntryBlockUC : ISimpleCompletionUC, INotifyCompletion, ICriticalNotifyCompletion
 	{
 		public static AsyncEntryBlockUC RefusedEntry { get; } = new AsyncEntryBlockUC(EntryBlockUC.RefusedEntry, null);
 
 		private EntryBlockUC? EntryBlock { get; }
-		private TaskAwaiter<EntryBlockUC>? TaskAwaiter { get; }
+		private ConfiguredTaskAwaitable<EntryBlockUC>.ConfiguredTaskAwaiter? TaskAwaiter { get; }
 
 		public AsyncEntryBlockUC(EntryTypeUC entryTypeUC, IEntryCompletionUC entryCompletion) : this(new EntryBlockUC(entryTypeUC, entryCompletion), null) { }
 
-		public AsyncEntryBlockUC(TaskAwaiter<EntryBlockUC>? TaskAwaiter) : this(null, TaskAwaiter) { }
-		public AsyncEntryBlockUC(Task<EntryBlockUC> Task) : this(Task.GetAwaiter()) { }
-		public AsyncEntryBlockUC(TaskCompletionSource<EntryBlockUC> tcs) : this(tcs?.Task) { }
-
-		public AsyncEntryBlockUC(EntryBlockUC? EntryBlock, TaskAwaiter<EntryBlockUC>? TaskAwaiter)
+		public AsyncEntryBlockUC(EntryBlockUC? EntryBlock, TaskCompletionSource<EntryBlockUC> tcs, ConfigCompletionContinuation configContinuation = ConfigCompletionContinuation.ContinueOnDefaultContext)
 		{
 			this.EntryBlock = EntryBlock;
-			this.TaskAwaiter = TaskAwaiter;
+			this.TaskAwaiter = tcs?.Task.ConfigureAwait(configContinuation.ContinueOnCapturedContext()).GetAwaiter();
 			if (!this.EntryBlock.HasValue && !this.TaskAwaiter.HasValue) throw new ArgumentNullException($"{nameof(EntryBlock)}, {nameof(TaskAwaiter)}");
 		}
 
@@ -46,11 +44,15 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		/// </summary>
 		public void OnCompleted(Action continuation)
 		{
-			if (EntryBlock.HasValue) continuation?.Invoke();
-			else
-			{
-				TaskAwaiter?.OnCompleted(continuation);
-			}
+			if (EntryBlock.HasValue) throw new InvalidOperationException($"Unexpected call, is completed, this method should not be called!");
+			TaskAwaiter?.OnCompleted(continuation);
+		}
+
+		[SecurityCritical]
+		public void UnsafeOnCompleted(Action continuation)
+		{
+			if (EntryBlock.HasValue) throw new InvalidOperationException($"Unexpected call, is completed, this method should not be called!");
+			TaskAwaiter?.UnsafeOnCompleted(continuation);
 		}
 	}
 }

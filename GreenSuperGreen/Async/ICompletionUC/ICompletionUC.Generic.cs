@@ -13,7 +13,7 @@ namespace GreenSuperGreen.Async
 	/// it has everything the await keyword returin result needs. Making own awaitable class with result
 	/// is greatly simplified with <see cref="ACompletionUC{TImplementer}"/>
 	/// </summary>
-	public interface ICompletionUC<out TResult> : ISimpleCompletionUC, INotifyCompletion, IUniqueID
+	public interface ICompletionUC<out TResult> : ISimpleCompletionUC, INotifyCompletion, ICriticalNotifyCompletion, IUniqueID
 	{
 		TResult GetResult();
 		ICompletionUC<TResult> GetAwaiter();

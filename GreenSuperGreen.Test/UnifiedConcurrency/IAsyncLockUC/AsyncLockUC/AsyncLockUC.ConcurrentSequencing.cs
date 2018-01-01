@@ -61,7 +61,6 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			var Begin1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Begin);
 			//first worker at Begin point
 
-
 			//start second worker
 			sequencer.Run(seq => ConcurrentSequencingWorker(Lock, sequencer));
 			//await second worker to get to Begin point

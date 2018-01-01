@@ -69,7 +69,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				}
 				TaskCompletionSource<EntryBlockUC> access;
 				Queue.Enqueue(access = new TaskCompletionSource<EntryBlockUC>(TaskCreationOptions.RunContinuationsAsynchronously));
-				return new AsyncEntryBlockUC(access);
+				return new AsyncEntryBlockUC(null, access);
 			}
 			finally
 			{
@@ -112,7 +112,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				if (gotLock) _spinLock.Exit(true);
 			}
 			Timeout(milliseconds, access);
-			return new AsyncEntryBlockUC(access);
+			return new AsyncEntryBlockUC(null, access);
 		}
 
 		private static async void Timeout(int milliseconds, TaskCompletionSource<EntryBlockUC> access)

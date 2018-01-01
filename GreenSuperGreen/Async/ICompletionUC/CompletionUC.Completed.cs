@@ -17,6 +17,7 @@ namespace GreenSuperGreen.Async
 			ICompletionUC,
 			ISimpleCompletionUC,
 			INotifyCompletion,
+			ICriticalNotifyCompletion,
 			IUniqueID
 		{
 		}

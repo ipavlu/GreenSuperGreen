@@ -18,6 +18,7 @@ namespace GreenSuperGreen.Async
 			ICompletionUC<TResult>,
 			ISimpleCompletionUC,
 			INotifyCompletion,
+			ICriticalNotifyCompletion,
 			IUniqueID
 		{
 			public GenericCompletedCompletionUC(TResult result = default(TResult)) : base(result) { }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Security;
 using System.Threading.Tasks;
 using GreenSuperGreen.IdentifierGenerators;
 
@@ -22,6 +23,7 @@ namespace GreenSuperGreen.Async
 			ICompletionUC,
 			ISimpleCompletionUC,
 			INotifyCompletion,
+			ICriticalNotifyCompletion,
 			IUniqueID
 		where TImplementer : class 
 	{
@@ -54,5 +56,8 @@ namespace GreenSuperGreen.Async
 		///	DEPENDING ON COMPILER SERVICES ALWAYS CALLING THIS METHOD IS ILL ADVISED.
 		/// </summary>
 		public virtual void OnCompleted(Action continuation) => TaskResult.GetAwaiter().OnCompleted(continuation);
+
+		[SecurityCritical]
+		public virtual void UnsafeOnCompleted(Action continuation) => TaskResult.GetAwaiter().OnCompleted(continuation);
 	}
 }

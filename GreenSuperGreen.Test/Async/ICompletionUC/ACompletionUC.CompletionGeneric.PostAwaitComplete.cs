@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -26,6 +27,13 @@ namespace GreenSuperGreen.Async.Test
 			{
 				base.OnCompleted(continuation);
 				if (Interlocked.Increment(ref _sequence) != 2) throw new InvalidOperationException("OnCompleted was not second");
+			}
+
+			[SecurityCritical]
+			public override void UnsafeOnCompleted(Action continuation)
+			{
+				base.UnsafeOnCompleted(continuation);
+				if (Interlocked.Increment(ref _sequence) != 2) throw new InvalidOperationException("UnsafeOnCompleted was not second");
 			}
 
 			public bool Complete(bool rslt)

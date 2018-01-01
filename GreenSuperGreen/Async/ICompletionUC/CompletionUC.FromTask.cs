@@ -18,6 +18,7 @@ namespace GreenSuperGreen.Async
 			ICompletionUC,
 			ISimpleCompletionUC,
 			INotifyCompletion,
+			ICriticalNotifyCompletion,
 			IUniqueID
 		{
 			public CompletionFromTaskUC(Task task) : base(task) { }
@@ -42,6 +43,7 @@ namespace GreenSuperGreen.Async
 			ICompletionUC<TResult>,
 			ISimpleCompletionUC,
 			INotifyCompletion,
+			ICriticalNotifyCompletion,
 			IUniqueID
 		{
 			public GenericCompletionFromTaskUC(Task<TResult> task) : base(task) { }
