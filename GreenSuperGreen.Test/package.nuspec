@@ -4,22 +4,18 @@
     <!--*-->
     <id>$id$</id>
     <!--*-->
-    <version>1.0.0.0</version>
-    <title>
-    </title>
+    <version>1.0.0.5</version>
+    <title>GreenSuperGreen.Test</title>
     <!--*-->
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <!--
-    <licenseUrl></licenseUrl>
-    <projectUrl></projectUrl>
-    <iconUrl></iconUrl>
--->
+    <licenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</licenseUrl>
+	<projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <!--*-->
-    <description>$description$</description>
+	<description> GreenSuperGreen Unit tests </description>
     <!--*-->
-    <releaseNotes>GreenSuperGreen.Test&amp;#x0020;-&amp;#x0020;initial&amp;#x0020;release</releaseNotes>
+    <releaseNotes>GreenSuperGreen.Test</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>
     </tags>
