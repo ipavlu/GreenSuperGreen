@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GreenSuperGreen.Async;
 using GreenSuperGreen.UnifiedConcurrency;
 
 // ReSharper disable UnusedMember.Local
@@ -30,8 +29,8 @@ namespace GreenSuperGreen.Queues
 	{
 		private ISimpleLockUC Lock { get; } = new SpinLockUC();
 
-		private Queue<IEnqueuedCompletionUC> NotifyAnyPriority { get; } = new Queue<IEnqueuedCompletionUC>();
-		private Dictionary<TPrioritySelectorEnum, Queue<IEnqueuedCompletionUC>> NotifyPriority { get; }
+		private Queue<AsyncEnqueuedCompletionUC> NotifyAnyPriority { get; } = new Queue<AsyncEnqueuedCompletionUC>();
+		private Dictionary<TPrioritySelectorEnum, Queue<AsyncEnqueuedCompletionUC>> NotifyPriority { get; }
 
 		/// <summary>
 		/// <para/> Concurrent non-blocking priority queue with optional priority based dequeue.
@@ -43,7 +42,7 @@ namespace GreenSuperGreen.Queues
 		public PriorityQueueNotifierUC(IEnumerable<TPrioritySelectorEnum> descendingPriorities)
 			: base(descendingPriorities)
 		{
-			NotifyPriority = DescendingPriorities.ToDictionary(p => p, p => new Queue<IEnqueuedCompletionUC>());
+			NotifyPriority = DescendingPriorities.ToDictionary(p => p, p => new Queue<AsyncEnqueuedCompletionUC>());
 		}
 
 		/// <summary>
@@ -56,11 +55,11 @@ namespace GreenSuperGreen.Queues
 			using (Lock.Enter())
 			{
 				int iMax = NotifyAnyPriority.Count;
-				for (int i = 0; i < iMax; i++) NotifyAnyPriority.Dequeue()?.Enqueued();
+				for (int i = 0; i < iMax; i++) NotifyAnyPriority.Dequeue().Enqueued();
 
-				Queue<IEnqueuedCompletionUC> priorityQueue = NotifyPriority[prioritySelector];
+				Queue<AsyncEnqueuedCompletionUC> priorityQueue = NotifyPriority[prioritySelector];
 				iMax = priorityQueue.Count;
-				for (int i = 0; i < iMax; i++) priorityQueue.Dequeue()?.Enqueued();
+				for (int i = 0; i < iMax; i++) priorityQueue.Dequeue().Enqueued();
 			}
 		}
 
@@ -68,28 +67,28 @@ namespace GreenSuperGreen.Queues
 		/// Use only with TryDequeue without overridden priority!
 		/// Awaitable returns completed as long as there are any items for any priority!
 		/// </summary>
-		public ICompletionUC EnqueuedItemsAsync()
+		public AsyncEnqueuedCompletionUC EnqueuedItemsAsync()
 		{
 			using (Lock.Enter())
 			{
-				if (HasItems()) return EnqueuedCompletionUC.AlreadyEnqueued;
-				IEnqueuedCompletionUC enqueued;
-				NotifyAnyPriority.Enqueue(enqueued = new EnqueuedCompletionUC());
-				return enqueued;
+				if (HasItems()) return AsyncEnqueuedCompletionUC.AlreadyAsyncEnqueued;
+				AsyncEnqueuedCompletionUC asyncEnqueued;
+				NotifyAnyPriority.Enqueue(asyncEnqueued = new AsyncEnqueuedCompletionUC());
+				return asyncEnqueued;
 			}
 		}
 
 		/// <summary>
 		/// Use only with TryDequeue with same priority!
 		/// </summary>
-		public ICompletionUC EnqueuedItemsAsync(TPrioritySelectorEnum prioritySelector)
+		public AsyncEnqueuedCompletionUC EnqueuedItemsAsync(TPrioritySelectorEnum prioritySelector)
 		{
 			using (Lock.Enter())
 			{
-				if (HasItems(prioritySelector)) return EnqueuedCompletionUC.AlreadyEnqueued;
-				IEnqueuedCompletionUC enqueued;
-				NotifyPriority[prioritySelector].Enqueue(enqueued = new EnqueuedCompletionUC());
-				return enqueued;
+				if (HasItems(prioritySelector)) return AsyncEnqueuedCompletionUC.AlreadyAsyncEnqueued;
+				AsyncEnqueuedCompletionUC asyncEnqueued;
+				NotifyPriority[prioritySelector].Enqueue(asyncEnqueued = new AsyncEnqueuedCompletionUC());
+				return asyncEnqueued;
 			}
 		}
 	}

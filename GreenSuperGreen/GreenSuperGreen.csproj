@@ -60,8 +60,8 @@
     <Compile Include="IdentifierGenerators\IUniqueID\UniqueID.cs" />
     <Compile Include="Diagnostics\PerfCounters\PerfCounterTypeUC.cs" />
     <Compile Include="Diagnostics\PerfCounters\ProcessorTimePerfCounterUC.cs" />
-    <Compile Include="Queues\IEnqueuedCompletionUC\EnqueuedCompletionUC.cs" />
-    <Compile Include="Queues\IEnqueuedCompletionUC\IEnqueuedCompletionUC.cs" />
+    <Compile Include="Queues\IEnqueuedCompletionUC\AsyncEnqueuedCompletionUC.cs" />
+    <Compile Include="Queues\IEnqueuedCompletionUC\IAsyncEnqueuedCompletionUC.cs" />
     <Compile Include="Queues\PriorityQueues\IPriorityQueueNotifierUC\IPriorityQueueNotifierUC.cs" />
     <Compile Include="Queues\PriorityQueues\IPriorityQueueUC\IPriorityQueueUC.cs" />
     <Compile Include="Queues\PriorityQueues\IPriorityQueueUC\PriorityQueueUC.cs" />
