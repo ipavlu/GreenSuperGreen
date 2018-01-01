@@ -1,5 +1,6 @@
 ﻿using GreenSuperGreen.Async;
 
+// ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable RedundantExtendsListEntry
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
@@ -14,7 +15,7 @@ namespace GreenSuperGreen.Queues
 	{
 		public static IEnqueuedCompletionUC AlreadyEnqueued { get; } = new EnqueuedCompletionUC(true);
 		public EnqueuedCompletionUC() : this(false) { }
-		public EnqueuedCompletionUC(bool enqueued)
+		private EnqueuedCompletionUC(bool enqueued) : base(ConfigCompletionContinuation.ContinueOnDefaultContext)
 		{
 			if (enqueued) Enqueued();
 		}

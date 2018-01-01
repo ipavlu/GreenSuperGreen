@@ -22,7 +22,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		public AsyncEntryBlockUC(EntryTypeUC entryTypeUC, IEntryCompletionUC entryCompletion) : this(new EntryBlockUC(entryTypeUC, entryCompletion), null) { }
 
 		public AsyncEntryBlockUC(TaskAwaiter<EntryBlockUC>? TaskAwaiter) : this(null, TaskAwaiter) { }
-		public AsyncEntryBlockUC(Task<EntryBlockUC> Task) : this(Task?.GetAwaiter()) { }
+		public AsyncEntryBlockUC(Task<EntryBlockUC> Task) : this(Task.GetAwaiter()) { }
 		public AsyncEntryBlockUC(TaskCompletionSource<EntryBlockUC> tcs) : this(tcs?.Task) { }
 
 		public AsyncEntryBlockUC(EntryBlockUC? EntryBlock, TaskAwaiter<EntryBlockUC>? TaskAwaiter)

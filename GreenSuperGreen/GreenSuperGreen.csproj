@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Async\ICompletionUC\Enum.ConfigCompletionContinuation.cs" />
     <Compile Include="Console\ConsoleUC.cs" />
     <Compile Include="Contexts\ExecutionContextExtensions\ExecutionContextExtensions.cs" />
     <Compile Include="Async\ICompletionUC\CompletionFromTaskUC.Generic.cs" />
