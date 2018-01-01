@@ -10,10 +10,10 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</licenseUrl>
-	<projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
+    <projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <!--*-->
-	<description> GreenSuperGreen Unit tests </description>
+    <description> GreenSuperGreen Unit tests </description>
     <!--*-->
     <releaseNotes>GreenSuperGreen.Test</releaseNotes>
     <copyright>$copyright$</copyright>
