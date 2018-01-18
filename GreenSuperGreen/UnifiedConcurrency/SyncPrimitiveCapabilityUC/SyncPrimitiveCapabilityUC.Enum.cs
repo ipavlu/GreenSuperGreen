@@ -15,13 +15,10 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		TryEnter = (1 << 1),
 		/// <summary> Supports <see cref="ISimpleLockUC.TryEnter(int)"/> </summary>
 		TryEnterWithTimeout = (1 << 2),
-		/// <summary>
-		/// <para/> Reentrancy should be avoided at all costs!
-		/// <para/> Supported only on legacy synchronization primitives based .net <see cref="System.Threading.Monitor"/>
-		/// </summary>
-		Reentrant = (1 << 3),
-		/// <summary> Reentrancy not supported </summary>
-		NonReentrant = (1 << 4),
+		/// <summary> Recursive calls supported. Recursiveness should be avoided at all costs! </summary>
+		Recursive = (1 << 3),
+		/// <summary> Recursive calls not supported. </summary>
+		NonRecursive = (1 << 4),
 		/// <summary>
 		/// <para/> Thread afinity is required by legacy synchronization primitives like .net <see cref="System.Threading.Monitor"/>
 		/// <para/> Enter and Exit has to be executed on same thread!

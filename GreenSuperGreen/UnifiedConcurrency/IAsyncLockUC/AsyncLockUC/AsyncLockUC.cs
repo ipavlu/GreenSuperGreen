@@ -24,7 +24,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		| SyncPrimitiveCapabilityUC.TryEnter
 		| SyncPrimitiveCapabilityUC.TryEnterWithTimeout
 		| SyncPrimitiveCapabilityUC.NonCancellable
-		| SyncPrimitiveCapabilityUC.NonReentrant
+		| SyncPrimitiveCapabilityUC.NonRecursive
 		| SyncPrimitiveCapabilityUC.NonThreadAffine
 		;
 

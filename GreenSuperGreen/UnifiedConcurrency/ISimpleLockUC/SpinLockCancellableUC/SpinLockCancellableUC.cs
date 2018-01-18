@@ -10,7 +10,7 @@
 //{
 //	/// <summary>
 //	/// <para/> <see cref="SpinLockCancellableUC"/> is based on .Net <see cref="System.Threading.SpinLock"/>.
-//	/// <para/> Does not support reentrancy and does not protect against reentrancy!
+//	/// <para/> Does not support recursive call and does not protect against recursive call!
 //	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
 //	/// </summary>
 //	public class SpinLockCancellableUC : ISimpleLockUC
@@ -27,7 +27,7 @@
 //		| SyncPrimitiveCapabilityUC.TryEnter
 //		| SyncPrimitiveCapabilityUC.TryEnterWithTimeout
 //		| SyncPrimitiveCapabilityUC.Cancellable
-//		| SyncPrimitiveCapabilityUC.NonReentrant
+//		| SyncPrimitiveCapabilityUC.NonRecursive
 //		| SyncPrimitiveCapabilityUC.NonThreadAffine
 //		;
 

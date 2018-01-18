@@ -4,7 +4,7 @@
     <!--*-->
     <id>$id$</id>
     <!--*-->
-    <version>1.0.0.5</version>
+    <version>1.0.0.6</version>
     <title>GreenSuperGreen</title>
     <!--*-->
     <authors>$author$</authors>
@@ -30,6 +30,11 @@
 
     2) AsyncTesting SequencerUC
     A strongly typed Sequencer is a powerful threading or async/await based unit testing tool to simplify and test correctness in asynchronous and/or parallel code. The Sequencer allows to simplify control/detection of one or many testing thread flows and allows to deterministically setup testing scenario from unit test method and optionally inject data into the tested code to ensure required state.
+
+    3) Concurrent Priority Queues
+    Awaitable Concurrent Priority Queue - Optionally awaitable simple to use Concurrent Priority Queue.
+    https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Priority-Queue
+    
 	</description>
     <!--*-->
     <releaseNotes>...</releaseNotes>

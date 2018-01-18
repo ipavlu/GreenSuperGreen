@@ -11,7 +11,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 {
 	/// <summary>
 	/// <para/> <see cref="SpinLockUC"/> is based on .Net <see cref="System.Threading.SpinLock"/>.
-	/// <para/> Does not support reentrancy and does not protect against reentrancy!
+	/// <para/> Does not support recursive call and does not protect against recursive call!
 	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
 	/// </summary>
 	public partial class LockUC : ISimpleLockUC
@@ -28,7 +28,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		| SyncPrimitiveCapabilityUC.TryEnter
 		| SyncPrimitiveCapabilityUC.TryEnterWithTimeout
 		| SyncPrimitiveCapabilityUC.NonCancellable
-		| SyncPrimitiveCapabilityUC.NonReentrant
+		| SyncPrimitiveCapabilityUC.NonRecursive
 		| SyncPrimitiveCapabilityUC.NonThreadAffine
 		;
 

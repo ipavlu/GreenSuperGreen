@@ -10,7 +10,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 {
 	/// <summary>
 	/// <para/> <see cref="TicketSpinLockUC"/> is based on .Net <see cref="Interlocked"/> operations (atomic instructions).
-	/// <para/> Does not support reentrancy and does not protect against reentrancy!
+	/// <para/> Does not support recursive call and does not protect against recursive call!
 	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered.
 	/// <para/> TryEnter can not be used! Not supported!
 	/// </summary>
@@ -24,7 +24,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		public SyncPrimitiveCapabilityUC Capability { get; } = 0
 		| SyncPrimitiveCapabilityUC.Enter
 		| SyncPrimitiveCapabilityUC.NonCancellable
-		| SyncPrimitiveCapabilityUC.NonReentrant
+		| SyncPrimitiveCapabilityUC.NonRecursive
 		| SyncPrimitiveCapabilityUC.NonThreadAffine
 		;
 

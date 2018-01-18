@@ -52,7 +52,7 @@ namespace GreenSuperGreen.Async.Test
 			//for semaphores in messanger/receiver blocks it can easily create deadlock,
 
 			//For monitor lock in messanger/receiver blocks it should mostly work well,
-			// reentrantcy takes care of it.
+			// recursivness takes care of it.
 
 			//For UI it is highly dangerous and unpredictable!
 			//If messanger is executed from UI, it will most often execute continuation synchronously on UI.
