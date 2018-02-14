@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GreenSuperGreen.UnifiedConcurrency;
 
 // ReSharper disable UnusedMember.Local
@@ -29,8 +30,8 @@ namespace GreenSuperGreen.Queues
 	{
 		private ISimpleLockUC Lock { get; } = new SpinLockUC();
 
-		private Queue<AsyncEnqueuedCompletionUC> NotifyAnyPriority { get; } = new Queue<AsyncEnqueuedCompletionUC>();
-		private Dictionary<TPrioritySelectorEnum, Queue<AsyncEnqueuedCompletionUC>> NotifyPriority { get; }
+		private Queue<TaskCompletionSource<object>> NotifyAnyPriority { get; } = new Queue<TaskCompletionSource<object>>();
+		private Dictionary<TPrioritySelectorEnum, Queue<TaskCompletionSource<object>>> NotifyPriority { get; }
 
 		/// <summary>
 		/// <para/> Concurrent non-blocking priority queue with optional priority based dequeue.
@@ -42,7 +43,7 @@ namespace GreenSuperGreen.Queues
 		public PriorityQueueNotifierUC(IEnumerable<TPrioritySelectorEnum> descendingPriorities)
 			: base(descendingPriorities)
 		{
-			NotifyPriority = DescendingPriorities.ToDictionary(p => p, p => new Queue<AsyncEnqueuedCompletionUC>());
+			NotifyPriority = DescendingPriorities.ToDictionary(p => p, p => new Queue<TaskCompletionSource<object>>());
 		}
 
 		/// <summary>
@@ -55,11 +56,11 @@ namespace GreenSuperGreen.Queues
 			using (Lock.Enter())
 			{
 				int iMax = NotifyAnyPriority.Count;
-				for (int i = 0; i < iMax; i++) NotifyAnyPriority.Dequeue().Enqueued();
+				for (int i = 0; i < iMax; i++) NotifyAnyPriority.Dequeue().TrySetResult(null);
 
-				Queue<AsyncEnqueuedCompletionUC> priorityQueue = NotifyPriority[prioritySelector];
+				Queue<TaskCompletionSource<object>> priorityQueue = NotifyPriority[prioritySelector];
 				iMax = priorityQueue.Count;
-				for (int i = 0; i < iMax; i++) priorityQueue.Dequeue().Enqueued();
+				for (int i = 0; i < iMax; i++) priorityQueue.Dequeue().TrySetResult(null);
 			}
 		}
 
@@ -71,10 +72,10 @@ namespace GreenSuperGreen.Queues
 		{
 			using (Lock.Enter())
 			{
-				if (HasItems()) return AsyncEnqueuedCompletionUC.AlreadyAsyncEnqueued;
-				AsyncEnqueuedCompletionUC asyncEnqueued;
-				NotifyAnyPriority.Enqueue(asyncEnqueued = new AsyncEnqueuedCompletionUC());
-				return asyncEnqueued;
+				if (HasItems()) return AsyncEnqueuedCompletionUC.Completed;
+				TaskCompletionSource<object> asyncEnqueued = new TaskCompletionSource<object>();
+				NotifyAnyPriority.Enqueue(asyncEnqueued);
+				return new AsyncEnqueuedCompletionUC(asyncEnqueued.Task);
 			}
 		}
 
@@ -85,10 +86,10 @@ namespace GreenSuperGreen.Queues
 		{
 			using (Lock.Enter())
 			{
-				if (HasItems(prioritySelector)) return AsyncEnqueuedCompletionUC.AlreadyAsyncEnqueued;
-				AsyncEnqueuedCompletionUC asyncEnqueued;
-				NotifyPriority[prioritySelector].Enqueue(asyncEnqueued = new AsyncEnqueuedCompletionUC());
-				return asyncEnqueued;
+				if (HasItems(prioritySelector)) return AsyncEnqueuedCompletionUC.Completed;//AsyncEnqueuedCompletionUC.AlreadyAsyncEnqueued;
+				TaskCompletionSource<object> asyncEnqueued = new TaskCompletionSource<object>();
+				NotifyPriority[prioritySelector].Enqueue(asyncEnqueued);
+				return new AsyncEnqueuedCompletionUC(asyncEnqueued.Task);
 			}
 		}
 	}
