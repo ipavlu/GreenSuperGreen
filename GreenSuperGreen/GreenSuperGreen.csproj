@@ -85,6 +85,8 @@
     <Compile Include="Sequencing\ISequencerUC\ISequencerExceptionRegister\SequencerExceptionRegister.cs" />
     <Compile Include="Sequencing\ISequencerUC\ConditionalSequencerUC\ConditionalSequencerUC.Point.cs" />
     <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.PointAsync.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.TestPointFailAsync.cs" />
+    <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.TestPointCompleteAsync.cs" />
     <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Throw.cs" />
     <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.WhenAll.cs" />
     <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.TryReThrowException.cs" />
