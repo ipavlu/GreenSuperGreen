@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable InconsistentNaming
 // ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable UnusedMethodReturnValue.Local
 // ReSharper disable RedundantStringInterpolation
@@ -13,10 +14,18 @@ namespace GreenSuperGreen.Queues
 {
 	public interface IConcurrentQueueNotifier<TItem>
 	{
-		
+		int? ThrottleLevel { get; set; }
+
+		Task EnqueueAsync(TItem item);
+		Task EnqueueAsync(IList<TItem> items);
+		Task EnqueueAsync(IEnumerable<TItem> items);
+		Task EnqueuedItemsAsync();
+
+		bool TryDequeu(out TItem item);
+
+		int Count();
 	}
 
-	[Obsolete("UNDER DEVELOPMENT", true)]
 	public class ConcurrentQueueNotifier<TItem> : IConcurrentQueueNotifier<TItem>
 	{
 		private ISimpleLockUC Lock { get; } = new SpinLockUC();
@@ -28,7 +37,7 @@ namespace GreenSuperGreen.Queues
 
 		public int? ThrottleLevel { get { return GetThrottleLevelLimiter(); } set { SetThrottleLevelLimiter(value); } }
 
-		public ConcurrentQueueNotifier(int? throttleLevel = null) 
+		public ConcurrentQueueNotifier(int? throttleLevel = null)
 		{
 			SetThrottleLevelLimiter(throttleLevel);
 		}
@@ -43,58 +52,46 @@ namespace GreenSuperGreen.Queues
 			using (Lock.Enter())
 			{
 				ThrottleLevelLimiter = throttleLevel <= 0 ? null : throttleLevel;
-				LockedUpdateDequeueAccess();
+				LockedUpdateEnqueueAccess();
 				return ThrottleLevelLimiter;
 			}
 		}
 
 		private void LockedUpdateEnqueueAccess()
 		{
-			if (EnqueueAccess.Count <= 0) return;
-			if (ThrottleLevelLimiter != null && ItemsQueue.Count >= ThrottleLevelLimiter.Value) return;
-
-			while (EnqueueAccess.Count > 0)
+			for (int i = ItemsQueue.Count; EnqueueAccess.Count > 0 && (ThrottleLevelLimiter == null || i < ThrottleLevelLimiter) ; i++)
 			{
 				TaskCompletionSource<object> tcs = EnqueueAccess.Dequeue();
 				tcs?.SetResult(null);
 			}
 		}
 
-
-		private void LockedUpdateDequeueAccess()
+		private Task LockedInsertUpdateAsync()
 		{
-			if (ThrottleLevelLimiter != null && ThrottleLevelLimiter.Value > ItemsQueue.Count) return;
-
-			while (DequeueAccess.Count > 0)
+			int maxConsumers = Math.Min(ItemsQueue.Count, DequeueAccess.Count);
+			while (maxConsumers-- > 0)
 			{
 				TaskCompletionSource<object> tcs = DequeueAccess.Dequeue();
 				tcs?.SetResult(null);
 			}
-		}
 
-		private Task LockedInsertUpdateDequeueAccessAsync()
-		{
-			if (ThrottleLevelLimiter == null || ThrottleLevelLimiter.Value > ItemsQueue.Count)
-			{
-				while (DequeueAccess.Count > 0)
-				{
-					TaskCompletionSource<object> tcs = DequeueAccess.Dequeue();
-					tcs?.SetResult(null);
-				}
-				return Task.CompletedTask;
-			}
+			if (ThrottleLevelLimiter == null || ThrottleLevelLimiter.Value > ItemsQueue.Count) return Task.CompletedTask;
 			var tcs2 = new TaskCompletionSource<object>();
-			DequeueAccess.Enqueue(tcs2);
+			EnqueueAccess.Enqueue(tcs2);
 			return tcs2.Task;
 		}
 
+		public int Count()
+		{
+			using (Lock.Enter()) return ItemsQueue.Count;
+		}
 
 		public Task EnqueueAsync(TItem item)
 		{
 			using (Lock.Enter())
 			{
 				ItemsQueue.Enqueue(item);
-				return LockedInsertUpdateDequeueAccessAsync();
+				return LockedInsertUpdateAsync();
 			}
 		}
 
