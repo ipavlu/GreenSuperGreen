@@ -105,6 +105,7 @@
     <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Construct.cs" />
     <Compile Include="Sequencing\ISequencerUC\ISequencerUC.cs" />
     <Compile Include="Sequencing\ISequencerUC\ISequencerTaskRegister\ISequencerTaskRegister.cs" />
+    <Compile Include="Timing\TimerProcessor\TimerProcessor.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSpinLockUC\AsyncSpinLockUC.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncEntryBlockUC.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\IAsyncLockUC.cs" />
