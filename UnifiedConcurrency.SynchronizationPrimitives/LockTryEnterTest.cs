@@ -29,7 +29,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 		[Test]
 		public async Task LockTryEnterTest()
 		{
-			using (ITestingJob job = new LockEnter(100000))
+			using (ITestingJob job = new LockEnter(1000000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

@@ -76,7 +76,7 @@ namespace GreenSuperGreen.Queues
 			}
 
 			if (ThrottleLevelLimiter == null || ThrottleLevelLimiter.Value > ItemsQueue.Count) return Task.CompletedTask;
-			var tcs2 = new TaskCompletionSource<object>();
+			var tcs2 = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 			EnqueueAccess.Enqueue(tcs2);
 			return tcs2.Task;
 		}
@@ -117,7 +117,7 @@ namespace GreenSuperGreen.Queues
 			using (Lock.Enter())
 			{
 				if (ItemsQueue.Count > 0) return Task.CompletedTask;
-				var tcs = new TaskCompletionSource<object>();
+				var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 				DequeueAccess.Enqueue(tcs);
 				return tcs.Task;
 			}

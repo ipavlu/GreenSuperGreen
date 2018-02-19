@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using GreenSuperGreen.Timing;
 
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable CheckNamespace
@@ -134,9 +136,12 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		{
 			private static TaskCompletionSource<object> CompletedAccess { get; } = CreateCompletedAccess();
 			private static TaskCompletionSource<object> CancelledAccess { get; } = CreateCancelledAccess();
+			
+			//private static ITimerProcessor TimerProcessor { get; } = new TimerProcessor(new RealTimeSource(), new TickGenerator(1));
 
-			//special snowflake!
-			private static TaskCompletionSource<object> CreateAccess() => new TaskCompletionSource<object>();
+			//special snowflake! TaskCreationOptions.RunContinuationsAsynchronously should not be necessary, as LockUC is waiting incoming threads,
+			//not awaiting, so the ambient context has no meaning
+			private static TaskCompletionSource<object> CreateAccess() => new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 
 			private static TaskCompletionSource<object> CreateCompletedAccess()
 			{
@@ -177,21 +182,21 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			{
 				if (milliseconds <= 0) return false;
 
-				Task task;
+				TaskCompletionSource<object> tcs;
 				bool gotLock = false;
 
 				try
 				{
 					_spinLock.Enter(ref gotLock);
-					task = (Access = Access ?? CreateAccess()).Task;
+					tcs = Access = Access ?? CreateAccess();
 
-					if (task.IsCompleted)
+					if (tcs.Task.IsCompleted)
 					{
 						Access = CompletedAccess;
 						return true;
 					}
 
-					if (task.IsCanceled) 
+					if (tcs.Task.IsCanceled) 
 					{
 						Access = CancelledAccess;
 						return false;
@@ -202,15 +207,17 @@ namespace GreenSuperGreen.UnifiedConcurrency
 					if (gotLock) _spinLock.Exit(true);
 				}
 
+				//tcs = TimerProcessor.RegisterAsync(TimeSpan.FromMilliseconds(milliseconds), tcs);
+
 				Task
-				.WhenAny(task, Task.Delay(milliseconds))
+				.WhenAny(tcs.Task, Task.Delay(milliseconds))
 				.Wait()
 				;
 
 				try
 				{
 					_spinLock.Enter(ref gotLock);
-					if (task.IsCompleted)
+					if (tcs.Task.IsCompleted && !tcs.Task.IsCanceled && !tcs.Task.IsFaulted)
 					{
 						Access = CompletedAccess;
 						return true;

@@ -73,7 +73,7 @@ namespace GreenSuperGreen.Queues
 			using (Lock.Enter())
 			{
 				if (HasItems()) return AsyncEnqueuedCompletionUC.Completed;
-				TaskCompletionSource<object> asyncEnqueued = new TaskCompletionSource<object>();
+				TaskCompletionSource<object> asyncEnqueued = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 				NotifyAnyPriority.Enqueue(asyncEnqueued);
 				return new AsyncEnqueuedCompletionUC(asyncEnqueued.Task);
 			}
@@ -87,7 +87,7 @@ namespace GreenSuperGreen.Queues
 			using (Lock.Enter())
 			{
 				if (HasItems(prioritySelector)) return AsyncEnqueuedCompletionUC.Completed;//AsyncEnqueuedCompletionUC.AlreadyAsyncEnqueued;
-				TaskCompletionSource<object> asyncEnqueued = new TaskCompletionSource<object>();
+				TaskCompletionSource<object> asyncEnqueued = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 				NotifyPriority[prioritySelector].Enqueue(asyncEnqueued);
 				return new AsyncEnqueuedCompletionUC(asyncEnqueued.Task);
 			}
