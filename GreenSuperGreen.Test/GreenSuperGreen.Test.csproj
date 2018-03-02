@@ -71,6 +71,8 @@
     <Compile Include="Queues\ConcurrentQueueNotifier\Insert3ItemsThrottleTest.cs" />
     <Compile Include="Queues\ConcurrentQueueNotifier\AwaitAlreadyEnqueuedDataTest.cs" />
     <Compile Include="Timing\TimerProcessor\TimerProcessorTest.cs" />
+    <Compile Include="Timing\TickGenerator\TickGeneratorTest.cs" />
+    <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelLimiterTest.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncTicketSpinLockUC\AsyncTicketSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSpinLockUC\AsyncSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncLockUC\AsyncLockUC.ConcurrentSequencing.cs" />
