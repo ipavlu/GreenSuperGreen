@@ -28,6 +28,27 @@ namespace GreenSuperGreen.Sequencing
 			;
 		}
 
+		/// <summary> Avoiding boxing of <see cref="ValueType"/> argument in case Sequencer is null </summary>
+		public
+		static
+		ICompletionUC
+		PointAsyncArg<TEnum,TArg>(this	ISequencerUC sequencer,
+										SeqPointTypeUC seqPointTypeUC,
+										TEnum registration,
+										TArg arg,
+										Action<object> injectContinuation = null)
+		where TEnum : struct
+		{
+			return
+			sequencer
+			.PointAsyncArg(	seqPointTypeUC,
+							registration,
+							() => true,
+							arg,
+							injectContinuation)
+			;
+		}
+
 		public
 		static
 		ICompletionUC
@@ -48,6 +69,31 @@ namespace GreenSuperGreen.Sequencing
 			ISequencerPointUC<TEnum> seqPoint = register.TryGet(registration);
 			return
 			seqPoint?.ProductionPoint(taskRegister,exceptionRegister, seqPointTypeUC, arg, injectContinuation)
+			?? CompletedAwaiter
+			;
+		}
+
+		/// <summary> Avoiding boxing of <see cref="ValueType"/> argument in case Sequencer is null </summary>
+		public
+		static
+		ICompletionUC
+		PointAsyncArg<TEnum,TArg>(this	ISequencerUC sequencer,
+										SeqPointTypeUC seqPointTypeUC,
+										TEnum registration,
+										Func<bool> condition,
+										TArg arg,
+										Action<object> injectContinuation = null)
+		where TEnum : struct
+		{
+			SequencerRegisterUC register = sequencer as SequencerRegisterUC;
+			if (register == null || condition == null || !condition()) return CompletedAwaiter;
+
+			ISequencerExceptionRegister exceptionRegister = register.ExceptionRegister.TryReThrowException();
+			ISequencerTaskRegister taskRegister = register.TaskRegister;
+
+			ISequencerPointUC<TEnum> seqPoint = register.TryGet(registration);
+			return
+			seqPoint?.ProductionPoint(taskRegister, exceptionRegister, seqPointTypeUC, arg, injectContinuation)
 			?? CompletedAwaiter
 			;
 		}
