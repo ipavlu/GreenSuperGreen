@@ -55,6 +55,8 @@
     <Compile Include="Diagnostics\PerfCounters\IPerfCounterUC.cs" />
     <Compile Include="Exceptions\StackTraceExceptionUC\StackTraceExceptionUC.cs" />
     <Compile Include="GeneralExtensions\Assign\AssignGeneralExtensions.Assign.cs" />
+    <Compile Include="GeneralExtensions\Task\TaskConstants.cs" />
+    <Compile Include="GeneralExtensions\Task\TaskExtensions.cs" />
     <Compile Include="IdentifierGenerators\IUniqueID\AUniqueID.cs" />
     <Compile Include="IdentifierGenerators\IUniqueID\IUniqueID.cs" />
     <Compile Include="IdentifierGenerators\IUniqueID\UniqueID.cs" />
@@ -105,7 +107,11 @@
     <Compile Include="Sequencing\ISequencerUC\SequencerUC\SequencerUC.Construct.cs" />
     <Compile Include="Sequencing\ISequencerUC\ISequencerUC.cs" />
     <Compile Include="Sequencing\ISequencerUC\ISequencerTaskRegister\ISequencerTaskRegister.cs" />
+    <Compile Include="Timing\RealTimeSource\RealTimeSource.cs" />
+    <Compile Include="Timing\TickGenerator\TickGenerator.cs" />
     <Compile Include="Timing\TimerProcessor\TimerProcessor.cs" />
+    <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelEntry.cs" />
+    <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelLimiter.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSpinLockUC\AsyncSpinLockUC.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncEntryBlockUC.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\IAsyncLockUC.cs" />
@@ -124,6 +130,7 @@
     <Compile Include="UnifiedConcurrency\ISimpleLockUC\MonitorLockUC\MonitorLockUC.cs" />
     <Compile Include="UnifiedConcurrency\ISimpleLockUC\TicketSpinLockUC\TicketSpinLockUC.cs" />
     <Compile Include="UnifiedConcurrency\SyncPrimitiveCapabilityUC\SyncPrimitiveCapabilityUC.Enum.cs" />
+    <Compile Include="UnifiedConcurrency\TimerProcessorUC\TimerProcessorUC.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\ReadMe.txt" />
@@ -134,6 +141,7 @@
   <ItemGroup>
     <None Include="package.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
