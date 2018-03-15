@@ -9,7 +9,6 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	{
 		public static int Period { get; } = 10;
 		public static IRealTimeSource RealTimeSource { get; } = new RealTimeSource();
-		public static ITickGenerator TickGenerator { get; } = new TickGenerator(Period); 
-		public static ITimerProcessor TimerProcessor { get; } = new TimerProcessor(RealTimeSource, TickGenerator);
+		public static ITimerProcessor TimerProcessor { get; } = new TimerProcessor(Period, RealTimeSource);
 	}
 }

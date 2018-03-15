@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using GreenSuperGreen.UnifiedConcurrency;
+using GreenSuperGreen.Sequencing;
 using NUnit.Framework;
 
 // ReSharper disable RedundantExtendsListEntry
@@ -9,31 +9,525 @@ using NUnit.Framework;
 
 namespace GreenSuperGreen.Timing.Test
 {
-	public class RealTimeSourceTest : IRealTimeSource
-	{
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
-
-		private DateTime UtcNow { get; set; }
-		private DateTime Now { get; set; }
-
-		public DateTime GetUtcNow() { using (Lock.Enter()) { return UtcNow; } }
-		public DateTime GetNow() { using (Lock.Enter()) { return Now; } }
-
-		public void SetUtcNow(DateTime dt) { using (Lock.Enter()) { UtcNow = dt; } }
-		public void SetNow(DateTime dt) { using (Lock.Enter()) { Now = dt; } }
-	}
-
 	[TestFixture]
 	public class TimerProcessorTest
 	{
-		[Test]
-		[Obsolete("Incomplete test")]
-		public async Task Test()
+		private enum Steps
 		{
-			var source = new RealTimeSourceTest();
-			var tickGenerator = new TickGenerator(10);
-			var timing = new TimerProcessor(source, tickGenerator);
+			Notify
+		}
 
+		[Test]
+		public async Task BasicTest()
+		{
+			var timerProcessor = new TimerProcessor(10, new RealTimeSource());
+
+			var t = await timerProcessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(100)).WrapIntoTask();
+			var tcs = t.Result;
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			t = await timerProcessor.UnRegisterAsync(tcs).WrapIntoTask();
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+		}
+
+		[Test]
+		public async Task CompletedWithoutTimoutTest()
+		{
+			ISequencerUC sequencer =
+			SequencerUC
+			.Construct()
+			.Register(OrderedExpiryItemsSequencer.TryExpireBegin, new StrategyOneOnOneUC())
+			;
+
+			var timerProcessor = new TimerProcessor(10, new RealTimeSource(), sequencer);
+
+			var t = await timerProcessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(10000)).WrapIntoTask();
+			var tcs = t.Result;
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			//OrderedExpiryItemsSequencer.TryExpireBegin is Match point, it wont proceed without point setting to Complete() state
+			tcs.SetResult(null);
+			Assert.IsTrue(tcs.Task.IsCompleted);
+			Assert.IsFalse(tcs.Task.IsCanceled);
+			Assert.IsFalse(tcs.Task.IsFaulted);
+
+			t = await timerProcessor.UnRegisterAsync(tcs).WrapIntoTask();
+			var tcs2 = t.Result;
+			Assert.AreEqual(tcs, tcs2);
+
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			Assert.IsTrue(tcs2.Task.IsCompleted);
+			Assert.IsFalse(tcs2.Task.IsCanceled);
+			Assert.IsFalse(tcs2.Task.IsFaulted);
+		}
+
+		[Test]
+		public async Task CompletedWithTimoutTest()
+		{
+			var timerProcessor = new TimerProcessor(10, new RealTimeSource());
+
+			var t = await timerProcessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(25)).WrapIntoTask();
+			var tcs = t.Result;
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			Assert.CatchAsync<TaskCanceledException>(async () => await tcs.Task);
+		}
+
+		[Test]
+		public async Task ConcurrentTest()
+		{
+			ISequencerUC sequencer =
+			SequencerUC
+			.Construct()
+
+			.Register(TimerProcessorSequencer.RegisterStatus, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.RegisterActiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.UnRegisterStatus, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.UnRegisterActiveProcessing, new StrategyOneOnOneUC())
+
+			.Register(TimerProcessorSequencer.Processing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.ExclusiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.BeginActiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.EndActiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.ActionsProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.ActionsProcessingCount, new StrategyOneOnOneUC())
+
+			.Register(TimerProcessorSequencer.TryUpdateTimerBegin, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.TryUpdateTimerEnd, new StrategyOneOnOneUC())
+
+			.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			//.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			//.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			//.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			;
+
+			var timeprocessor = new TimerProcessor(10, new RealTimeSource(), sequencer);
+
+
+			var tt = Task.Run(() => timeprocessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(10000)).WrapIntoTask());
+
+			var rStatus = await sequencer.TestPointAsync(TimerProcessorSequencer.RegisterStatus);
+			Assert.AreEqual(TimerProcessorStatus.Operating, rStatus.ProductionArg);
+			var rActiveProcesing = await sequencer.TestPointAsync(TimerProcessorSequencer.RegisterActiveProcessing);
+			Assert.AreEqual(false, rActiveProcesing.ProductionArg);
+
+			var processing = await sequencer.TestPointAsync(TimerProcessorSequencer.Processing);
+			var processingResult = (TimerProcessor.ProcessingResult)processing.ProductionArg;
+			Assert.AreEqual(TimerProcessor.ProcessingResult.Processed, processingResult);
+
+			var exclusiveProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.ExclusiveProcessing);
+			exclusiveProcessing.Complete();
+
+			var beginActiveProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.BeginActiveProcessing);
+			beginActiveProcessing.Complete();
+
+			var actionProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessing);
+			actionProcessing.Complete();
+			Assert.AreEqual(false, actionProcessing.ProductionArg);
+
+			var updateTimerBegin = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerBegin);
+			updateTimerBegin.Complete();
+			Assert.AreEqual(TimerProcessorTimerStatus.None, updateTimerBegin.ProductionArg);
+
+			var updateTimerEnd = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerEnd);
+			updateTimerEnd.Complete();
+			Assert.AreEqual(TimerProcessorTimerStatus.Activate | TimerProcessorTimerStatus.IsActive | TimerProcessorTimerStatus.Changed, updateTimerEnd.ProductionArg);
+
+			var endActiveProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.EndActiveProcessing);
+			endActiveProcessing.Complete();
+			Assert.AreEqual(TimerProcessorStatus.Operating, endActiveProcessing.ProductionArg);
+
+
+			Task<TaskCompletionSource<object>> t = await tt;
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			TaskCompletionSource<object> tcs = t.Result;
+
+
+			for (int i = 0; i < 1; i++)
+			{
+				var callBackProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.CallBackProcessing);
+				callBackProcessing.Complete();
+
+				var processingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.Processing);
+				var processingCycleResult = (TimerProcessor.ProcessingResult)processingCycle.ProductionArg;
+				Assert.AreEqual(TimerProcessor.ProcessingResult.Processed, processingCycleResult);
+
+				var exclusiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ExclusiveProcessing);
+				exclusiveProcessingCycle.Complete();
+
+				var beginActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.BeginActiveProcessing);
+				beginActiveProcessingCycle.Complete();
+
+				var actionProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessing);
+				actionProcessingCycle.Complete();
+				Assert.AreEqual(true, actionProcessingCycle.ProductionArg);
+
+				var actionProcessingCountCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessingCount);
+				Assert.AreEqual(1, actionProcessingCountCycle.ProductionArg);
+				//for (int j = 0; j < (int)actionProcessingCountCycle.ProductionArg; j++)
+				//{
+				//	await sequencer.TestPointAsync(Steps.Notify);
+				//}
+
+				var updateTimerBeginCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerBegin);
+				updateTimerBeginCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.IsActive, updateTimerBeginCycle.ProductionArg);
+
+				var updateTimerEndCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerEnd);
+				updateTimerEndCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.Activate | TimerProcessorTimerStatus.IsActive, updateTimerEndCycle.ProductionArg);
+
+				var endActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.EndActiveProcessing);
+				endActiveProcessingCycle.Complete();
+				Assert.AreEqual(TimerProcessorStatus.Operating, endActiveProcessingCycle.ProductionArg);
+			}
+
+			for (int i = 0; i < 1; i++)
+			{
+				var callBackProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.CallBackProcessing);
+				callBackProcessing.Complete();
+
+				var processingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.Processing);
+				var processingCycleResult = (TimerProcessor.ProcessingResult)processingCycle.ProductionArg;
+				Assert.AreEqual(TimerProcessor.ProcessingResult.Processed, processingCycleResult);
+
+				var exclusiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ExclusiveProcessing);
+				exclusiveProcessingCycle.Complete();
+
+				var beginActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.BeginActiveProcessing);
+				beginActiveProcessingCycle.Complete();
+
+				//ActiveProcessing
+				tt = Task.Run(() => timeprocessor.UnRegisterAsync(tcs).WrapIntoTask());
+
+				var rStatusCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.UnRegisterStatus);
+				Assert.AreEqual(TimerProcessorStatus.Operating, rStatusCycle.ProductionArg);
+				var rActiveProcesingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.UnRegisterActiveProcessing);
+				Assert.AreEqual(true, rActiveProcesingCycle.ProductionArg);
+
+				var actionProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessing);
+				actionProcessingCycle.Complete();
+				Assert.AreEqual(true, actionProcessingCycle.ProductionArg);
+
+				var actionProcessingCountCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessingCount);
+				Assert.AreEqual(1, actionProcessingCountCycle.ProductionArg);
+				for (int j = 0; j < (int)actionProcessingCountCycle.ProductionArg; j++)
+				{
+					await sequencer.TestPointAsync(Steps.Notify);
+				}
+
+				var updateTimerBeginCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerBegin);
+				updateTimerBeginCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.IsActive, updateTimerBeginCycle.ProductionArg);
+
+				var updateTimerEndCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerEnd);
+				updateTimerEndCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.Changed, updateTimerEndCycle.ProductionArg);
+
+				var endActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.EndActiveProcessing);
+				endActiveProcessingCycle.Complete();
+				Assert.AreEqual(TimerProcessorStatus.Operating, endActiveProcessingCycle.ProductionArg);
+			}
+
+
+			t = await tt;
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			await sequencer.WhenAll();
+			sequencer.TryReThrowException();
+		}
+
+		[Test]
+		public async Task Concurrent2Test()
+		{
+			ISequencerUC sequencer =
+			SequencerUC
+			.Construct()
+
+			.Register(TimerProcessorSequencer.RegisterStatus, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.RegisterActiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.UnRegisterStatus, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.UnRegisterActiveProcessing, new StrategyOneOnOneUC())
+
+			.Register(TimerProcessorSequencer.Processing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.ExclusiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.BeginActiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.EndActiveProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.ActionsProcessing, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.ActionsProcessingCount, new StrategyOneOnOneUC())
+
+			.Register(TimerProcessorSequencer.TryUpdateTimerBegin, new StrategyOneOnOneUC())
+			.Register(TimerProcessorSequencer.TryUpdateTimerEnd, new StrategyOneOnOneUC())
+
+			.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			//.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			//.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			//.Register(TimerProcessorSequencer.CallBackProcessing, new StrategyOneOnOneUC())
+			;
+
+			var timeprocessor = new TimerProcessor(10, new RealTimeSource(), sequencer);
+
+
+			var tt = Task.Run(() => timeprocessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(10000)).WrapIntoTask());
+
+			var rStatus = await sequencer.TestPointAsync(TimerProcessorSequencer.RegisterStatus);
+			Assert.AreEqual(TimerProcessorStatus.Operating, rStatus.ProductionArg);
+			var rActiveProcesing = await sequencer.TestPointAsync(TimerProcessorSequencer.RegisterActiveProcessing);
+			Assert.AreEqual(false, rActiveProcesing.ProductionArg);
+
+			var processing = await sequencer.TestPointAsync(TimerProcessorSequencer.Processing);
+			var processingResult = (TimerProcessor.ProcessingResult)processing.ProductionArg;
+			Assert.AreEqual(TimerProcessor.ProcessingResult.Processed, processingResult);
+
+			var exclusiveProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.ExclusiveProcessing);
+			exclusiveProcessing.Complete();
+
+			var beginActiveProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.BeginActiveProcessing);
+			beginActiveProcessing.Complete();
+
+			var actionProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessing);
+			actionProcessing.Complete();
+			Assert.AreEqual(false, actionProcessing.ProductionArg);
+
+			var updateTimerBegin = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerBegin);
+			updateTimerBegin.Complete();
+			Assert.AreEqual(TimerProcessorTimerStatus.None, updateTimerBegin.ProductionArg);
+
+			var updateTimerEnd = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerEnd);
+			updateTimerEnd.Complete();
+			Assert.AreEqual(TimerProcessorTimerStatus.Activate | TimerProcessorTimerStatus.IsActive | TimerProcessorTimerStatus.Changed, updateTimerEnd.ProductionArg);
+
+			var endActiveProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.EndActiveProcessing);
+			endActiveProcessing.Complete();
+			Assert.AreEqual(TimerProcessorStatus.Operating, endActiveProcessing.ProductionArg);
+
+
+			Task<TaskCompletionSource<object>> t = await tt;
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+			TaskCompletionSource<object> tcs = t.Result;
+
+			for (int i = 0; i < 10; i++)
+			{
+				var callBackProcessing = await sequencer.TestPointAsync(TimerProcessorSequencer.CallBackProcessing);
+				callBackProcessing.Complete();
+
+				var processingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.Processing);
+				var processingCycleResult = (TimerProcessor.ProcessingResult)processingCycle.ProductionArg;
+				Assert.AreEqual(TimerProcessor.ProcessingResult.Processed, processingCycleResult);
+
+				var exclusiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ExclusiveProcessing);
+				exclusiveProcessingCycle.Complete();
+
+				var beginActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.BeginActiveProcessing);
+				beginActiveProcessingCycle.Complete();
+
+				var actionProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessing);
+				actionProcessingCycle.Complete();
+				Assert.AreEqual(true, actionProcessingCycle.ProductionArg);
+
+				var actionProcessingCountCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessingCount);
+				Assert.AreEqual(1, actionProcessingCountCycle.ProductionArg);
+				//for (int j = 0; j < (int)actionProcessingCountCycle.ProductionArg; j++)
+				//{
+				//	await sequencer.TestPointAsync(Steps.Notify);
+				//}
+
+				var updateTimerBeginCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerBegin);
+				updateTimerBeginCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.IsActive, updateTimerBeginCycle.ProductionArg);
+
+				var updateTimerEndCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerEnd);
+				updateTimerEndCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.Activate | TimerProcessorTimerStatus.IsActive, updateTimerEndCycle.ProductionArg);
+
+				var endActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.EndActiveProcessing);
+				endActiveProcessingCycle.Complete();
+				Assert.AreEqual(TimerProcessorStatus.Operating, endActiveProcessingCycle.ProductionArg);
+			}
+
+			for (int i = 0; i < 1; i++)
+			{
+				//var callBackProcessing = 
+				await sequencer.TestPointAsync(TimerProcessorSequencer.CallBackProcessing);
+				//callBackProcessing.Complete();
+
+				//var processingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.Processing);
+				//var processingCycleResult = (TimerProcessor.ProcessingResult)processingCycle.ProductionArg;
+				//Assert.AreEqual(TimerProcessor.ProcessingResult.Processed, processingCycleResult);
+
+				//var exclusiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ExclusiveProcessing);
+				//exclusiveProcessingCycle.Complete();
+
+				//var beginActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.BeginActiveProcessing);
+				//beginActiveProcessingCycle.Complete();
+
+				//ActiveProcessing
+				tt = Task.Run(() => timeprocessor.UnRegisterAsync(tcs).WrapIntoTask());
+
+				var rStatusCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.UnRegisterStatus);
+				Assert.AreEqual(TimerProcessorStatus.Operating, rStatusCycle.ProductionArg);
+				var rActiveProcesingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.UnRegisterActiveProcessing);
+				Assert.AreEqual(false, rActiveProcesingCycle.ProductionArg);
+
+				var processingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.Processing);
+				var processingCycleResult = (TimerProcessor.ProcessingResult)processingCycle.ProductionArg;
+				Assert.AreEqual(TimerProcessor.ProcessingResult.Processed, processingCycleResult);
+
+				var exclusiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ExclusiveProcessing);
+				exclusiveProcessingCycle.Complete();
+
+				var beginActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.BeginActiveProcessing);
+				beginActiveProcessingCycle.Complete();
+
+				var actionProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessing);
+				actionProcessingCycle.Complete();
+				Assert.AreEqual(false, actionProcessingCycle.ProductionArg);
+
+				//var actionProcessingCountCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.ActionsProcessingCount);
+				//Assert.AreEqual(1, actionProcessingCountCycle.ProductionArg);
+				//for (int j = 0; j < (int)actionProcessingCountCycle.ProductionArg; j++)
+				//{
+				//	await sequencer.TestPointAsync(Steps.Notify);
+				//}
+
+				var updateTimerBeginCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerBegin);
+				updateTimerBeginCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.IsActive, updateTimerBeginCycle.ProductionArg);
+
+				var updateTimerEndCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.TryUpdateTimerEnd);
+				updateTimerEndCycle.Complete();
+				Assert.AreEqual(TimerProcessorTimerStatus.Changed, updateTimerEndCycle.ProductionArg);
+
+				var endActiveProcessingCycle = await sequencer.TestPointAsync(TimerProcessorSequencer.EndActiveProcessing);
+				endActiveProcessingCycle.Complete();
+				Assert.AreEqual(TimerProcessorStatus.Operating, endActiveProcessingCycle.ProductionArg);
+			}
+
+
+			t = await tt;
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			await sequencer.WhenAll();
+			sequencer.TryReThrowException();
+		}
+
+
+		[Test]
+		public async Task DisposeBasicTest()
+		{
+			var timerProcessor = new TimerProcessor(10, new RealTimeSource());
+
+			timerProcessor.Dispose();
+			Task t = await timerProcessor.Disposed.WrapIntoTask();
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			TaskCompletionSource<object> ttt = new TaskCompletionSource<object>();
+			Assert.ThrowsAsync<ObjectDisposedException>(async () => await timerProcessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(10000)));
+			Assert.ThrowsAsync<ObjectDisposedException>(async () => await timerProcessor.UnRegisterAsync(ttt));
+		}
+
+		[Test]
+		[Ignore("Incomplete")]
+		public async Task MultipleRegistrationsTest()
+		{
+			//var TimerProcessor = new TimerProcessor(10);
+
+			//ISequencerUC sequencer =
+			//SequencerUC
+			//.Construct()
+			//.Register(Steps.Notify, new StrategyOneOnOneUC())
+			//;
+
+			//Action action = () =>
+			//{
+			//	sequencer.Point(SeqPointTypeUC.Notify, Steps.Notify);
+			//};
+
+			//Task t = await TimerProcessor.RegisterAsync(action).WrapIntoTask();
+			//Assert.IsTrue(t.IsCompleted);
+			//Assert.IsFalse(t.IsCanceled);
+			//Assert.IsFalse(t.IsFaulted);
+
+			//t = await TimerProcessor.RegisterAsync(action).WrapIntoTask();
+			//Assert.IsTrue(t.IsCompleted);
+			//Assert.IsFalse(t.IsCanceled);
+			//Assert.IsFalse(t.IsFaulted);
+
+			//for (int i = 0; i < 10; i++)
+			//{
+			//	await sequencer.TestPointAsync(Steps.Notify);
+			//}
+
+			//t = await TimerProcessor.UnRegisterAsync(action).WrapIntoTask();
+			//Assert.IsTrue(t.IsCompleted);
+			//Assert.IsFalse(t.IsCanceled);
+			//Assert.IsFalse(t.IsFaulted);
+
+			//await sequencer.WhenAll();
+			//sequencer.TryReThrowException();
+		}
+
+		[Test]
+		[Ignore("Incomplete")]
+		public async Task MultipleUnRegistrationsTest()
+		{
+			//var TimerProcessor = new TimerProcessor(10);
+
+			//ISequencerUC sequencer =
+			//SequencerUC
+			//.Construct()
+			//.Register(Steps.Notify, new StrategyOneOnOneUC())
+			//;
+
+			//Action action = () =>
+			//{
+			//	sequencer.Point(SeqPointTypeUC.Notify, Steps.Notify);
+			//};
+
+			//Task t = await TimerProcessor.RegisterAsync(action).WrapIntoTask();
+			//Assert.IsTrue(t.IsCompleted);
+			//Assert.IsFalse(t.IsCanceled);
+			//Assert.IsFalse(t.IsFaulted);
+
+			//for (int i = 0; i < 10; i++)
+			//{
+			//	await sequencer.TestPointAsync(Steps.Notify);
+			//}
+
+			//t = await TimerProcessor.UnRegisterAsync(action).WrapIntoTask();
+			//Assert.IsTrue(t.IsCompleted);
+			//Assert.IsFalse(t.IsCanceled);
+			//Assert.IsFalse(t.IsFaulted);
+
+			//t = await TimerProcessor.UnRegisterAsync(action).WrapIntoTask();
+			//Assert.IsTrue(t.IsCompleted);
+			//Assert.IsFalse(t.IsCanceled);
+			//Assert.IsFalse(t.IsFaulted);
+
+			//await sequencer.WhenAll();
+			//sequencer.TryReThrowException();
 		}
 	}
 }
