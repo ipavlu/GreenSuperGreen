@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Async\ICompletionUC\Enum.ConfigCompletionContinuation.cs" />
+    <Compile Include="Async\TaskCompletionSource\TaskCompletionSourceAccessor.cs" />
     <Compile Include="Console\ConsoleUC.cs" />
     <Compile Include="Contexts\ExecutionContextExtensions\ExecutionContextExtensions.cs" />
     <Compile Include="Async\ICompletionUC\CompletionFromTaskUC.Generic.cs" />
@@ -109,6 +110,8 @@
     <Compile Include="Sequencing\ISequencerUC\ISequencerTaskRegister\ISequencerTaskRegister.cs" />
     <Compile Include="Timing\RealTimeSource\RealTimeSource.cs" />
     <Compile Include="Timing\TickGenerator\TickGenerator.cs" />
+    <Compile Include="Timing\TimerProcessor\TimerProcessorItem.cs" />
+    <Compile Include="Timing\TimerProcessor\OrderedExpiryItems.cs" />
     <Compile Include="Timing\TimerProcessor\TimerProcessor.cs" />
     <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelEntry.cs" />
     <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelLimiter.cs" />
