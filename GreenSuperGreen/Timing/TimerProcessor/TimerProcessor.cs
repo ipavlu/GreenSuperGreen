@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GreenSuperGreen.Async;
 using GreenSuperGreen.Sequencing;
 using GreenSuperGreen.UnifiedConcurrency;
 
@@ -55,102 +54,11 @@ namespace GreenSuperGreen.Timing
 	}
 
 
-	public struct TimerProcessorCallBackRequest
-	{
-		public TimerProcessorRequest Request { get; }
-		public TimerProcessorItem TimerProcessorItem { get; }
-		public object TCS { get; }
-		public ITaskCompletionSourceAccessor AccessorTCS { get; }
-		public Task<TaskCompletionSource<TArg>> GetWrappedTCS<TArg>() => AccessorTCS?.GetTask(TCS) as Task<TaskCompletionSource<TArg>>;
-		public Task Task => AccessorTCS?.GetTask(TCS);
-		public TimerProcessorCallBackRequest TrySetResult() { AccessorTCS.TrySetResult(TCS, TimerProcessorItem.TimingTCS); return this; }
-		public TimerProcessorCallBackRequest TrySetCanceled() { AccessorTCS.TrySetCanceled(TCS); return this; }
-		public TimerProcessorCallBackRequest TrySetDisposed() { AccessorTCS.TrySetException(TCS, TimerProcessor.DisposedException); return this; }
-		public TimerProcessorCallBackRequest TrySetException(Exception e) { AccessorTCS.TrySetException(TCS, e); return this; }
-		public TimerProcessorCallBackRequest TrySetException(string msg) => TrySetException(new Exception(msg));
-
-		public static TimerProcessorCallBackRequest Add<TArg>(DateTime Now, TimeSpan Delay)
-		=> new TimerProcessorCallBackRequest(	TimerProcessorRequest.Add,
-												TimerProcessorItem.Add<TArg>(Now, Delay),
-												new TaskCompletionSource<TaskCompletionSource<TArg>>(TaskCreationOptions.RunContinuationsAsynchronously),
-												TaskCompletionSourceAccessor<TaskCompletionSource<TArg>>.Default)
-		;
-
-		public static TimerProcessorCallBackRequest Remove<TArg>(TaskCompletionSource<TArg> tcs)
-		=> new TimerProcessorCallBackRequest(	TimerProcessorRequest.Remove,
-												TimerProcessorItem.Remove(tcs),
-												new TaskCompletionSource<TaskCompletionSource<TArg>>(TaskCreationOptions.RunContinuationsAsynchronously),
-												TaskCompletionSourceAccessor<TaskCompletionSource<TArg>>.Default)
-		;
-
-
-		private TimerProcessorCallBackRequest(	TimerProcessorRequest Request,
-												TimerProcessorItem TimerProcessorItem,
-												object TCS,
-												ITaskCompletionSourceAccessor AccessorTCS)
-		{
-			this.Request = Request;
-			this.TimerProcessorItem = TimerProcessorItem;
-			this.TCS = TCS;
-			this.AccessorTCS = AccessorTCS;
-		}
-
-		private void ProcessingAdd(TimerProcessorStatus status, IOrderedExpiryItems expiryItems)
-		{
-			if (status == TimerProcessorStatus.Operating)
-			{
-				if (expiryItems.TryAdd(TimerProcessorItem)) TrySetResult();
-				else TrySetException($"{nameof(ProcessingAdd)}.TryAdd has failed");
-				return;
-			}
-			if (status == TimerProcessorStatus.Disposing)
-			{
-				TrySetCanceled();
-				return;
-			}
-			if (status == TimerProcessorStatus.Disposed)
-			{
-				TrySetDisposed();
-			}
-		}
-
-		private void ProcessingRemove(TimerProcessorStatus status, IOrderedExpiryItems expiryItems)
-		{
-			if (status == TimerProcessorStatus.Operating)
-			{
-				expiryItems.TryRemove(TimerProcessorItem);
-				TrySetResult();
-				return;
-			}
-			if (status == TimerProcessorStatus.Disposing)
-			{
-				expiryItems.TryRemove(TimerProcessorItem);
-				TrySetCanceled();
-				return;
-			}
-			if (status == TimerProcessorStatus.Disposed)
-			{
-				TrySetDisposed();
-				return;
-			}
-		}
-
-		public static void Processing(TimerProcessorStatus status, Queue<TimerProcessorCallBackRequest> queue, IOrderedExpiryItems expiryItems)
-		{
-			while (queue.Count > 0)
-			{
-				TimerProcessorCallBackRequest request = queue.Dequeue();
-				if (request.Request == TimerProcessorRequest.Add) request.ProcessingAdd(status, expiryItems);
-				else if (request.Request == TimerProcessorRequest.Remove) request.ProcessingRemove(status, expiryItems);
-			}
-		}
-	}
-
-
 	public interface ITimerProcessor : IDisposable
 	{
 		int? Period { get; }
 		Task Disposed { get; }
+		Task<TaskCompletionSource<TArg>> RegisterResultAsync<TArg>(TimeSpan delay, TArg result);
 		Task<TaskCompletionSource<TArg>> RegisterAsync<TArg>(TimeSpan delay);
 		Task<TaskCompletionSource<TArg>> UnRegisterAsync<TArg>(TaskCompletionSource<TArg> tcs);
 	}
@@ -288,6 +196,33 @@ namespace GreenSuperGreen.Timing
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.DisposedEnd, Status);
 				if (Status == TimerProcessorStatus.Disposed) return;
 				TryUpdateTimer(activate: true);
+			}
+		}
+
+		public Task<TaskCompletionSource<TArg>> RegisterResultAsync<TArg>(TimeSpan delay, TArg result)
+		{
+			TimerProcessorCallBackRequest request = TimerProcessorCallBackRequest.AddWithResult(RealTimeSource.GetUtcNow(), delay, result);
+			if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+			if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetWrappedTCS<TArg>();
+
+			using (Lock.Enter())
+			{
+				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterStatus, Status);
+				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterActiveProcessing, ActiveProcessing);
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+				if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetWrappedTCS<TArg>();
+				Requests.Enqueue(request);
+				if (ActiveProcessing) return request.GetWrappedTCS<TArg>();
+			}
+
+			if (Processing(processActions: false) == ProcessingResult.Processed) return request.GetWrappedTCS<TArg>();
+
+			using (Lock.Enter())
+			{
+				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterEnd, Status);
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+				TryUpdateTimer(activate: true);
+				return request.GetWrappedTCS<TArg>();
 			}
 		}
 

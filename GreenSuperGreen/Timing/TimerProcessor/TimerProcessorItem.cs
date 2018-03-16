@@ -8,34 +8,62 @@ using GreenSuperGreen.Async;
 
 namespace GreenSuperGreen.Timing
 {
+	public enum TimerExpiryAction
+	{
+		TrySetCanceled,
+		TrySetResult
+	}
+
 	/// <summary>
 	/// Equality is based on <see cref="TimingTCS"/>
 	/// </summary>
 	public struct TimerProcessorItem : IEquatable<TimerProcessorItem>
 	{
 		public DateTime? Expiry { get; }
+		public TimerExpiryAction? ExpiryAction { get; }
+		private object Result { get; }
 
 		public object TimingTCS { get; }
 		private ITaskCompletionSourceAccessor AccessorTimingTCS { get; }
 
 		private Task TaskTCS => AccessorTimingTCS?.GetTask(TimingTCS);
+
 		public bool? Expired { get { Task t = TaskTCS; return t == null ? (bool?)null : t.IsCompleted || t.IsCanceled || t.IsFaulted; } }
-		public bool? TryExpire() => AccessorTimingTCS?.TrySetCanceled(TimingTCS);
+		public bool? TryExpire()
+		{
+			if (ExpiryAction == null) return AccessorTimingTCS?.TrySetCanceled(TimingTCS);
+			if (ExpiryAction == TimerExpiryAction.TrySetCanceled) return AccessorTimingTCS?.TrySetCanceled(TimingTCS);
+			if (ExpiryAction == TimerExpiryAction.TrySetResult) return AccessorTimingTCS?.TrySetResult(TimingTCS, Result);
+			return null;
+		}
 		public bool? TryDispose() => AccessorTimingTCS?.TrySetException(TimingTCS, TimerProcessor.DisposedException);
 
 		public static TimerProcessorItem Add<TArg>(DateTime Now, TimeSpan Delay)
 		=> new TimerProcessorItem(	Now,
 									Delay,
 									new TaskCompletionSource<TArg>(TaskCreationOptions.RunContinuationsAsynchronously),
-									TaskCompletionSourceAccessor<TArg>.Default)
+									TaskCompletionSourceAccessor<TArg>.Default,
+									TimerExpiryAction.TrySetCanceled,
+									null)
+		;
+
+		public static TimerProcessorItem AddWithResult<TArg>(DateTime Now, TimeSpan Delay, TArg result)
+		=> new TimerProcessorItem(	Now,
+									Delay,
+									new TaskCompletionSource<TArg>(TaskCreationOptions.RunContinuationsAsynchronously),
+									TaskCompletionSourceAccessor<TArg>.Default,
+									TimerExpiryAction.TrySetResult,
+									result)
 		;
 
 		public static TimerProcessorItem Remove<TArg>(TaskCompletionSource<TArg> tcs) 
 		=> new TimerProcessorItem(tcs, TaskCompletionSourceAccessor<TArg>.Default)
 		;
 
-		private TimerProcessorItem(DateTime Now, TimeSpan Delay, object TimingTCS, ITaskCompletionSourceAccessor AccessorTimingTCS)
+		private TimerProcessorItem(DateTime Now, TimeSpan Delay, object TimingTCS, ITaskCompletionSourceAccessor AccessorTimingTCS, TimerExpiryAction? expActiom, object expResult)
 		{
+			this.ExpiryAction = expActiom;
+			this.Result = expResult;
 			this.Expiry = Now + Delay;
 			this.TimingTCS = TimingTCS;
 			this.AccessorTimingTCS = AccessorTimingTCS;
@@ -44,6 +72,8 @@ namespace GreenSuperGreen.Timing
 
 		private TimerProcessorItem(object TimingTCS, ITaskCompletionSourceAccessor AccessorTimingTCS)
 		{
+			this.ExpiryAction = null;
+			this.Result = null;
 			this.Expiry = null;
 			this.TimingTCS = TimingTCS;
 			this.AccessorTimingTCS = AccessorTimingTCS;
