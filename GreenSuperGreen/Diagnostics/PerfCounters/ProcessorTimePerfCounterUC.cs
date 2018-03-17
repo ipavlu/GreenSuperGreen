@@ -18,7 +18,7 @@ namespace GreenSuperGreen.Diagnostics
 		private PerformanceCounter Counter { get; set; }
 		private Timer Timer { get; set; }
 		private Queue<double> Collected { get; set; }
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 
 		public PerfCounterTypeUC PerfCounterType => PerfCounterTypeUC.ProcessorTime;
 

@@ -28,7 +28,7 @@ namespace GreenSuperGreen.Queues
 			IPriorityQueueUC<TPrioritySelectorEnum, TItem>
 	where	TPrioritySelectorEnum : struct
 	{
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 
 		private Queue<TaskCompletionSource<object>> NotifyAnyPriority { get; } = new Queue<TaskCompletionSource<object>>();
 		private Dictionary<TPrioritySelectorEnum, Queue<TaskCompletionSource<object>>> NotifyPriority { get; }

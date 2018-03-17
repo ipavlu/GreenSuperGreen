@@ -14,7 +14,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered.
 	/// <para/> TryEnter can not be used! Not supported!
 	/// </summary>
-	public class TicketSpinLockUC : ISimpleLockUC
+	public class TicketSpinLockUC : ILockUC
 	{
 		private int _tickets = 0;
 		private int _activeTicket = 1;

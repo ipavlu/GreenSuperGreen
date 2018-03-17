@@ -12,7 +12,7 @@ namespace GreenSuperGreen.Sequencing
 {
 	public abstract class ASequencerStrategyUC : ISequencerStrategyUC
 	{
-		protected virtual ISimpleLockUC Lock { get; } = new SpinLockUC();
+		protected virtual ILockUC Lock { get; } = new SpinLockUC();
 
 		protected virtual Queue<IProductionPointUC> ProductionPointQueue { get; } = new Queue<IProductionPointUC>();
 		protected virtual Queue<ITestPointUC> TestPointQueue { get; } = new Queue<ITestPointUC>();

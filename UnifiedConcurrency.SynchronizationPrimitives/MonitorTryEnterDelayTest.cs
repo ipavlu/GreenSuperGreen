@@ -12,7 +12,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 		public int Delay { get; }
 		public MonitorTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
 
-		private ISimpleLockUC Lock { get; } = new MonitorLockUC();
+		private ILockUC Lock { get; } = new MonitorLockUC();
 
 		protected override bool ExclusiveAccess()
 		{

@@ -136,7 +136,7 @@ namespace GreenSuperGreen.Timing
 	public class TickGenerator : ITickGenerator, IDisposable
 	{
 		private ISequencerUC NullSafeSequencer { get; }
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 		private IConcurrencyLevelCounter ConcurrencyLimiter { get; } = new ConcurrencyLevelLimiter(maxConcurrency: 1);
 
 		public int? Period { get; private set; }

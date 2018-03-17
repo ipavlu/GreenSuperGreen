@@ -23,7 +23,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 
 		private static int StepConcurrentSequencing;
 
-		private static void ConcurrentSequencingWorker(ISimpleLockUC Lock, ISequencerUC sequencer)
+		private static void ConcurrentSequencingWorker(ILockUC Lock, ISequencerUC sequencer)
 		{
 			sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingPhase.Begin);
 			sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingPhase.EnteringSimpleLock, Interlocked.Increment(ref StepConcurrentSequencing));
@@ -54,7 +54,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//StrategyOneOnOneUC each production code point(per thread) is matched to unit test point
 			//that is per point and per thread in production code
 
-			ISimpleLockUC Lock = new TicketSpinLockUC();
+			ILockUC Lock = new TicketSpinLockUC();
 
 			//start first worker
 			sequencer.Run(seq => ConcurrentSequencingWorker(Lock, sequencer));

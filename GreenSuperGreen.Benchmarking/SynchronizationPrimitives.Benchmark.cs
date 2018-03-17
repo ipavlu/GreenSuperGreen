@@ -299,8 +299,8 @@ namespace GreenSuperGreen.Benchmarking
 
 	public class SimpleLockWorker : BenchInstance
 	{
-		private ISimpleLockUC Lock { get; }
-		public SimpleLockWorker(IPerfCounterCollectorUC perfCollector, ISimpleLockUC syncPrimitive, TimeSpan ts, int spin, string pair = null) : base(perfCollector, ts, spin, pair) { Lock = syncPrimitive; }
+		private ILockUC Lock { get; }
+		public SimpleLockWorker(IPerfCounterCollectorUC perfCollector, ILockUC syncPrimitive, TimeSpan ts, int spin, string pair = null) : base(perfCollector, ts, spin, pair) { Lock = syncPrimitive; }
 
 		protected override async Task BenchTarget()
 		{
@@ -493,26 +493,26 @@ namespace GreenSuperGreen.Benchmarking
 
 		public async Task HeavyLockUC(BenchInfo info, IPerfCounterCollectorUC perfColletor, TimeSpan ts, int spin, int threads)
 		{
-			ISimpleLockUC Lock = new LockUC();
+			ILockUC Lock = new LockUC();
 			await GeneralBenchmark(perfColletor, info.Name, threads, i => Lock, (i, perfCntr, sync) => new BenchInstance[] { new SimpleLockWorker(perfCntr, Lock, ts, spin, string.Empty)});
 		}
 
 		public async Task HeavySpinLockUC(BenchInfo info, IPerfCounterCollectorUC perfColletor, TimeSpan ts, int spin, int threads)
 		{
-			ISimpleLockUC Lock = new SpinLockUC();
+			ILockUC Lock = new SpinLockUC();
 			await GeneralBenchmark(perfColletor, info.Name, threads, i => Lock, (i, perfCntr, sync) => new BenchInstance[] { new SimpleLockWorker(perfCntr, Lock, ts, spin, string.Empty)});
 		}
 
 		public async Task HeavyTicketSpinLockUC(BenchInfo info, IPerfCounterCollectorUC perfColletor, TimeSpan ts, int spin, int threads)
 		{
-			ISimpleLockUC Lock = new TicketSpinLockUC();
+			ILockUC Lock = new TicketSpinLockUC();
 			await GeneralBenchmark(perfColletor, info.Name, threads, i => Lock, (i, perfCntr, sync) => new BenchInstance[] { new SimpleLockWorker(perfCntr, Lock, ts, spin, string.Empty)});
 		}
 
 		public async Task HeavyMonitorLockUC(BenchInfo info, IPerfCounterCollectorUC perfColletor, TimeSpan ts, int spin, int threads)
 		{
 			#pragma warning disable 618
-			ISimpleLockUC Lock = new MonitorLockUC();
+			ILockUC Lock = new MonitorLockUC();
 			#pragma warning restore 618
 			await GeneralBenchmark(perfColletor, info.Name, threads, i => Lock, (i, perfCntr, sync) => new BenchInstance[] { new SimpleLockWorker(perfCntr, Lock, ts, spin, string.Empty)});
 		}

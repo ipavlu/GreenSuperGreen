@@ -11,7 +11,7 @@ namespace GreenSuperGreen.Sequencing
 	public class SequencerExceptionRegister : ISequencerExceptionRegister
 	{
 		private Queue<Exception> Exceptions { get; } = new Queue<Exception>();
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 		private AggregateException AggregateException { get; set; }
 		private CancellationTokenSource TokenSource { get; } = new CancellationTokenSource();
 

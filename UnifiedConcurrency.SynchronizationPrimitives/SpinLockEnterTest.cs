@@ -11,7 +11,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	{
 		public SpinLockEnter(int count) : base(count) { }
 
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 
 		protected override bool ExclusiveAccess()
 		{

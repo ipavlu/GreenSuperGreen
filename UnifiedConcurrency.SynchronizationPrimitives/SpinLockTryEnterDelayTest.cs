@@ -12,7 +12,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 		public int Delay { get; }
 		public SpinLockTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
 
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 
 		protected override bool ExclusiveAccess()
 		{

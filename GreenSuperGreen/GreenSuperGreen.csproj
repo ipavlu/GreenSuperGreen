@@ -125,21 +125,21 @@
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncTicketSpinLockUC\AsyncTicketSpinLockUC.cs" />
     <Compile Include="UnifiedConcurrency\IEntryCompletionUC\IEntryCompletion.cs" />
     <Compile Include="UnifiedConcurrency\IEntryBlockUC\EntryBlockUC.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\ISimpleLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\ILockUC.cs" />
     <Compile Include="UnifiedConcurrency\IEntryBlockUC\IEntryBlockUC.cs" />
     <Compile Include="UnifiedConcurrency\IEntryBlockUC\EntryTypeUC.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockCancellableUC\LockCancellableUC.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockUC\LockUC.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockCancellableUC\SpinLockCancellableUC.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\LockCancellableUC\LockCancellableUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\LockUC\LockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockCancellableUC\SpinLockCancellableUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\MonitorLockUC\MonitorLockUC.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\TicketSpinLockUC\TicketSpinLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\MonitorLockUC\MonitorLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\TicketSpinLockUC\TicketSpinLockUC.cs" />
     <Compile Include="UnifiedConcurrency\SyncPrimitiveCapabilityUC\SyncPrimitiveCapabilityUC.Enum.cs" />
     <Compile Include="UnifiedConcurrency\TimerProcessorUC\TimerProcessorUC.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\ReadMe.txt" />
+    <Content Include="UnifiedConcurrency\ILockUC\SpinLockUC\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

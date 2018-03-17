@@ -12,7 +12,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <para/> Does not support recursive call and does not protect against recursive call!
 	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
 	/// </summary>
-	public class SpinLockUC : ISimpleLockUC
+	public class SpinLockUC : ILockUC
 	{
 		/// <summary> CAN NOT BE READONLY FIELD!!! CAN NOT BE PROPERTY!!! CAN NOT TRACK THREAD!!! </summary>
 		private SpinLock _spinLock = new SpinLock(false);

@@ -56,8 +56,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockCancellableUC\ReadMe.txt" />
-    <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\ReadMe.txt" />
+    <Content Include="UnifiedConcurrency\ILockUC\SpinLockCancellableUC\ReadMe.txt" />
+    <Content Include="UnifiedConcurrency\ILockUC\SpinLockUC\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

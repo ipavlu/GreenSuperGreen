@@ -28,7 +28,7 @@ namespace GreenSuperGreen.Queues
 
 	public class ConcurrentQueueNotifier<TItem> : IConcurrentQueueNotifier<TItem>
 	{
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 		private Queue<TItem> ItemsQueue { get; } = new Queue<TItem>();
 		private Queue<TaskCompletionSource<object>> EnqueueAccess { get; } = new Queue<TaskCompletionSource<object>>();
 		private Queue<TaskCompletionSource<object>> DequeueAccess { get; } = new Queue<TaskCompletionSource<object>>();

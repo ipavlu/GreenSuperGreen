@@ -24,7 +24,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 
 		private static int StepConcurrentSequencing;
 
-		private static void ConcurrentSequencingWorker(ISimpleLockUC Lock, ISequencerUC sequencer)
+		private static void ConcurrentSequencingWorker(ILockUC Lock, ISequencerUC sequencer)
 		{
 			sequencer.Point(SeqPointTypeUC.Match, ConcurrentTryEnterDelaySequencingPhase.Begin);
 			sequencer.Point(SeqPointTypeUC.Notify, ConcurrentTryEnterDelaySequencingPhase.EnteringSimpleLock, Interlocked.Increment(ref StepConcurrentSequencing));

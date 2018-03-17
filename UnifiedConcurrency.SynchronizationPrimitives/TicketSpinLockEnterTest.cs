@@ -11,7 +11,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	{
 		public TicketSpinLockEnter(int count) : base(count) { }
 
-		private ISimpleLockUC Lock { get; } = new TicketSpinLockUC();
+		private ILockUC Lock { get; } = new TicketSpinLockUC();
 
 		protected override bool ExclusiveAccess()
 		{

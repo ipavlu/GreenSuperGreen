@@ -43,7 +43,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			}
 		}
 
-		private ISimpleLockUC SpinLock { get; } = new SpinLockUC();
+		private ILockUC SpinLock { get; } = new SpinLockUC();
 		private Queue<AccessItem> Queue { get; } = new Queue<AccessItem>();
 		private EntryBlockUC ExclusiveEntry { get; }
 		private Status LockStatus { get; set; } = Status.Opened;

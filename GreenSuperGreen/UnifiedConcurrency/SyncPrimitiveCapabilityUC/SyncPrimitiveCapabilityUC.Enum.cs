@@ -9,11 +9,11 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	[Flags]
 	public enum SyncPrimitiveCapabilityUC
 	{
-		/// <summary> Supports <see cref="ISimpleLockUC.Enter"/> </summary>
-		Enter	= (1 << 0),
-		/// <summary> Supports <see cref="ISimpleLockUC.TryEnter()"/> </summary>
+		/// <summary> Supports <see cref="ILockUC.Enter"/> </summary>
+		Enter = (1 << 0),
+		/// <summary> Supports <see cref="ILockUC.TryEnter()"/> </summary>
 		TryEnter = (1 << 1),
-		/// <summary> Supports <see cref="ISimpleLockUC.TryEnter(int)"/> </summary>
+		/// <summary> Supports <see cref="ILockUC.TryEnter(int)"/> </summary>
 		TryEnterWithTimeout = (1 << 2),
 		/// <summary> Recursive calls supported. Recursiveness should be avoided at all costs! </summary>
 		Recursive = (1 << 3),

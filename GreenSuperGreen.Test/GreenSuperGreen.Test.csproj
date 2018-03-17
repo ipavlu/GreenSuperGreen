@@ -76,10 +76,10 @@
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncTicketSpinLockUC\AsyncTicketSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSpinLockUC\AsyncSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncLockUC\AsyncLockUC.ConcurrentSequencing.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockUC\LockUC.ConcurrentSequencing.TryEnterDelay.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockUC\LockUC.ConcurrentSequencing.Enter.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\MonitorLockUC\MonitorLockUC.ConcurrentSequencing.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\TicketSpinLockUC\TicketSpinLockUC.ConcurrentSequencing.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\LockUC\LockUC.ConcurrentSequencing.TryEnterDelay.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\LockUC\LockUC.ConcurrentSequencing.Enter.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\MonitorLockUC\MonitorLockUC.ConcurrentSequencing.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\TicketSpinLockUC\TicketSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\MonitorLock\Research\MonitorLockThreadAbortResearch.cs" />
     <Compile Include="Async\TaskCompletionSourceTests\TaskCompletionSourceSynchronousTests.cs" />
     <Compile Include="IdentifierGenerators\IUniqueID\IUniqueID.CheckUniqueness.cs" />
@@ -92,13 +92,13 @@
     <Compile Include="Sequencing\ISequencerUC\ISequencerUC.cs" />
     <Compile Include="Sequencing\ISequencerUC\ISequencerUC.Throw.DetectException.Conditional.cs" />
     <Compile Include="Sequencing\ISequencerUC\ISequencerUC.Throw.DetectException.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.ConcurrentSequencing.Conditional.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.ConcurrentSequencing.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.ConcurrentSequencing.Async.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.ConcurrentCorrectness.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.SyncExceptionReleasingLockTest.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\SpinLockUC.SingleThreadCorrectness.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.ConcurrentSequencing.Conditional.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.ConcurrentSequencing.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.ConcurrentSequencing.Async.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.ConcurrentCorrectness.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.SyncExceptionReleasingLockTest.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.SingleThreadCorrectness.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="package.nuspec" />

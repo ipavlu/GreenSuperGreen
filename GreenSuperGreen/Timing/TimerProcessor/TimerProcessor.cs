@@ -74,7 +74,7 @@ namespace GreenSuperGreen.Timing
 		public static Exception DisposedException => new ObjectDisposedException($"{nameof(TimerProcessor)} instance is disposed");
 
 		private ISequencerUC NullSafeSequencer { get; }
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 		private IConcurrencyLevelCounter ConcurrencyLimiter { get; } = new ConcurrencyLevelLimiter(maxConcurrency: 1);
 
 		public int? Period => Ticker?.Period;

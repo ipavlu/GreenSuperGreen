@@ -15,7 +15,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <para/> awaiting inside entry block NOT SUPPORTED, causing synchronization error!
 	/// </summary>
 	[Obsolete("Potentially harmfull! You would be served better with LockUC! Awaiting inside entry block or attempt to exit entry block in different thread is not supported!")]
-	internal class MonitorLockUC : ISimpleLockUC
+	internal class MonitorLockUC : ILockUC
 	{
 		private object ObjLock { get; } = new object();
 		private EntryCompletionUC EntryCompletion { get; }

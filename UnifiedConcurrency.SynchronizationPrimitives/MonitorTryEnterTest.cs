@@ -11,7 +11,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	{
 		public MonitorTryEnter(int count) : base(count) { }
 
-		private ISimpleLockUC Lock { get; } = new MonitorLockUC();
+		private ILockUC Lock { get; } = new MonitorLockUC();
 
 		protected override bool ExclusiveAccess()
 		{

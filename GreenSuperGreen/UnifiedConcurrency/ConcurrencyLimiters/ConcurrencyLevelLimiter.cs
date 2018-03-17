@@ -16,7 +16,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary> Helps limit number of concurrent threads without hard locking </summary>
 	public class ConcurrencyLevelLimiter : IConcurrencyLevelCounter
 	{
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 		private int ConcurrencyLevelValue { get; set; }
 		public int ConcurrencyLevel { get { using (Lock.Enter()) return ConcurrencyLevelValue; } }
 		public int MaxConcurrencyLevel { get; }

@@ -14,7 +14,7 @@
 //	/// <para/> Does not support recursive call and does not protect against recursive call!
 //	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
 //	/// </summary>
-//	public class LockCancellableUC : ISimpleLockUC
+//	public class LockCancellableUC : ILockUC
 //	{
 //		private static Task CancellationNoneTask { get; } = Task.FromCanceled(CancellationToken.None);
 //		private ISimpleLockUC Lock { get; } = new SpinLockUC();

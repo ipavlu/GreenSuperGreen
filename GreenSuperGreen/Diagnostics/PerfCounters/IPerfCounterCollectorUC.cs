@@ -20,7 +20,7 @@ namespace GreenSuperGreen.Diagnostics
 
 	public class PerfCounterCollectorUC : IPerfCounterCollectorUC
 	{
-		private ISimpleLockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SpinLockUC();
 		private Stopwatch StopWatch { get; set; } = new Stopwatch();
 		private IPerfCounterUC PerfCounter { get; set; }
 		private Queue<double> Queue { get; set; } = new Queue<double>();

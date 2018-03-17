@@ -14,7 +14,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <para/> Does not support recursive call and does not protect against recursive call!
 	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
 	/// </summary>
-	public class LockUC : ISimpleLockUC
+	public class LockUC : ILockUC
 	{
 		private struct AccessItem
 		{
@@ -50,7 +50,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			}
 		}
 
-		private ISimpleLockUC SpinLock { get; } = new SpinLockUC();
+		private ILockUC SpinLock { get; } = new SpinLockUC();
 		private Queue<AccessItem> Queue { get; } = new Queue<AccessItem>();
 		private EntryBlockUC ExclusiveEntry { get; }
 		private Status LockStatus { get; set; } = Status.Opened;
