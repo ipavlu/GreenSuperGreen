@@ -27,11 +27,38 @@ namespace GreenSuperGreen.Timing
 
 		public Task Task => AccessorTCS?.GetTask(TCS);
 
-		public TimerProcessorCallBackRequest TrySetResult() { AccessorTCS.TrySetResult(TCS, TimerProcessorItem.TimingTCS); return this; }
-		public TimerProcessorCallBackRequest TrySetCanceled() { AccessorTCS.TrySetCanceled(TCS); return this; }
-		public TimerProcessorCallBackRequest TrySetDisposed() { AccessorTCS.TrySetException(TCS, TimerProcessor.DisposedException); return this; }
-		public TimerProcessorCallBackRequest TrySetException(Exception e) { AccessorTCS.TrySetException(TCS, e); return this; }
-		public TimerProcessorCallBackRequest TrySetException(string msg) => TrySetException(new Exception(msg));
+		public TimerProcessorCallBackRequest TrySetResult()
+		{
+			AccessorTCS.TrySetResult(TCS, TimerProcessorItem.TimingTCS);
+			return this;
+		}
+
+		public TimerProcessorCallBackRequest TrySetCanceled()
+		{
+			AccessorTCS.TrySetCanceled(TCS);
+			TimerProcessorItem.TryCancel();
+			return this;
+		}
+
+		public TimerProcessorCallBackRequest TrySetDisposed()
+		{
+			AccessorTCS.TrySetException(TCS, TimerProcessor.DisposedException);
+			TimerProcessorItem.TryDispose();
+			return this;
+		}
+
+		public TimerProcessorCallBackRequest TrySetException(Exception e)
+		{
+			AccessorTCS.TrySetException(TCS, e);
+			TimerProcessorItem.TrySetException(e);
+			return this;
+		}
+
+		public TimerProcessorCallBackRequest TrySetException(string msg)
+		{
+			return TrySetException(new Exception(msg));
+		}
+
 
 		public static TimerProcessorCallBackRequest Add<TArg>(DateTime Now, TimeSpan Delay)
 		=> new TimerProcessorCallBackRequest(	TimerProcessorRequest.Add,

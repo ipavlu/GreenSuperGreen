@@ -29,6 +29,7 @@ namespace GreenSuperGreen.Timing
 		private Task TaskTCS => AccessorTimingTCS?.GetTask(TimingTCS);
 
 		public bool? Expired { get { Task t = TaskTCS; return t == null ? (bool?)null : t.IsCompleted || t.IsCanceled || t.IsFaulted; } }
+
 		public bool? TryExpire()
 		{
 			if (ExpiryAction == null) return AccessorTimingTCS?.TrySetCanceled(TimingTCS);
@@ -36,7 +37,14 @@ namespace GreenSuperGreen.Timing
 			if (ExpiryAction == TimerExpiryAction.TrySetResult) return AccessorTimingTCS?.TrySetResult(TimingTCS, Result);
 			return null;
 		}
-		public bool? TryDispose() => AccessorTimingTCS?.TrySetException(TimingTCS, TimerProcessor.DisposedException);
+
+		public bool? TryCancel() => AccessorTimingTCS?.TrySetCanceled(TimingTCS);
+
+		public bool? TryDispose() => TrySetException(TimerProcessor.DisposedException);
+
+		public bool? TrySetException(Exception ex) => AccessorTimingTCS?.TrySetException(TimingTCS, ex);
+
+		public bool? TrySetException(string msg) => AccessorTimingTCS?.TrySetException(TimingTCS, new Exception(msg));
 
 		public static TimerProcessorItem Add<TArg>(DateTime Now, TimeSpan Delay)
 		=> new TimerProcessorItem(	Now,
