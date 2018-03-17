@@ -48,8 +48,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AAsyncTestingJob.cs" />
+    <Compile Include="AsyncLockEnterTest.cs" />
     <Compile Include="ATestingJob.cs" />
     <Compile Include="LockEnterTest.cs" />
+    <Compile Include="AsyncLockTryEnterDelayTest.cs" />
     <Compile Include="LockTryEnterDelayTest.cs" />
     <Compile Include="TicketSpinLockEnterTest.cs" />
     <Compile Include="SpinLockTryEnterDelayTest.cs" />

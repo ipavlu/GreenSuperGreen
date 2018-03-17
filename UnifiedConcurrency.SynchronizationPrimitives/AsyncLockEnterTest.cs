@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Threading.Tasks;
 using GreenSuperGreen.UnifiedConcurrency;
 using NUnit.Framework;
@@ -8,15 +7,15 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class LockEnter : ATestingJob, ITestingJob
+	public sealed class AsyncLockEnter : AAsyncTestingJob, ITestingJob
 	{
-		public LockEnter(int count) : base(count) { }
+		public AsyncLockEnter(int count) : base(count) { }
 
-		private ISimpleLockUC Lock { get; } = new LockUC();
+		private IAsyncLockUC Lock { get; } = new AsyncLockUC();
 
-		protected override bool ExclusiveAccess()
+		protected override async Task<bool> ExclusiveAccess()
 		{
-			using (EntryBlockUC entry = Lock.Enter())
+			using (EntryBlockUC entry = await Lock.Enter())
 			{
 				if (!entry.HasEntry) throw new Exception("hmmmmmmmmm");
 				return ProcessExclusively();
@@ -28,9 +27,9 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	public partial class UnifiedConcurrency
 	{
 		[Test]
-		public async Task LockEnterTest()
+		public async Task AsyncLockEnterTest()
 		{
-			using (ITestingJob job = new LockEnter(1000000))
+			using (ITestingJob job = new AsyncLockEnter(1000000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}
