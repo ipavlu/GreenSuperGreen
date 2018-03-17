@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 // ReSharper disable UnusedParameter.Local
@@ -10,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace GreenSuperGreen.UnifiedConcurrency
 {
-	/// <summary> </summary>
 	public class AsyncLockUC : IAsyncLockUC
 	{
 		private struct AccessItem
@@ -45,12 +43,11 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			}
 		}
 
+		private ISimpleLockUC SpinLock { get; } = new SpinLockUC();
 		private Queue<AccessItem> Queue { get; } = new Queue<AccessItem>();
 		private EntryBlockUC ExclusiveEntry { get; }
 		private Status LockStatus { get; set; } = Status.Opened;
-
-		/// <summary> CAN NOT BE READONLY FIELD!!! CAN NOT BE PROPERTY!!! CAN NOT TRACK THREAD!!! </summary>0
-		private SpinLock _spinLock = new SpinLock(false);
+		private enum Status { Opened, Locked }
 
 		public SyncPrimitiveCapabilityUC Capability { get; } = 0
 		| SyncPrimitiveCapabilityUC.Enter
@@ -71,10 +68,8 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			while (true)
 			{
 				AccessItem access;
-				bool gotLock = false;
-				try
+				using (SpinLock.Enter())
 				{
-					_spinLock.Enter(ref gotLock);
 					if (Queue.Count == 0)
 					{
 						LockStatus = Status.Opened;
@@ -82,22 +77,14 @@ namespace GreenSuperGreen.UnifiedConcurrency
 					}
 					access = Queue.Dequeue();
 				}
-				finally
-				{
-					if (gotLock) _spinLock.Exit(true);
-				}
 				if (access.TrySetResult(ExclusiveEntry)) return;
 			}
 		}
 
-		private enum Status { Opened, Locked }
-
 		public AsyncEntryBlockUC Enter()
 		{
-			bool gotLock = false;
-			try
+			using (SpinLock.Enter())
 			{
-				_spinLock.Enter(ref gotLock);
 				if (LockStatus == Status.Opened)
 				{
 					LockStatus = Status.Locked;
@@ -107,45 +94,29 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				Queue.Enqueue(access = AccessItem.NewTCS());
 				return new AsyncEntryBlockUC(null, access.TCS);
 			}
-			finally
-			{
-				if (gotLock) _spinLock.Exit(true);
-			}
 		}
 
 		public AsyncEntryBlockUC TryEnter()
 		{
-			bool gotLock = false;
-			try
+			using (SpinLock.Enter())
 			{
-				_spinLock.Enter(ref gotLock);
 				if (LockStatus == Status.Locked) return AsyncEntryBlockUC.RefusedEntry;
 				LockStatus = Status.Locked;
 				return new AsyncEntryBlockUC(ExclusiveEntry);
-			}
-			finally
-			{
-				if (gotLock) _spinLock.Exit(true);
 			}
 		}
 
 		public AsyncEntryBlockUC TryEnter(int milliseconds)
 		{
 			AccessItem access;
-			bool gotLock = false;
-			try
+			using (SpinLock.Enter())
 			{
-				_spinLock.Enter(ref gotLock);
 				if (LockStatus == Status.Opened)
 				{
 					LockStatus = Status.Locked;
 					return new AsyncEntryBlockUC(ExclusiveEntry);
 				}
 				Queue.Enqueue(access = AccessItem.NewTimeLimitedTCS(milliseconds));
-			}
-			finally
-			{
-				if (gotLock) _spinLock.Exit(true);
 			}
 			return new AsyncEntryBlockUC(null, access.TCS);
 		}
