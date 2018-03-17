@@ -7,17 +7,20 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class LockEnter : ATestingJob, ITestingJob
+	public sealed class MonitorTryEnter : ATestingJob, ITestingJob
 	{
-		public LockEnter(int count) : base(count) { }
+		public MonitorTryEnter(int count) : base(count) { }
 
-		private ISimpleLockUC Lock { get; } = new LockUC();
+		private ISimpleLockUC Lock { get; } = new MonitorLockUC();
 
 		protected override bool ExclusiveAccess()
 		{
-			using (EntryBlockUC entry = Lock.Enter())
+			using (EntryBlockUC entry = Lock.TryEnter())
 			{
-				if (!entry.HasEntry) throw new Exception("hmmmmmmmmm");
+				if (!entry.HasEntry)
+				{
+					return true;//no entry, keep trying
+				}
 				return ProcessExclusively();
 			}
 		}
@@ -27,9 +30,9 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	public partial class UnifiedConcurrency
 	{
 		[Test]
-		public async Task LockEnterTest()
+		public async Task MonitorTryEnterTest()
 		{
-			using (ITestingJob job = new LockEnter(1000000))
+			using (ITestingJob job = new MonitorTryEnter(1000000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

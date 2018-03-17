@@ -33,7 +33,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 		[Test]
 		public async Task AsyncLockTryEnterDelayTest()
 		{
-			using (ITestingJob job = new AsyncLockTryEnterDelay(1000000, 15))
+			using (ITestingJob job = new AsyncLockTryEnterDelay(1000000, 1500))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

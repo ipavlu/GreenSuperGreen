@@ -7,12 +7,12 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class LockTryEnterDelay : ATestingJob, ITestingJob
+	public sealed class MonitorTryEnterDelay : ATestingJob, ITestingJob
 	{
 		public int Delay { get; }
-		public LockTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
+		public MonitorTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
 
-		private ISimpleLockUC Lock { get; } = new LockUC();
+		private ISimpleLockUC Lock { get; } = new MonitorLockUC();
 
 		protected override bool ExclusiveAccess()
 		{
@@ -31,9 +31,9 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	public partial class UnifiedConcurrency
 	{
 		[Test]
-		public async Task LockTryEnterDelayTest()
+		public async Task MonitorTryEnterDelayTest()
 		{
-			using (ITestingJob job = new LockTryEnterDelay(1000000, 15))
+			using (ITestingJob job = new MonitorTryEnterDelay(1000000, 15))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

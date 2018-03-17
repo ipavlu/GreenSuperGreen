@@ -38,9 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GreenSuperGreen, Version=1.0.0.7, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GreenSuperGreen.1.0.0.7\lib\net46\GreenSuperGreen.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -51,6 +48,9 @@
     <Compile Include="AAsyncTestingJob.cs" />
     <Compile Include="AsyncLockEnterTest.cs" />
     <Compile Include="ATestingJob.cs" />
+    <Compile Include="MonitorTryEnterTest.cs" />
+    <Compile Include="MonitorTryEnterDelayTest.cs" />
+    <Compile Include="MonitorLockEnterTest.cs" />
     <Compile Include="LockEnterTest.cs" />
     <Compile Include="AsyncLockTryEnterDelayTest.cs" />
     <Compile Include="LockTryEnterDelayTest.cs" />
@@ -65,7 +65,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="UnifiedConcurrency\ISimpleLockUC\SpinLockUC\ReadMe.txt" />
+    <ProjectReference Include="..\GreenSuperGreen\GreenSuperGreen.csproj">
+      <Project>{31f7cf88-4a1a-499b-98bf-07d02615d7f5}</Project>
+      <Name>GreenSuperGreen</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
