@@ -107,6 +107,7 @@ namespace GreenSuperGreen.Timing
 			}
 			if (status == TickGeneratorStatus.Disposed)
 			{
+				set.Remove(AsyncCallback);
 				TrySetDisposed();
 				return;
 			}
@@ -150,6 +151,8 @@ namespace GreenSuperGreen.Timing
 
 		private ISet<Action> Actions { get; } = new HashSet<Action>();
 		private Queue<CallBackRequest> Requests { get; } = new Queue<CallBackRequest>();
+		private static int MaxActiveRequests { get; } = Environment.ProcessorCount;
+		private Queue<CallBackRequest> WorkingRequests { get; } = new Queue<CallBackRequest>(MaxActiveRequests);
 
 		public TickGenerator(int period, ISequencerUC sequencer = null)
 		{
@@ -157,7 +160,7 @@ namespace GreenSuperGreen.Timing
 			Period = period < 1 ? 1 : period;
 			Timer = new Timer(StaticCallBack, this, Timeout.Infinite, Timeout.Infinite);
 		}
-
+		
 		protected virtual TickGeneratorTimerStatus TryUpdateTimer(bool activate)
 		{
 			NullSafeSequencer.PointArg(SeqPointTypeUC.Match, TickGeneratorSequencer.TryUpdateTimerBegin, IsActive ? TickGeneratorTimerStatus.IsActive : TickGeneratorTimerStatus.None);
@@ -203,8 +206,19 @@ namespace GreenSuperGreen.Timing
 			using (Lock.Enter())
 			{
 				ActiveProcessing = true;
-				CallBackRequest.Processing(lastStatus = Status, Requests, Actions);
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Match, TickGeneratorSequencer.BeginActiveProcessing, Status);
+			}
+
+			while (true)
+			{
+				using (Lock.Enter())
+				{
+					lastStatus = Status;
+					while (Requests.Count > 0 && WorkingRequests.Count < MaxActiveRequests) WorkingRequests.Enqueue(Requests.Dequeue());
+					if (Requests.Count <= 0 && WorkingRequests.Count <= 0) break;
+				}
+
+				CallBackRequest.Processing(lastStatus, WorkingRequests, Actions);
 			}
 
 			bool processing = processActions && lastStatus != TickGeneratorStatus.Disposed && Actions.Count > 0;
@@ -219,10 +233,22 @@ namespace GreenSuperGreen.Timing
 				}
 			}
 
+			while (true)
+			{
+				using (Lock.Enter())
+				{
+					lastStatus = Status;
+					while (Requests.Count > 0 && WorkingRequests.Count < MaxActiveRequests) WorkingRequests.Enqueue(Requests.Dequeue());
+					if (Requests.Count <= 0 && WorkingRequests.Count <= 0) break;
+				}
+
+				CallBackRequest.Processing(lastStatus, WorkingRequests, Actions);
+			}
+
 			using (Lock.Enter())
 			{
 				ActiveProcessing = false;
-				CallBackRequest.Processing(Status, Requests, Actions);
+				CallBackRequest.Processing(lastStatus, Requests, Actions);
 
 				if (Status == TickGeneratorStatus.Operating)
 				{
