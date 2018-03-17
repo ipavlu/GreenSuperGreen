@@ -76,7 +76,8 @@
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncTicketSpinLockUC\AsyncTicketSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSpinLockUC\AsyncSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncLockUC\AsyncLockUC.ConcurrentSequencing.cs" />
-    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockUC\LockUC.ConcurrentSequencing.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockUC\LockUC.ConcurrentSequencing.TryEnterDelay.cs" />
+    <Compile Include="UnifiedConcurrency\ISimpleLockUC\LockUC\LockUC.ConcurrentSequencing.Enter.cs" />
     <Compile Include="UnifiedConcurrency\ISimpleLockUC\MonitorLockUC\MonitorLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\ISimpleLockUC\TicketSpinLockUC\TicketSpinLockUC.ConcurrentSequencing.cs" />
     <Compile Include="UnifiedConcurrency\MonitorLock\Research\MonitorLockThreadAbortResearch.cs" />
