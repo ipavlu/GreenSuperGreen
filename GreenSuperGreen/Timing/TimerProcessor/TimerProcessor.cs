@@ -90,6 +90,8 @@ namespace GreenSuperGreen.Timing
 
 		private IOrderedExpiryItems ExpiryItems { get; } = new OrderedExpiryItems();
 		private Queue<TimerProcessorCallBackRequest> Requests { get; } = new Queue<TimerProcessorCallBackRequest>();
+		private static int MaxActiveRequests { get; } = Environment.ProcessorCount;
+		private Queue<TimerProcessorCallBackRequest> WorkingRequests { get; } = new Queue<TimerProcessorCallBackRequest>(MaxActiveRequests);
 
 		public TimerProcessor(int period, IRealTimeSource realTimeSource, ISequencerUC sequencer = null)
 		{
@@ -140,8 +142,19 @@ namespace GreenSuperGreen.Timing
 			using (Lock.Enter())
 			{
 				ActiveProcessing = true;
-				TimerProcessorCallBackRequest.Processing(lastStatus = Status, Requests, ExpiryItems);
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Match, TimerProcessorSequencer.BeginActiveProcessing, Status);
+			}
+
+			while (true)
+			{
+				using (Lock.Enter())
+				{
+					lastStatus = Status;
+					while (Requests.Count > 0 && WorkingRequests.Count < MaxActiveRequests) WorkingRequests.Enqueue(Requests.Dequeue());
+					if (Requests.Count <= 0 && WorkingRequests.Count <= 0) break;
+				}
+
+				TimerProcessorCallBackRequest.Processing(lastStatus, WorkingRequests, ExpiryItems);
 			}
 
 			bool processing = processActions && lastStatus != TimerProcessorStatus.Disposed && ExpiryItems.Any();
@@ -151,6 +164,18 @@ namespace GreenSuperGreen.Timing
 			{
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.ActionsProcessingCount, ExpiryItems.Count);
 				ExpiryItems.TryExpire(RealTimeSource.GetUtcNow());
+			}
+
+			while (true)
+			{
+				using (Lock.Enter())
+				{
+					lastStatus = Status;
+					while (Requests.Count > 0 && WorkingRequests.Count < MaxActiveRequests) WorkingRequests.Enqueue(Requests.Dequeue());
+					if (Requests.Count <= 0 && WorkingRequests.Count <= 0) break;
+				}
+
+				TimerProcessorCallBackRequest.Processing(lastStatus, WorkingRequests, ExpiryItems);
 			}
 
 			using (Lock.Enter())
@@ -168,6 +193,7 @@ namespace GreenSuperGreen.Timing
 				else
 				{
 					TryUpdateTimer(activate: false);
+					ExpiryItems.CancelAllAndClear();
 					Status = TimerProcessorStatus.Disposed;
 					Ticker.Dispose();
 					DisposedTCS.TrySetResult(null);

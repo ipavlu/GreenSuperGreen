@@ -25,6 +25,7 @@ namespace GreenSuperGreen.Timing
 		bool TryRemove(TimerProcessorItem item);
 		bool TryExpire(DateTime now);
 		bool Any();
+		void CancelAllAndClear();
 	}
 
 	public class OrderedExpiryItems : IOrderedExpiryItems
@@ -83,6 +84,16 @@ namespace GreenSuperGreen.Timing
 			bool somethingExpired = Remove.Count > 0;
 			while (Remove.Count > 0) SortedList.RemoveAt(Remove.Pop());
 			return somethingExpired;
+		}
+
+		public void CancelAllAndClear()
+		{
+			for (int i = 0; i < SortedList.Count; ++i)
+			{
+				TimerProcessorItem item = SortedList.Values[i];
+				item.TryCancel();
+			}
+			SortedList.Clear();
 		}
 
 		public bool Any() => SortedList.Count > 0;
