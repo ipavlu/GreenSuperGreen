@@ -58,9 +58,9 @@ namespace GreenSuperGreen.Timing
 	{
 		int? Period { get; }
 		Task Disposed { get; }
-		Task<TaskCompletionSource<TArg>> RegisterResultAsync<TArg>(TimeSpan delay, TArg result);
-		Task<TaskCompletionSource<TArg>> RegisterAsync<TArg>(TimeSpan delay);
-		Task<TaskCompletionSource<TArg>> UnRegisterAsync<TArg>(TaskCompletionSource<TArg> tcs);
+		AsyncTimerProcessorResult<TArg> RegisterResultAsync<TArg>(TimeSpan delay, TArg result);
+		AsyncTimerProcessorResult<TArg> RegisterAsync<TArg>(TimeSpan delay);
+		AsyncTimerProcessorResult<TArg> UnRegisterAsync<TArg>(TaskCompletionSource<TArg> tcs);
 	}
 
 	/// <summary>
@@ -199,83 +199,83 @@ namespace GreenSuperGreen.Timing
 			}
 		}
 
-		public Task<TaskCompletionSource<TArg>> RegisterResultAsync<TArg>(TimeSpan delay, TArg result)
+		public AsyncTimerProcessorResult<TArg> RegisterResultAsync<TArg>(TimeSpan delay, TArg result)
 		{
 			TimerProcessorCallBackRequest request = TimerProcessorCallBackRequest.AddWithResult(RealTimeSource.GetUtcNow(), delay, result);
-			if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
-			if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetWrappedTCS<TArg>();
+			if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
+			if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetAsyncResult<TArg>();
 
 			using (Lock.Enter())
 			{
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterStatus, Status);
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterActiveProcessing, ActiveProcessing);
-				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
-				if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetWrappedTCS<TArg>();
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
+				if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetAsyncResult<TArg>();
 				Requests.Enqueue(request);
-				if (ActiveProcessing) return request.GetWrappedTCS<TArg>();
+				if (ActiveProcessing) return request.GetAsyncResult<TArg>();
 			}
 
-			if (Processing(processActions: false) == ProcessingResult.Processed) return request.GetWrappedTCS<TArg>();
+			if (Processing(processActions: false) == ProcessingResult.Processed) return request.GetAsyncResult<TArg>();
 
 			using (Lock.Enter())
 			{
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterEnd, Status);
-				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
 				TryUpdateTimer(activate: true);
-				return request.GetWrappedTCS<TArg>();
+				return request.GetAsyncResult<TArg>();
 			}
 		}
 
-		public Task<TaskCompletionSource<TArg>> RegisterAsync<TArg>(TimeSpan delay)
+		public AsyncTimerProcessorResult<TArg> RegisterAsync<TArg>(TimeSpan delay)
 		{
 			TimerProcessorCallBackRequest request = TimerProcessorCallBackRequest.Add<TArg>(RealTimeSource.GetUtcNow(), delay);
-			if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
-			if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetWrappedTCS<TArg>();
+			if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
+			if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetAsyncResult<TArg>();
 
 			using (Lock.Enter())
 			{
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterStatus, Status);
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterActiveProcessing, ActiveProcessing);
-				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
-				if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetWrappedTCS<TArg>();
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
+				if (Status == TimerProcessorStatus.Disposing) return request.TrySetCanceled().GetAsyncResult<TArg>();
 				Requests.Enqueue(request);
-				if (ActiveProcessing) return request.GetWrappedTCS<TArg>();
+				if (ActiveProcessing) return request.GetAsyncResult<TArg>();
 			}
 
-			if (Processing(processActions: false) == ProcessingResult.Processed) return request.GetWrappedTCS<TArg>();
+			if (Processing(processActions: false) == ProcessingResult.Processed) return request.GetAsyncResult<TArg>();
 
 			using (Lock.Enter())
 			{
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.RegisterEnd, Status);
-				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
 				TryUpdateTimer(activate: true);
-				return request.GetWrappedTCS<TArg>();
+				return request.GetAsyncResult<TArg>();
 			}
 		}
 
-		public Task<TaskCompletionSource<TArg>> UnRegisterAsync<TArg>(TaskCompletionSource<TArg> tcs)
+		public AsyncTimerProcessorResult<TArg> UnRegisterAsync<TArg>(TaskCompletionSource<TArg> tcs)
 		{
 			if (tcs == null) throw new ArgumentNullException(nameof(tcs));
 			TimerProcessorCallBackRequest request = TimerProcessorCallBackRequest.Remove(tcs);
-			if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+			if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
 
 			using (Lock.Enter())
 			{
-				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.UnRegisterStatus, Status);
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.UnRegisterActiveProcessing, ActiveProcessing);
 				Requests.Enqueue(request);
-				if (ActiveProcessing) return request.GetWrappedTCS<TArg>();
+				if (ActiveProcessing) return request.GetAsyncResult<TArg>();
 			}
 
-			if (Processing(processActions: false) == ProcessingResult.Processed) return request.GetWrappedTCS<TArg>();
+			if (Processing(processActions: false) == ProcessingResult.Processed) return request.GetAsyncResult<TArg>();
 
 			using (Lock.Enter())
 			{
 				NullSafeSequencer.PointArg(SeqPointTypeUC.Notify, TimerProcessorSequencer.UnRegisterEnd, Status);
-				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetWrappedTCS<TArg>();
+				if (Status == TimerProcessorStatus.Disposed) return request.TrySetDisposed().GetAsyncResult<TArg>();
 				TryUpdateTimer(activate: true);
-				return request.GetWrappedTCS<TArg>();
+				return request.GetAsyncResult<TArg>();
 			}
 		}
 	}

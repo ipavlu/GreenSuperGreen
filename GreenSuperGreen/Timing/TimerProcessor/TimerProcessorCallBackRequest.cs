@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GreenSuperGreen.Async;
+using GreenSuperGreen.UnifiedConcurrency;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
@@ -18,6 +19,12 @@ namespace GreenSuperGreen.Timing
 		public ITaskCompletionSourceAccessor AccessorTCS { get; }
 
 		public Task<TaskCompletionSource<TArg>> GetWrappedTCS<TArg>() => AccessorTCS?.GetTask(TCS) as Task<TaskCompletionSource<TArg>>;
+
+		public AsyncTimerProcessorResult<TArg> GetAsyncResult<TArg>()
+		{
+			return new AsyncTimerProcessorResult<TArg>((TaskCompletionSource<TArg>)TimerProcessorItem.TimingTCS, GetWrappedTCS<TArg>());
+		}
+
 		public Task Task => AccessorTCS?.GetTask(TCS);
 
 		public TimerProcessorCallBackRequest TrySetResult() { AccessorTCS.TrySetResult(TCS, TimerProcessorItem.TimingTCS); return this; }

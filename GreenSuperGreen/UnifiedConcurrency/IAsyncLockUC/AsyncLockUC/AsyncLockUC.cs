@@ -16,13 +16,13 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		private struct AccessItem
 		{
 			private TaskCompletionSource<EntryBlockUC> StoredTCS { get; }
-			private Task<TaskCompletionSource<EntryBlockUC>> StoredTaskTCS { get; }
-			public TaskCompletionSource<EntryBlockUC> TCS => StoredTCS ?? StoredTaskTCS?.Result;
+			private TaskCompletionSource<EntryBlockUC> StoredTimingProcessorTCS { get; }
+			public TaskCompletionSource<EntryBlockUC> TCS => StoredTCS ?? StoredTimingProcessorTCS;
 
 			public bool TrySetResult(EntryBlockUC result)
 			{
 				bool setRslt = TCS.TrySetResult(result);
-				if (StoredTCS != null && setRslt) TimerProcessorUC.TimerProcessor.UnRegisterAsync(TCS);
+				if (StoredTimingProcessorTCS != null && setRslt) TimerProcessorUC.TimerProcessor.UnRegisterAsync(TCS);
 				return setRslt;
 			}
 
@@ -33,7 +33,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			private AccessItem(TaskCompletionSource<EntryBlockUC> storedTCS)
 			{
 				StoredTCS = storedTCS;
-				StoredTaskTCS = null;
+				StoredTimingProcessorTCS = null;
 			}
 
 			private AccessItem(int limit)
@@ -41,7 +41,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				StoredTCS = null;
 				limit = limit < 2 ? 2 : limit;
 				TimeSpan tsLimit = TimeSpan.FromMilliseconds(limit);
-				StoredTaskTCS = TimerProcessorUC.TimerProcessor.RegisterResultAsync(tsLimit, EntryBlockUC.RefusedEntry);
+				StoredTimingProcessorTCS = TimerProcessorUC.TimerProcessor.RegisterResultAsync(tsLimit, EntryBlockUC.RefusedEntry).TCS;
 			}
 		}
 
