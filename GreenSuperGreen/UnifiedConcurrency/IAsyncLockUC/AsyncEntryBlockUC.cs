@@ -21,6 +21,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		private EntryBlockUC? EntryBlock { get; }
 		private ConfiguredTaskAwaitable<EntryBlockUC>.ConfiguredTaskAwaiter? TaskAwaiter { get; }
 
+		public AsyncEntryBlockUC(EntryBlockUC entryBlock) : this(entryBlock, null) { }
 		public AsyncEntryBlockUC(EntryTypeUC entryTypeUC, IEntryCompletionUC entryCompletion) : this(new EntryBlockUC(entryTypeUC, entryCompletion), null) { }
 
 		public AsyncEntryBlockUC(EntryBlockUC? EntryBlock, TaskCompletionSource<EntryBlockUC> tcs, ConfigCompletionContinuation configContinuation = ConfigCompletionContinuation.ContinueOnDefaultContext)

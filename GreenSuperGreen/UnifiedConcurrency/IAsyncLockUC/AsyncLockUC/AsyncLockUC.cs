@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,8 +13,40 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary> </summary>
 	public class AsyncLockUC : IAsyncLockUC
 	{
-		private Queue<TaskCompletionSource<EntryBlockUC>> Queue { get; } = new Queue<TaskCompletionSource<EntryBlockUC>>();
-		private EntryCompletionUC EntryCompletion { get; }
+		private struct AccessItem
+		{
+			private TaskCompletionSource<EntryBlockUC> StoredTCS { get; }
+			private Task<TaskCompletionSource<EntryBlockUC>> StoredTaskTCS { get; }
+			public TaskCompletionSource<EntryBlockUC> TCS => StoredTCS ?? StoredTaskTCS?.Result;
+
+			public bool TrySetResult(EntryBlockUC result)
+			{
+				bool setRslt = TCS.TrySetResult(result);
+				if (StoredTCS != null && setRslt) TimerProcessorUC.TimerProcessor.UnRegisterAsync(TCS);
+				return setRslt;
+			}
+
+			public static AccessItem NewTCS() => new AccessItem(new TaskCompletionSource<EntryBlockUC>(TaskCreationOptions.RunContinuationsAsynchronously));
+
+			public static AccessItem NewTimeLimitedTCS(int limit) => new AccessItem(limit);
+
+			private AccessItem(TaskCompletionSource<EntryBlockUC> storedTCS)
+			{
+				StoredTCS = storedTCS;
+				StoredTaskTCS = null;
+			}
+
+			private AccessItem(int limit)
+			{
+				StoredTCS = null;
+				limit = limit < 2 ? 2 : limit;
+				TimeSpan tsLimit = TimeSpan.FromMilliseconds(limit);
+				StoredTaskTCS = TimerProcessorUC.TimerProcessor.RegisterResultAsync(tsLimit, EntryBlockUC.RefusedEntry);
+			}
+		}
+
+		private Queue<AccessItem> Queue { get; } = new Queue<AccessItem>();
+		private EntryBlockUC ExclusiveEntry { get; }
 		private Status LockStatus { get; set; } = Status.Opened;
 
 		/// <summary> CAN NOT BE READONLY FIELD!!! CAN NOT BE PROPERTY!!! CAN NOT TRACK THREAD!!! </summary>0
@@ -28,13 +61,16 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		| SyncPrimitiveCapabilityUC.NonThreadAffine
 		;
 
-		public AsyncLockUC() { EntryCompletion = new EntryCompletionUC(Exit); }
+		public AsyncLockUC()
+		{
+			ExclusiveEntry = new EntryBlockUC(EntryTypeUC.Exclusive, new EntryCompletionUC(Exit));
+		}
 
 		private void Exit()
 		{
 			while (true)
 			{
-				TaskCompletionSource<EntryBlockUC> access;
+				AccessItem access;
 				bool gotLock = false;
 				try
 				{
@@ -50,7 +86,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				{
 					if (gotLock) _spinLock.Exit(true);
 				}
-				if (access.TrySetResult(new EntryBlockUC(EntryTypeUC.Exclusive, EntryCompletion))) return;
+				if (access.TrySetResult(ExclusiveEntry)) return;
 			}
 		}
 
@@ -65,11 +101,11 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				if (LockStatus == Status.Opened)
 				{
 					LockStatus = Status.Locked;
-					return new AsyncEntryBlockUC(EntryTypeUC.Exclusive, EntryCompletion);
+					return new AsyncEntryBlockUC(ExclusiveEntry);
 				}
-				TaskCompletionSource<EntryBlockUC> access;
-				Queue.Enqueue(access = new TaskCompletionSource<EntryBlockUC>(TaskCreationOptions.RunContinuationsAsynchronously));
-				return new AsyncEntryBlockUC(null, access);
+				AccessItem access;
+				Queue.Enqueue(access = AccessItem.NewTCS());
+				return new AsyncEntryBlockUC(null, access.TCS);
 			}
 			finally
 			{
@@ -85,7 +121,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				_spinLock.Enter(ref gotLock);
 				if (LockStatus == Status.Locked) return AsyncEntryBlockUC.RefusedEntry;
 				LockStatus = Status.Locked;
-				return new AsyncEntryBlockUC(EntryTypeUC.Exclusive, EntryCompletion);
+				return new AsyncEntryBlockUC(ExclusiveEntry);
 			}
 			finally
 			{
@@ -95,7 +131,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 
 		public AsyncEntryBlockUC TryEnter(int milliseconds)
 		{
-			TaskCompletionSource<EntryBlockUC> access;
+			AccessItem access;
 			bool gotLock = false;
 			try
 			{
@@ -103,22 +139,15 @@ namespace GreenSuperGreen.UnifiedConcurrency
 				if (LockStatus == Status.Opened)
 				{
 					LockStatus = Status.Locked;
-					return new AsyncEntryBlockUC(EntryTypeUC.Exclusive, EntryCompletion);
+					return new AsyncEntryBlockUC(ExclusiveEntry);
 				}
-				Queue.Enqueue(access = new TaskCompletionSource<EntryBlockUC>(TaskCreationOptions.RunContinuationsAsynchronously));
+				Queue.Enqueue(access = AccessItem.NewTimeLimitedTCS(milliseconds));
 			}
 			finally
 			{
 				if (gotLock) _spinLock.Exit(true);
 			}
-			Timeout(milliseconds, access);
-			return new AsyncEntryBlockUC(null, access);
-		}
-
-		private static async void Timeout(int milliseconds, TaskCompletionSource<EntryBlockUC> access)
-		{
-			await Task.Delay(milliseconds);
-			access.TrySetResult(EntryBlockUC.RefusedEntry);
+			return new AsyncEntryBlockUC(null, access.TCS);
 		}
 	}
 }
