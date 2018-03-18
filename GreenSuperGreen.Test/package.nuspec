@@ -4,16 +4,28 @@
     <!--*-->
     <id>$id$</id>
     <!--*-->
-    <version>1.1.0.0</version>
+    <version>1.1.0</version>
     <title>GreenSuperGreen.Test</title>
     <!--*-->
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
+    <!--
+    <iconUrl></iconUrl>
+   -->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <!--*-->
-    <description> GreenSuperGreen Unit tests </description>
+    <description>
+		Unified Concurrency Tests:
+		- wrapper for the .Net SpinLock,
+		- TicketSpinLock,
+		- Lock replacement of C# lock (Monitor),
+		- wrapper around C# lock (monitor) benchmarking only,
+		- async/await AsyncLock,
+		- async/await AsyncSpinLock,
+		- async/await AsyncTicketSpinLock.
+	</description>
     <!--*-->
     <releaseNotes>GreenSuperGreen.Test</releaseNotes>
     <copyright>$copyright$</copyright>
