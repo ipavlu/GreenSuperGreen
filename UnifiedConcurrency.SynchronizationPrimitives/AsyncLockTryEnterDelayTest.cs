@@ -30,6 +30,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	[TestFixture]
 	public partial class UnifiedConcurrency
 	{
+		/// <summary> About 15 seconds </summary>
 		[Test]
 		public async Task AsyncLockTryEnterDelayTest()
 		{
