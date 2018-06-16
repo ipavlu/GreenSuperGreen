@@ -1,10 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>GreenSuperGreen</RootNamespace>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>1) Unified Concurrency
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <!--*-->
+    <id>$id$</id>
+    <!--*-->
+    <version>1.1.0</version>
+    <title>GreenSuperGreen.NetStandard</title>
+    <!--*-->
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
+    <!--
+    <iconUrl></iconUrl>
+    -->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!--*-->
+    <description>
+    1) Unified Concurrency
     The main mission is to unify usage of heterogeneous synchronization primitives with interface/pattern based Object Oriented approach. Switching between multiple synchronization primitives with one code line change! Agile Development ready solution to synchronization. Easy upgrade from general threading to async/await thanks to the pattern based design! Reduced code complexity. Easy correctness testing. Simplified performance optimization. Currently implemented synchronization primitives cover:
 
     - wrapper for the .Net SpinLock,
@@ -20,12 +33,15 @@
 
     3) Concurrent Priority Queues
     Awaitable Concurrent Priority Queue - Optionally awaitable simple to use Concurrent Priority Queue.
-    https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Priority-Queue</Description>
-    <Copyright>Copyright © ipavlu 2017</Copyright>
-    <PackageLicenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/ipavlu/GreenSuperGreen/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ipavlu/GreenSuperGreen/</RepositoryUrl>
-    <PackageTags />
-  </PropertyGroup>
-
-</Project>
+    https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Priority-Queue
+    
+	</description>
+    <!--*-->
+    <releaseNotes>...</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>
+    </tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>
