@@ -26,6 +26,9 @@
     <PackageProjectUrl>https://github.com/ipavlu/GreenSuperGreen/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ipavlu/GreenSuperGreen/</RepositoryUrl>
     <PackageTags />
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Authors>Marek Pavlu - ipavlu</Authors>
+    <Company>ipavlu</Company>
   </PropertyGroup>
 
 </Project>
