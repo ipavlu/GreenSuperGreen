@@ -919,6 +919,7 @@ namespace GreenSuperGreen.Timing.Test
 
 			//await sequencer.WhenAll();
 			//sequencer.TryReThrowException();
+			await Task.CompletedTask;
 		}
 
 		[Test]
@@ -960,6 +961,7 @@ namespace GreenSuperGreen.Timing.Test
 
 			//await sequencer.WhenAll();
 			//sequencer.TryReThrowException();
+			await Task.CompletedTask;
 		}
 	}
 }
