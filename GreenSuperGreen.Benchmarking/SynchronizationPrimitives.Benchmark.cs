@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using GreenSuperGreen.Diagnostics;
 using GreenSuperGreen.Queues;
@@ -67,6 +68,10 @@ namespace GreenSuperGreen.Benchmarking
 			new BenchInfo() {KeyName = "o", CollectorSupport = true, Name =  $"{nameof(SyncPrimitivesBenchmark.HeavyAsyncLockUC)}", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().HeavyAsyncLockUC(bi,pc,t,a,Environment.ProcessorCount)},
 			new BenchInfo() {KeyName = "p", CollectorSupport = true, Name =  $"{nameof(SyncPrimitivesBenchmark.NeighborAsyncLockUC)}", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().NeighborAsyncLockUC(bi,pc,t,a,Environment.ProcessorCount/2)},
 
+			new BenchInfo() {KeyName = "1", CollectorSupport = true, Name =  $"{nameof(SyncPrimitivesBenchmark.ManualResetEvent)} distinct producer/consumer pairs: 1", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().ManualResetEvent(bi,pc,t,a,1)},
+			new BenchInfo() {KeyName = "2", CollectorSupport = true, Name =  $"{nameof(SyncPrimitivesBenchmark.ManualResetEvent)} distinct producer/consumer pairs: 2", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().ManualResetEvent(bi,pc,t,a,2)},
+			new BenchInfo() {KeyName = "3", CollectorSupport = true, Name =  $"{nameof(SyncPrimitivesBenchmark.ManualResetEvent)} distinct producer/consumer pairs: 4", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().ManualResetEvent(bi,pc,t,a,4)},
+			new BenchInfo() {KeyName = "4", CollectorSupport = true, Name =  $"{nameof(SyncPrimitivesBenchmark.ManualResetEvent)} distinct producer/consumer pairs: cores/2", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().ManualResetEvent(bi,pc,t,a,Environment.ProcessorCount/2)},
 
 			new BenchInfo() {KeyName = "a", CollectorSupport = false, Name =  $"{nameof(SyncPrimitivesBenchmark.HeavyLockUC)}/2", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().HeavyLockUC(bi,pc,t,a,Environment.ProcessorCount/2)},
 			new BenchInfo() {KeyName = "s", CollectorSupport = false, Name =  $"{nameof(SyncPrimitivesBenchmark.HeavyMonitorLockUC)}/2", Task = (bi,pc,t,a) => new SyncPrimitivesBenchmark().HeavyMonitorLockUC(bi,pc,t,a,Environment.ProcessorCount/2)},
@@ -326,6 +331,30 @@ namespace GreenSuperGreen.Benchmarking
 		}
 	}
 
+	public class ManualResetEventSetterWorker : BenchInstance
+	{
+		private ManualResetEvent mre { get; }
+		public ManualResetEventSetterWorker(IPerfCounterCollectorUC perfCollector, ManualResetEvent syncPrimitive, TimeSpan ts, int spin, string pair = null) : base(perfCollector, ts, spin, pair) { mre = syncPrimitive; }
+
+		protected override async Task BenchTarget()
+		{
+			WastingTime();
+			mre.Set();
+			await Task.CompletedTask;
+		}
+	}
+
+	public class ManualResetEventReSetterWorker : BenchInstance
+	{
+		private ManualResetEvent mre { get; }
+		public ManualResetEventReSetterWorker(IPerfCounterCollectorUC perfCollector, ManualResetEvent syncPrimitive, TimeSpan ts, int spin, string pair = null) : base(perfCollector, ts, spin, pair) { mre = syncPrimitive; }
+
+		protected override async Task BenchTarget()
+		{
+			mre.Reset();
+			await Task.CompletedTask;
+		}
+	}
 	public class ConcurrentQueueReaderWorker : BenchInstance
 	{
 		private ConcurrentQueue<object> Queue { get; }
@@ -550,11 +579,16 @@ namespace GreenSuperGreen.Benchmarking
 			#pragma warning restore 618
 		}
 
-
 		public async Task HeavyConcurrentQueue(BenchInfo info, IPerfCounterCollectorUC perfColletor, TimeSpan ts, int spin, int threadPairs)
 		{
 			ConcurrentQueue<object> queue = new ConcurrentQueue<object>();
 			await GeneralBenchmark(perfColletor, info.Name, threadPairs, i => string.Empty, (i, perfCntr, sync) => new BenchInstance[] { new ConcurrentQueueWriterWorker(queue, perfCntr, ts, spin, $"W{i}"), new ConcurrentQueueWriterWorker(queue, perfCntr, ts, spin, $"R{i}") });
 		}
+		
+		public async Task ManualResetEvent(BenchInfo info, IPerfCounterCollectorUC perfColletor, TimeSpan ts, int spin, int threadPairs)
+		{
+			await GeneralBenchmark(perfColletor, info.Name, threadPairs, i => new ManualResetEvent(false), (i, perfCntr, sync) => new BenchInstance[] { new ManualResetEventSetterWorker(perfCntr, sync, ts, spin, $"A{i}"), new ManualResetEventReSetterWorker(perfCntr, sync, ts, spin, $"B{i}") });
+		}
+
 	}
 }
