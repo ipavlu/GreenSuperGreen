@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{6371
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnifiedConcurrency.SynchronizationPrimitives", "UnifiedConcurrency.SynchronizationPrimitives\UnifiedConcurrency.SynchronizationPrimitives.csproj", "{2D48F474-4E00-4A89-B821-C0507532EE12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen.NetStandard", "GreenSuperGreen.NetStandard\GreenSuperGreen.NetStandard.csproj", "{881233EA-5B90-4FFF-BC28-F2D09DC42325}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{2D48F474-4E00-4A89-B821-C0507532EE12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D48F474-4E00-4A89-B821-C0507532EE12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D48F474-4E00-4A89-B821-C0507532EE12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{881233EA-5B90-4FFF-BC28-F2D09DC42325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{881233EA-5B90-4FFF-BC28-F2D09DC42325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{881233EA-5B90-4FFF-BC28-F2D09DC42325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{881233EA-5B90-4FFF-BC28-F2D09DC42325}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
