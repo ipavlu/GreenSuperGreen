@@ -11,7 +11,7 @@ namespace GreenSuperGreen.Async.Test
 	{
 		private class AwaitConstructionResult : ACompletionUC<AwaitConstructionResult, bool>
 		{
-			public AwaitConstructionResult()
+			public AwaitConstructionResult() : base(ConfigCompletionContinuation.ContinueOnCapturedContext)
 			{
 				Trace.WriteLine("some work to be done");
 
@@ -25,7 +25,9 @@ namespace GreenSuperGreen.Async.Test
 			Assert.IsTrue(await new AwaitConstructionResult());
 
 			//ACompletionUC is built on awaitable interfaces, ICompletionUC is complete .net awaitable
-			Assert.IsTrue(await new AwaitConstructionResult()); await (new AwaitConstruction() as ICompletionUC);
+			Assert.IsTrue(await new AwaitConstructionResult());
+
+			await (new AwaitConstruction() as ICompletionUC);
 
 
 			ICompletionUC<bool> icpl = new AwaitConstructionResult();
