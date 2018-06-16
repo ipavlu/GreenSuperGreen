@@ -52,9 +52,6 @@
     <Compile Include="Async\ICompletionUC\ICompletionUC.Generic.cs" />
     <Compile Include="Async\ICompletionUC\ICompletionUC.cs" />
     <Compile Include="Async\ISimpleCompletionUC\ISimpleCompletionUC.cs" />
-    <Compile Include="Diagnostics\DiagnosticsUC.cs" />
-    <Compile Include="Diagnostics\PerfCounters\IPerfCounterCollectorUC.cs" />
-    <Compile Include="Diagnostics\PerfCounters\IPerfCounterUC.cs" />
     <Compile Include="Exceptions\StackTraceExceptionUC\StackTraceExceptionUC.cs" />
     <Compile Include="GeneralExtensions\Assign\AssignGeneralExtensions.Assign.cs" />
     <Compile Include="GeneralExtensions\Task\TaskConstants.cs" />
@@ -62,8 +59,6 @@
     <Compile Include="IdentifierGenerators\IUniqueID\AUniqueID.cs" />
     <Compile Include="IdentifierGenerators\IUniqueID\IUniqueID.cs" />
     <Compile Include="IdentifierGenerators\IUniqueID\UniqueID.cs" />
-    <Compile Include="Diagnostics\PerfCounters\PerfCounterTypeUC.cs" />
-    <Compile Include="Diagnostics\PerfCounters\ProcessorTimePerfCounterUC.cs" />
     <Compile Include="Queues\AsyncEnqueuedCompletionUC.cs\AsyncEnqueuedCompletionUC.cs" />
     <Compile Include="Queues\ConcurrentQueueNotifier\ConcurrentQueueNotifier.cs" />
     <Compile Include="Queues\PriorityQueues\IPriorityQueueNotifierUC\IPriorityQueueNotifierUC.cs" />
