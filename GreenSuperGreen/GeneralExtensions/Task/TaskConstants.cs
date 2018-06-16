@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
 
 namespace GreenSuperGreen
@@ -11,15 +12,10 @@ namespace GreenSuperGreen
 		public static Task<bool?> TaskNullableTrue { get; } = Task.FromResult<bool?>(true);
 		public static Task<bool?> TaskNullableFalse { get; } = Task.FromResult<bool?>(false);
 
-		private static Task GetTaskCanceled()
-		{
-			var tcs = new TaskCompletionSource<object>();
-			tcs.SetCanceled();
-			return tcs.Task;
-		}
-
-		public static Task TaskCanceled { get; } = GetTaskCanceled();
-
 		public static Task<int?> NullInt { get; } = Task.FromResult((int?)null);
+
+		private static TaskCompletionSource<TArg> SetCanceledFunc<TArg>(this TaskCompletionSource<TArg> tcs) { tcs?.SetCanceled(); return tcs; }
+		public static Task<object> TaskCanceledObject { get; } = new TaskCompletionSource<object>().SetCanceledFunc().Task;
+		public static Task TaskCanceled => TaskCanceledObject;
 	}
 }
