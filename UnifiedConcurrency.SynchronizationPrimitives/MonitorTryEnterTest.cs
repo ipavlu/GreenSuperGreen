@@ -11,7 +11,9 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	{
 		public MonitorTryEnter(int count) : base(count) { }
 
-		private ILockUC Lock { get; } = new MonitorLockUC();
+		#pragma warning disable 618
+			private ILockUC Lock { get; } = new MonitorLockUC();
+		#pragma warning restore 618
 
 		protected override bool ExclusiveAccess()
 		{
