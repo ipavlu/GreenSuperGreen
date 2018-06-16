@@ -35,6 +35,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diagnostics\DiagnosticsUC.cs" />
+    <Compile Include="Diagnostics\PerfCounters\IPerfCounterCollectorUC.cs" />
+    <Compile Include="Diagnostics\PerfCounters\IPerfCounterUC.cs" />
+    <Compile Include="Diagnostics\PerfCounters\PerfCounterTypeUC.cs" />
+    <Compile Include="Diagnostics\PerfCounters\ProcessorTimePerfCounterUC.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SynchronizationPrimitives.Benchmark.cs" />
