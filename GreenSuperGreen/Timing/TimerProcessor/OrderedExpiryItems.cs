@@ -31,7 +31,7 @@ namespace GreenSuperGreen.Timing
 	public class OrderedExpiryItems : IOrderedExpiryItems
 	{
 		/// <summary> Key access wont be possible, only indexed/value-referenced removal of items from collection. </summary>
-		private class DuplicitKeysComparer<TKey> : IComparer<TKey> where TKey : IComparable
+		private class DuplicityKeysComparer<TKey> : IComparer<TKey> where TKey : IComparable
 		{
 			public int Compare(TKey x, TKey y)
 			{
@@ -46,12 +46,12 @@ namespace GreenSuperGreen.Timing
 
 		public OrderedExpiryItems(ISequencerUC nullSafeSequencer = null) { NullSafeSequencer = nullSafeSequencer; }
 
-		private static DuplicitKeysComparer<DateTime> DuplicitComparer { get; } = new DuplicitKeysComparer<DateTime>();
+		private static DuplicityKeysComparer<DateTime> DuplicityComparer { get; } = new DuplicityKeysComparer<DateTime>();
 
 		public int Count => SortedList.Count;
 
-		//access to items by key not possible, due to duplicit comparer!
-		private SortedList<DateTime, TimerProcessorItem> SortedList { get; } = new SortedList<DateTime, TimerProcessorItem>(DuplicitComparer);
+		//access to items by key not possible, due to duplicity comparer!
+		private SortedList<DateTime, TimerProcessorItem> SortedList { get; } = new SortedList<DateTime, TimerProcessorItem>(DuplicityComparer);
 		private Stack<int> Remove { get; } = new Stack<int>();
 
 		public bool TryAdd(TimerProcessorItem item)
