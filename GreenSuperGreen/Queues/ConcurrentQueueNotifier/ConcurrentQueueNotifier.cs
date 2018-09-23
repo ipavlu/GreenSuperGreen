@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable StringLiteralTypo
+// ReSharper disable IdentifierTypo
 // ReSharper disable InconsistentNaming
 // ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable UnusedMethodReturnValue.Local
@@ -35,7 +37,11 @@ namespace GreenSuperGreen.Queues
 
 		private int? ThrottleLevelLimiter { get; set; }
 
-		public int? ThrottleLevel { get { return GetThrottleLevelLimiter(); } set { SetThrottleLevelLimiter(value); } }
+		public int? ThrottleLevel
+		{
+			get => GetThrottleLevelLimiter();
+			set => SetThrottleLevelLimiter(value);
+		}
 
 		public ConcurrentQueueNotifier(int? throttleLevel = null)
 		{

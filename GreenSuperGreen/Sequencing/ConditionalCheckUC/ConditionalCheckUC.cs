@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
+// ReSharper disable IdentifierTypo
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming

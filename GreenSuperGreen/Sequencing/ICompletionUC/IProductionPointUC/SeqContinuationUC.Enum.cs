@@ -5,7 +5,7 @@ namespace GreenSuperGreen.Sequencing
 {
 	public enum SeqContinuationUC
 	{
-		/// <summary> Captured current contex in production code </summary>
+		/// <summary> Captured current context in production code </summary>
 		OnCapturedContext,
 
 		/// <summary> On Test context, executing synchronously from test code. </summary>
