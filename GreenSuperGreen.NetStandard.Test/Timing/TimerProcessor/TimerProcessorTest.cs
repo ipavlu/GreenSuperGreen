@@ -863,6 +863,41 @@ namespace GreenSuperGreen.Timing.Test
 			Assert.ThrowsAsync<ObjectDisposedException>(async () => await timerProcessor.UnRegisterAsync(ttt));
 		}
 
+
+		[Test]
+		public async Task DisposeBasicRegisterWithRegisteredTimerTest()
+		{
+			var timerProcessor = new TimerProcessor(10, new RealTimeSource());
+			await timerProcessor.RegisterAsync<int>(TimeSpan.FromSeconds(1));
+
+			timerProcessor.Dispose();
+			Task t = await timerProcessor.Disposed.WrapIntoTask();
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			TaskCompletionSource<object> ttt = new TaskCompletionSource<object>();
+			Assert.ThrowsAsync<ObjectDisposedException>(async () => await timerProcessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(10000)));
+			Assert.ThrowsAsync<ObjectDisposedException>(async () => await timerProcessor.UnRegisterAsync(ttt));
+		}
+
+		[Test]
+		public async Task DisposeBasicRegisterWithRegisteredTimerTestere()
+		{
+			var timerProcessor = new TimerProcessor(10, new RealTimeSource());
+			await timerProcessor.RegisterAsync<int>(TimeSpan.FromSeconds(1));
+
+			timerProcessor.Dispose();
+			Task t = await timerProcessor.Disposed.WrapIntoTask();
+			Assert.IsTrue(t.IsCompleted);
+			Assert.IsFalse(t.IsCanceled);
+			Assert.IsFalse(t.IsFaulted);
+
+			TaskCompletionSource<object> ttt = new TaskCompletionSource<object>();
+			Assert.ThrowsAsync<ObjectDisposedException>(async () => await timerProcessor.RegisterAsync<object>(TimeSpan.FromMilliseconds(10000)));
+			Assert.ThrowsAsync<ObjectDisposedException>(async () => await timerProcessor.UnRegisterAsync(ttt));
+		}
+
 		[Test]
 		public async Task DisposeBasicRegisterResultTest()
 		{

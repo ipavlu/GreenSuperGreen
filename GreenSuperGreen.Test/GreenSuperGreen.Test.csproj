@@ -73,6 +73,7 @@
     <Compile Include="Queues\ConcurrentQueueNotifier\AwaitAheadOfDataTest.cs" />
     <Compile Include="Queues\ConcurrentQueueNotifier\Insert3ItemsThrottleTest.cs" />
     <Compile Include="Queues\ConcurrentQueueNotifier\AwaitAlreadyEnqueuedDataTest.cs" />
+    <Compile Include="Timing\TimerProcessor\TimerProcessorItemTest.cs" />
     <Compile Include="Timing\TimerProcessor\TimerProcessorTest.cs" />
     <Compile Include="Timing\TickGenerator\TickGeneratorTest.cs" />
     <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelLimiterTest.cs" />
