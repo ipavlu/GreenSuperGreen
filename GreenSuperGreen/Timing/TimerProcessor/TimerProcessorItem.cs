@@ -35,7 +35,7 @@ namespace GreenSuperGreen.Timing
 			if (ExpiryAction == null) return AccessorTimingTCS?.TrySetCanceled(TimingTCS);
 			if (ExpiryAction == TimerExpiryAction.TrySetCanceled) return AccessorTimingTCS?.TrySetCanceled(TimingTCS);
 			if (ExpiryAction == TimerExpiryAction.TrySetResult) return AccessorTimingTCS?.TrySetResult(TimingTCS, Result);
-			return null;
+			throw new ArgumentException($"Unexpected value of type TimerExpiryAction?: {ExpiryAction}");
 		}
 
 		public bool? TryCancel() => AccessorTimingTCS?.TrySetCanceled(TimingTCS);
@@ -68,13 +68,13 @@ namespace GreenSuperGreen.Timing
 		=> new TimerProcessorItem(tcs, TaskCompletionSourceAccessor<TArg>.Default)
 		;
 
-		private TimerProcessorItem(DateTime Now, TimeSpan Delay, object TimingTCS, ITaskCompletionSourceAccessor AccessorTimingTCS, TimerExpiryAction? expActiom, object expResult)
+		private TimerProcessorItem(DateTime Now, TimeSpan Delay, object TimingTCS, ITaskCompletionSourceAccessor AccessorTimingTCS, TimerExpiryAction? expAction, object expResult)
 		{
-			this.ExpiryAction = expActiom;
+			this.ExpiryAction = expAction;
 			this.Result = expResult;
 			this.Expiry = Now + Delay;
-			this.TimingTCS = TimingTCS;
-			this.AccessorTimingTCS = AccessorTimingTCS;
+			this.TimingTCS = TimingTCS ?? throw new ArgumentNullException(nameof(TimingTCS));
+			this.AccessorTimingTCS = AccessorTimingTCS ?? throw new ArgumentNullException(nameof(AccessorTimingTCS));
 			if ((Now + TimerProcessor.MinDelay) >= Expiry) TryExpire();
 		}
 
@@ -83,8 +83,8 @@ namespace GreenSuperGreen.Timing
 			this.ExpiryAction = null;
 			this.Result = null;
 			this.Expiry = null;
-			this.TimingTCS = TimingTCS;
-			this.AccessorTimingTCS = AccessorTimingTCS;
+			this.TimingTCS = TimingTCS ?? throw new ArgumentNullException(nameof(TimingTCS));
+			this.AccessorTimingTCS = AccessorTimingTCS ?? throw new ArgumentNullException(nameof(AccessorTimingTCS));
 		}
 
 		public bool Equals(TimerProcessorItem other) => Equals(TimingTCS, other.TimingTCS);
@@ -92,10 +92,10 @@ namespace GreenSuperGreen.Timing
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
-			return obj is TimerProcessorItem && Equals((TimerProcessorItem) obj);
+			return obj is TimerProcessorItem item && Equals(item);
 		}
 
-		public override int GetHashCode() => TimingTCS.GetHashCode();
+		public override int GetHashCode() => TimingTCS?.GetHashCode() ?? 0;
 
 		public static bool operator ==(TimerProcessorItem x, TimerProcessorItem y) => x.Equals(y);
 		public static bool operator !=(TimerProcessorItem x, TimerProcessorItem y) => !x.Equals(y);
