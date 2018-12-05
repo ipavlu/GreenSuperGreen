@@ -4,7 +4,7 @@
     <!--*-->
     <id>$id$</id>
     <!--*-->
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <title>GreenSuperGreen</title>
     <!--*-->
     <authors>$author$</authors>
@@ -37,11 +37,9 @@
     
 	</description>
     <!--*-->
-    <releaseNotes>...</releaseNotes>
+    <releaseNotes>Main development is shifting from Net46 version toward NetStandard version. Net46 version will be maintained as long as compatibility allow.</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>
-    </tags>
-    <dependencies>
-    </dependencies>
+    <tags>1.1.0</tags>
+    <dependencies></dependencies>
   </metadata>
 </package>
