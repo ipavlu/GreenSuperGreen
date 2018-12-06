@@ -4,7 +4,7 @@
     <!--*-->
     <id>GreenSuperGreen</id>
     <!--*-->
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <title>GreenSuperGreen</title>
     <!--*-->
     <authors>ipavlu</authors>
@@ -39,8 +39,10 @@
     <!--*-->
     <releaseNotes>Main development is shifting from Net46 version toward NetStandard version. Net46 version will be maintained as long as compatibility allow.</releaseNotes>
     <copyright>Copyright © ipavlu 2017</copyright>
-    <tags>1.1.1</tags>
+    <tags>1.1.2</tags>
     <dependencies>
+		<group targetFramework="net46">
+		</group>	
     </dependencies>
   </metadata>
 </package>
