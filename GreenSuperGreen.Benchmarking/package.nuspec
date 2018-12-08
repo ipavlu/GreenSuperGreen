@@ -2,13 +2,13 @@
 <package>
   <metadata>
     <!--*-->
-    <id>$id$</id>
+    <id>GreenSuperGreen.Benchmarking</id>
     <!--*-->
-    <version>1.1.0</version>
+    <version>1.1.4</version>
     <title>GreenSuperGreen.Benchmarking</title>
     <!--*-->
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <authors>ipavlu</authors>
+    <owners>ipavlu</owners>
     <licenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
     <!--
@@ -27,14 +27,17 @@
 		- async/await AsyncTicketSpinLock.
 	</description>
     <!--*-->
-    <releaseNotes>GreenSuperGreen.Benchmarking</releaseNotes>
-    <copyright>$copyright$</copyright>
+    <releaseNotes>
+	    Last version of the NET46 Benchmarking library, next versions will be based on shared
+	    NetStandard2.0 version and Net vs NetCore will be handled by framework specific launchers.
+    </releaseNotes>
+    <copyright>Copyright © ipavlu 2017</copyright>
     <tags>
     </tags>
     <dependencies>
-   <group targetFramework="net46">
-      <dependency id="NUnit" version="3.9.0" />
-   </group>
-</dependencies>
+      <group targetFramework="net46">
+        <dependency id="NUnit" version="3.9.0" />
+      </group>
+    </dependencies>
   </metadata>
 </package>
