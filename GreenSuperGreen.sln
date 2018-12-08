@@ -17,15 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenSuperGreen.NetStandard
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenSuperGreen.NetStandard.Test", "GreenSuperGreen.NetStandard.Test\GreenSuperGreen.NetStandard.Test.csproj", "{E2173E37-5948-41A3-8367-8290CA80520E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcurrentPriorityQueues.NetStandard", "Examples\Queues\ConcurrentPriorityQueues.NetStandard\ConcurrentPriorityQueues.NetStandard.csproj", "{D91748CC-290F-4DB8-9DBF-C815F3349EAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConcurrentPriorityQueues.NetStandard", "Examples\Queues\ConcurrentPriorityQueues.NetStandard\ConcurrentPriorityQueues.NetStandard.csproj", "{D91748CC-290F-4DB8-9DBF-C815F3349EAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwaitableConcurrentPriorityQueues.NetStandard", "Examples\Queues\AwaitableConcurrentPriorityQueues.NetStandard\AwaitableConcurrentPriorityQueues.NetStandard.csproj", "{46642025-036A-43E3-A0B9-E323B4F02258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwaitableConcurrentPriorityQueues.NetStandard", "Examples\Queues\AwaitableConcurrentPriorityQueues.NetStandard\AwaitableConcurrentPriorityQueues.NetStandard.csproj", "{46642025-036A-43E3-A0B9-E323B4F02258}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnifiedConcurrency.SynchronizationPrimitives", "Examples\Article\UnifiedConcurrency.SynchronizationPrimitives\UnifiedConcurrency.SynchronizationPrimitives.csproj", "{78094E54-D8C2-4E4F-BDEF-C82663EB0864}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenSuperGreen.Benchmarking.NetStandard", "GreenSuperGreen.Benchmarking.NetStandard\GreenSuperGreen.Benchmarking.NetStandard.csproj", "{4D976E6B-3498-4FA3-A0C5-C896424D4696}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen.Benchmarking.Launcher.Net", "GreenSuperGreen.Benchmarking.Launcher.Net\GreenSuperGreen.Benchmarking.Launcher.Net.csproj", "{CB9A57F2-3F68-4722-B614-6640E9ED1532}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenSuperGreen.Benchmarking.Launcher.NetCore", "GreenSuperGreen.Benchmarking.Launcher.NetCore\GreenSuperGreen.Benchmarking.Launcher.NetCore.csproj", "{F72CDA20-3CD8-4E68-AC5E-040B56A56604}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{CB9A57F2-3F68-4722-B614-6640E9ED1532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB9A57F2-3F68-4722-B614-6640E9ED1532}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB9A57F2-3F68-4722-B614-6640E9ED1532}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F72CDA20-3CD8-4E68-AC5E-040B56A56604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F72CDA20-3CD8-4E68-AC5E-040B56A56604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F72CDA20-3CD8-4E68-AC5E-040B56A56604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F72CDA20-3CD8-4E68-AC5E-040B56A56604}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
