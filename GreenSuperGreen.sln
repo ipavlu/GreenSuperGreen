@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen", "GreenSuperGreen\GreenSuperGreen.csproj", "{31F7CF88-4A1A-499B-98BF-07D02615D7F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen.Benchmarking", "GreenSuperGreen.Benchmarking\GreenSuperGreen.Benchmarking.csproj", "{21A80A70-E596-4B79-BB98-ECEE9EDED4E1}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen.Test", "GreenSuperGreen.Test\GreenSuperGreen.Test.csproj", "{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{0E073002-86BD-46A6-98EC-68E7CFA76F9D}"
@@ -35,10 +33,6 @@ Global
 		{31F7CF88-4A1A-499B-98BF-07D02615D7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31F7CF88-4A1A-499B-98BF-07D02615D7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31F7CF88-4A1A-499B-98BF-07D02615D7F5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21A80A70-E596-4B79-BB98-ECEE9EDED4E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21A80A70-E596-4B79-BB98-ECEE9EDED4E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21A80A70-E596-4B79-BB98-ECEE9EDED4E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21A80A70-E596-4B79-BB98-ECEE9EDED4E1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
