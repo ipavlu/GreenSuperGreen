@@ -21,19 +21,70 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		private EntryBlockUC? EntryBlock { get; }
 		private ConfiguredTaskAwaitable<EntryBlockUC>.ConfiguredTaskAwaiter? TaskAwaiter { get; }
 
+		private EntryBlockUC? EntryBlockForTaskPredicate { get; }
+		private ConfiguredTaskAwaitable<bool>.ConfiguredTaskAwaiter? TaskBoolPredicateAwaiter { get; }
+		private ConfiguredTaskAwaitable.ConfiguredTaskAwaiter? TaskPredicateAwaiter { get; }
+
 		public AsyncEntryBlockUC(EntryBlockUC entryBlock) : this(entryBlock, null) { }
 		public AsyncEntryBlockUC(EntryTypeUC entryTypeUC, IEntryCompletionUC entryCompletion) : this(new EntryBlockUC(entryTypeUC, entryCompletion), null) { }
 
-		public AsyncEntryBlockUC(EntryBlockUC? EntryBlock, TaskCompletionSource<EntryBlockUC> tcs, ConfigCompletionContinuation configContinuation = ConfigCompletionContinuation.ContinueOnDefaultContext)
+		public AsyncEntryBlockUC(EntryBlockUC? entryBlock, TaskCompletionSource<EntryBlockUC> tcs, ConfigCompletionContinuation configContinuation = ConfigCompletionContinuation.ContinueOnDefaultContext)
 		{
-			this.EntryBlock = EntryBlock;
-			this.TaskAwaiter = tcs?.Task.ConfigureAwait(configContinuation.ContinueOnCapturedContext()).GetAwaiter();
-			if (!this.EntryBlock.HasValue && !this.TaskAwaiter.HasValue) throw new ArgumentNullException($"{nameof(EntryBlock)}, {nameof(TaskAwaiter)}");
+			EntryBlock = entryBlock;
+			TaskAwaiter = tcs?.Task.ConfigureAwait(configContinuation.ContinueOnCapturedContext()).GetAwaiter();
+
+			EntryBlockForTaskPredicate = null;
+			TaskBoolPredicateAwaiter = null;
+			TaskPredicateAwaiter = null;
+
+			if (!EntryBlock.HasValue && !TaskAwaiter.HasValue) throw new ArgumentNullException($"{nameof(entryBlock)}, {nameof(tcs)}");
 		}
 
-		public bool IsCompleted => EntryBlock.HasValue || (TaskAwaiter?.IsCompleted ?? false);
+		public AsyncEntryBlockUC(EntryBlockUC entryBlockForTaskPredicate, Task<bool> taskPredicate, ConfigCompletionContinuation configContinuation = ConfigCompletionContinuation.ContinueOnDefaultContext)
+		{
+			EntryBlock = null;
+			TaskAwaiter = null;
 
-		public EntryBlockUC GetResult() => EntryBlock ?? (TaskAwaiter?.GetResult() ?? EntryBlockUC.RefusedEntry);
+			EntryBlockForTaskPredicate = entryBlockForTaskPredicate;
+			TaskBoolPredicateAwaiter = taskPredicate.ConfigureAwait(configContinuation.ContinueOnCapturedContext()).GetAwaiter();
+			TaskPredicateAwaiter = null;
+
+			if (!TaskBoolPredicateAwaiter.HasValue) throw new ArgumentNullException(nameof(taskPredicate));
+		}
+
+		public AsyncEntryBlockUC(EntryBlockUC entryBlockForTaskPredicate, Task taskPredicate, ConfigCompletionContinuation configContinuation = ConfigCompletionContinuation.ContinueOnDefaultContext)
+		{
+			EntryBlock = null;
+			TaskAwaiter = null;
+
+			EntryBlockForTaskPredicate = entryBlockForTaskPredicate;
+			TaskBoolPredicateAwaiter = null;
+			TaskPredicateAwaiter = taskPredicate.ConfigureAwait(configContinuation.ContinueOnCapturedContext()).GetAwaiter();
+
+			if (!TaskPredicateAwaiter.HasValue) throw new ArgumentNullException(nameof(taskPredicate));
+		}
+
+
+		public bool IsCompleted =>
+		EntryBlock.HasValue ||
+		(TaskAwaiter?.IsCompleted ?? false) ||
+		(TaskBoolPredicateAwaiter?.IsCompleted ?? false) ||
+		(TaskPredicateAwaiter?.IsCompleted ?? false)
+		;
+
+		public EntryBlockUC GetResult()
+		{
+			if (EntryBlock.HasValue) return EntryBlock.Value;
+			if (TaskAwaiter.HasValue) return TaskAwaiter.Value.GetResult();
+			if (TaskBoolPredicateAwaiter.HasValue) return TaskBoolPredicateAwaiter.Value.GetResult() ? EntryBlockForTaskPredicate ?? EntryBlockUC.RefusedEntry : EntryBlockUC.RefusedEntry;
+			if (TaskPredicateAwaiter != null)
+			{
+				TaskPredicateAwaiter.Value.GetResult();
+				return EntryBlockForTaskPredicate ?? EntryBlockUC.RefusedEntry;
+			}
+
+			return EntryBlockUC.RefusedEntry;
+		}
 
 		public AsyncEntryBlockUC GetAwaiter() => this;
 
@@ -45,15 +96,17 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		/// </summary>
 		public void OnCompleted(Action continuation)
 		{
-			if (EntryBlock.HasValue) throw new InvalidOperationException($"Unexpected call, is completed, this method should not be called!");
 			TaskAwaiter?.OnCompleted(continuation);
+			TaskBoolPredicateAwaiter?.OnCompleted(continuation);
+			TaskPredicateAwaiter?.OnCompleted(continuation);
 		}
 
 		[SecurityCritical]
 		public void UnsafeOnCompleted(Action continuation)
 		{
-			if (EntryBlock.HasValue) throw new InvalidOperationException($"Unexpected call, is completed, this method should not be called!");
 			TaskAwaiter?.UnsafeOnCompleted(continuation);
+			TaskBoolPredicateAwaiter?.UnsafeOnCompleted(continuation);
+			TaskPredicateAwaiter?.UnsafeOnCompleted(continuation);
 		}
 	}
 }
