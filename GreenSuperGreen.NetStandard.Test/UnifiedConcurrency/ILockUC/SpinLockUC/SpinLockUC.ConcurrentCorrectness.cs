@@ -14,7 +14,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 		[Test]
 		public void ConcurrentCorrectness()
 		{
-			SpinLockUC spinlock = new SpinLockUC();
+			ILockUC spinlock = new SpinLockUC();
 
 			int index = 0;
 

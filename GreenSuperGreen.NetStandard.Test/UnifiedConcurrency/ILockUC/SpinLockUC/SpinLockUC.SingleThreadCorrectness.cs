@@ -12,7 +12,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 		[Test]
 		public void SingleThreadCorrectness()
 		{
-			SpinLockUC spinlock = new SpinLockUC();
+			ILockUC spinlock = new SpinLockUC();
 
 			using (spinlock.Enter())
 			{

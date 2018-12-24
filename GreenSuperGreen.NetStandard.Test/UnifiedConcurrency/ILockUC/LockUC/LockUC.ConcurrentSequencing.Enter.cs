@@ -53,7 +53,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//StrategyOneOnOneUC each production code point(per thread) is matched to unit test point
 			//that is per point and per thread in production code
 
-			LockUC Lock = new LockUC();
+			ILockUC Lock = new LockUC();
 
 			//start first worker
 			sequencer.Run(seq => ConcurrentSequencingEnterWorker(Lock, sequencer));

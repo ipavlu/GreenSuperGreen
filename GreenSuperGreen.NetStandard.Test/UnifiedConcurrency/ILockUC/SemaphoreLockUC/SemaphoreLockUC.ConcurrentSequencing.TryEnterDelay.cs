@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace GreenSuperGreen.UnifiedConcurrency.Test
 {
-	public class LockUCTryEnterDelayTest
+	public class SemaphoreLockUCTryEnterDelayTest
 	{
 		//sequencer points between test code and tested production code
 		private enum ConcurrentTryEnterDelaySequencingPhase
@@ -59,7 +59,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//StrategyOneOnOneUC each production code point(per thread) is matched to unit test point
 			//that is per point and per thread in production code
 
-			ILockUC Lock = new LockUC();
+			ILockUC Lock = new SemaphoreLockUC();
 
 			//start first worker
 			sequencer.Run(seq => ConcurrentSequencingWorker(Lock, sequencer));

@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace GreenSuperGreen.UnifiedConcurrency.Test
 {
-	public partial class SpinLockUCTest
+	public class MutexLockUCTest
 	{
 		//sequencer points between test code and tested production code
 		private enum ConcurrentSequencingPhase
@@ -18,16 +18,17 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			Locked,
 			LockedNotify,
 			End,
-			EnteringSpinLock
+			EnteringSimpleLock
 		}
 
 		private static int StepConcurrentSequencing;
 
-		private static void ConcurrentSequencingWorker(ILockUC spinLock, ISequencerUC sequencer)
+		private static void ConcurrentSequencingWorker(ILockUC Lock, ISequencerUC sequencer)
 		{
 			sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingPhase.Begin);
-			sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingPhase.EnteringSpinLock, Interlocked.Increment(ref StepConcurrentSequencing));
-			using (spinLock.Enter())
+			sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingPhase.EnteringSimpleLock, Interlocked.Increment(ref StepConcurrentSequencing));
+
+			using (Lock.Enter())
 			{
 				sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingPhase.Locked, Interlocked.Decrement(ref StepConcurrentSequencing));
 				sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingPhase.LockedNotify, Interlocked.Add(ref StepConcurrentSequencing, 0));
@@ -44,7 +45,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			SequencerUC
 			.Construct()
 			.Register(ConcurrentSequencingPhase.Begin, new StrategyOneOnOneUC())
-			.Register(ConcurrentSequencingPhase.EnteringSpinLock, new StrategyOneOnOneUC())
+			.Register(ConcurrentSequencingPhase.EnteringSimpleLock, new StrategyOneOnOneUC())
 			.Register(ConcurrentSequencingPhase.Locked, new StrategyOneOnOneUC())
 			.Register(ConcurrentSequencingPhase.LockedNotify, new StrategyOneOnOneUC())
 			.Register(ConcurrentSequencingPhase.End, new StrategyOneOnOneUC())
@@ -53,17 +54,19 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//StrategyOneOnOneUC each production code point(per thread) is matched to unit test point
 			//that is per point and per thread in production code
 
-			ILockUC spinlock = new SpinLockUC();
+			#pragma warning disable 618
+				ILockUC Lock = new MutexLockUC();
+			#pragma warning restore 618
 
 			//start first worker
-			sequencer.Run(seq => ConcurrentSequencingWorker(spinlock, sequencer));
+			sequencer.Run(seq => ConcurrentSequencingWorker(Lock, sequencer));
 			//await first worker to get to Begin point
 			var Begin1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Begin);
 			//first worker at Begin point
 
 
 			//start second worker
-			sequencer.Run(seq => ConcurrentSequencingWorker(spinlock, sequencer));
+			sequencer.Run(seq => ConcurrentSequencingWorker(Lock, sequencer));
 			//await second worker to get to Begin point
 			var Begin2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Begin);
 			//second worker at Begin point
@@ -71,7 +74,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//allow first worker to continue to Locked point
 			Begin1.Complete();
 			//Begin1.Fail(new Exception("Hmmmm"));
-			var notify1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.EnteringSpinLock);
+			var notify1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.EnteringSimpleLock);
 			//await first worker to get to Locked point
 			var Locked1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Locked);
 			Assert.AreEqual(0, Locked1.ProductionArg);
@@ -86,7 +89,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//notification are in production code completed awaiters,
 			//immediatelly executiong what is next after the await on notification,
 			//so it is known to be actively running thread!
-			var notify2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.EnteringSpinLock);
+			var notify2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.EnteringSimpleLock);
 			//second worker has entered spinlock as is spinning!
 
 			//let first worker leave spin lock
