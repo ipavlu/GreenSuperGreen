@@ -9,7 +9,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 {
 	public class AsyncSemaphoreSlimLockUC : IAsyncLockUC
 	{
-		private SemaphoreSlim Semaphore { get; } = new SemaphoreSlim(0, 1);
+		private SemaphoreSlim Semaphore { get; } = new SemaphoreSlim(1, 1);
 		private EntryBlockUC ExclusiveEntry { get; }
 
 		public SyncPrimitiveCapabilityUC Capability { get; } = 0
