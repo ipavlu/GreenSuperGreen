@@ -16,7 +16,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary> Awaitable with <see cref="EntryBlockUC"/> result </summary>
 	public struct AsyncEntryBlockUC : ISimpleCompletionUC, INotifyCompletion, ICriticalNotifyCompletion
 	{
-		public static AsyncEntryBlockUC RefusedEntry { get; } = new AsyncEntryBlockUC(EntryBlockUC.RefusedEntry, null);
+		public static AsyncEntryBlockUC RefusedEntry { get; } = new AsyncEntryBlockUC(EntryBlockUC.RefusedEntry, (TaskCompletionSource<EntryBlockUC>)null);
 
 		private EntryBlockUC? EntryBlock { get; }
 		private ConfiguredTaskAwaitable<EntryBlockUC>.ConfiguredTaskAwaiter? TaskAwaiter { get; }
@@ -25,8 +25,8 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		private ConfiguredTaskAwaitable<bool>.ConfiguredTaskAwaiter? TaskBoolPredicateAwaiter { get; }
 		private ConfiguredTaskAwaitable.ConfiguredTaskAwaiter? TaskPredicateAwaiter { get; }
 
-		public AsyncEntryBlockUC(EntryBlockUC entryBlock) : this(entryBlock, null) { }
-		public AsyncEntryBlockUC(EntryTypeUC entryTypeUC, IEntryCompletionUC entryCompletion) : this(new EntryBlockUC(entryTypeUC, entryCompletion), null) { }
+		public AsyncEntryBlockUC(EntryBlockUC entryBlock) : this(entryBlock, (TaskCompletionSource<EntryBlockUC>)null) { }
+		public AsyncEntryBlockUC(EntryTypeUC entryTypeUC, IEntryCompletionUC entryCompletion) : this(new EntryBlockUC(entryTypeUC, entryCompletion), (TaskCompletionSource<EntryBlockUC>)null) { }
 
 		public AsyncEntryBlockUC(EntryBlockUC? entryBlock, TaskCompletionSource<EntryBlockUC> tcs, ConfigCompletionContinuation configContinuation = ConfigCompletionContinuation.ContinueOnDefaultContext)
 		{

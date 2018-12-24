@@ -14,7 +14,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// </summary>
 	internal class SemaphoreLockUC : ILockUC
 	{
-		private Semaphore Semaphore { get; } = new Semaphore(0, 1);
+		private Semaphore Semaphore { get; } = new Semaphore(1, 1);
 
 		private EntryCompletionUC EntryCompletion { get; }
 
