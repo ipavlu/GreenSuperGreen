@@ -36,7 +36,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 
 		public EntryBlockUC Enter()
 		{
-			var aa=  Semaphore.WaitOne();
+			Semaphore.WaitOne();
 			return new EntryBlockUC(EntryTypeUC.Exclusive, EntryCompletion);
 		}
 
