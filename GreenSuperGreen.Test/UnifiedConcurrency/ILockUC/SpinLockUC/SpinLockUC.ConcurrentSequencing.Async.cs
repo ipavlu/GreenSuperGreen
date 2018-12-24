@@ -23,7 +23,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 
 		private static int StepConcurrentSequencingAsync;
 
-		private static async Task ConcurrentSequencingAsyncWorker(SpinLockUC spinLock, ISequencerUC sequencer)
+		private static async Task ConcurrentSequencingAsyncWorker(ILockUC spinLock, ISequencerUC sequencer)
 		{
 			await sequencer.PointAsync(SeqPointTypeUC.Match, ConcurrentSequencingPhaseAsync.Begin);
 			await sequencer.PointAsync(SeqPointTypeUC.Notify, ConcurrentSequencingPhaseAsync.EnteringSpinLock, Interlocked.Increment(ref StepConcurrentSequencingAsync));
@@ -53,7 +53,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//StrategyOneOnOneUC each production code point(per thread) is matched to unit test point
 			//that is per point and per thread in production code
 
-			SpinLockUC spinlock = new SpinLockUC();
+			ILockUC spinlock = new SpinLockUC();
 
 			//start first worker
 			sequencer.Run(seq => ConcurrentSequencingAsyncWorker(spinlock, seq));

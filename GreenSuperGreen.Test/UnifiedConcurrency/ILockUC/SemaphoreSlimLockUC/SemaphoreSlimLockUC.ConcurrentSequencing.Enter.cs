@@ -9,71 +9,71 @@ using NUnit.Framework;
 
 namespace GreenSuperGreen.UnifiedConcurrency.Test
 {
-	public partial class SpinLockUCTest
+	public class SemaphoreSlimLockUCEnterTest
 	{
 		//sequencer points between test code and tested production code
-		private enum ConcurrentSequencingPhase
+		private enum ConcurrentSequencingEnterPhase
 		{
 			Begin,
 			Locked,
 			LockedNotify,
 			End,
-			EnteringSpinLock
+			EnteringSimpleLock
 		}
 
 		private static int StepConcurrentSequencing;
 
-		private static void ConcurrentSequencingWorker(ILockUC spinLock, ISequencerUC sequencer)
+		private static void ConcurrentSequencingEnterWorker(ILockUC Lock, ISequencerUC sequencer)
 		{
-			sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingPhase.Begin);
-			sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingPhase.EnteringSpinLock, Interlocked.Increment(ref StepConcurrentSequencing));
-			using (spinLock.Enter())
+			sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingEnterPhase.Begin);
+			sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingEnterPhase.EnteringSimpleLock, Interlocked.Increment(ref StepConcurrentSequencing));
+			using (Lock.Enter())
 			{
-				sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingPhase.Locked, Interlocked.Decrement(ref StepConcurrentSequencing));
-				sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingPhase.LockedNotify, Interlocked.Add(ref StepConcurrentSequencing, 0));
+				sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingEnterPhase.Locked, Interlocked.Decrement(ref StepConcurrentSequencing));
+				sequencer.Point(SeqPointTypeUC.Notify, ConcurrentSequencingEnterPhase.LockedNotify, Interlocked.Add(ref StepConcurrentSequencing, 0));
 			}
-			sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingPhase.End);
+			sequencer.Point(SeqPointTypeUC.Match, ConcurrentSequencingEnterPhase.End);
 		}
 
 		[Test]
-		public async Task ConcurrentSequencing()
+		public async Task ConcurrentSequencingEnter()
 		{
 			StepConcurrentSequencing = 0;
 
 			ISequencerUC sequencer =
 			SequencerUC
 			.Construct()
-			.Register(ConcurrentSequencingPhase.Begin, new StrategyOneOnOneUC())
-			.Register(ConcurrentSequencingPhase.EnteringSpinLock, new StrategyOneOnOneUC())
-			.Register(ConcurrentSequencingPhase.Locked, new StrategyOneOnOneUC())
-			.Register(ConcurrentSequencingPhase.LockedNotify, new StrategyOneOnOneUC())
-			.Register(ConcurrentSequencingPhase.End, new StrategyOneOnOneUC())
+			.Register(ConcurrentSequencingEnterPhase.Begin, new StrategyOneOnOneUC())
+			.Register(ConcurrentSequencingEnterPhase.EnteringSimpleLock, new StrategyOneOnOneUC())
+			.Register(ConcurrentSequencingEnterPhase.Locked, new StrategyOneOnOneUC())
+			.Register(ConcurrentSequencingEnterPhase.LockedNotify, new StrategyOneOnOneUC())
+			.Register(ConcurrentSequencingEnterPhase.End, new StrategyOneOnOneUC())
 			;
 
 			//StrategyOneOnOneUC each production code point(per thread) is matched to unit test point
 			//that is per point and per thread in production code
 
-			ILockUC spinlock = new SpinLockUC();
+			ILockUC Lock = new SemaphoreSlimLockUC();
 
 			//start first worker
-			sequencer.Run(seq => ConcurrentSequencingWorker(spinlock, sequencer));
+			sequencer.Run(seq => ConcurrentSequencingEnterWorker(Lock, sequencer));
 			//await first worker to get to Begin point
-			var Begin1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Begin);
+			var Begin1 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.Begin);
 			//first worker at Begin point
 
 
 			//start second worker
-			sequencer.Run(seq => ConcurrentSequencingWorker(spinlock, sequencer));
+			sequencer.Run(seq => ConcurrentSequencingEnterWorker(Lock, sequencer));
 			//await second worker to get to Begin point
-			var Begin2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Begin);
+			var Begin2 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.Begin);
 			//second worker at Begin point
 
 			//allow first worker to continue to Locked point
 			Begin1.Complete();
 			//Begin1.Fail(new Exception("Hmmmm"));
-			var notify1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.EnteringSpinLock);
+			var notify1 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.EnteringSimpleLock);
 			//await first worker to get to Locked point
-			var Locked1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Locked);
+			var Locked1 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.Locked);
 			Assert.AreEqual(0, Locked1.ProductionArg);
 			//first worker at Locked point
 
@@ -86,7 +86,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//notification are in production code completed awaiters,
 			//immediatelly executiong what is next after the await on notification,
 			//so it is known to be actively running thread!
-			var notify2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.EnteringSpinLock);
+			var notify2 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.EnteringSimpleLock);
 			//second worker has entered spinlock as is spinning!
 
 			//let first worker leave spin lock
@@ -95,26 +95,26 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			//first thread is leaving the spinlock, but before leaving step value will be recorderd
 			//second thread is spinning to get inside
 			//LockedNotify can be checked if the recorded step value was 1 => thread 1 inside, thread 2 attempting to get inside
-			var LockedNotify1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.LockedNotify);
+			var LockedNotify1 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.LockedNotify);
 			Assert.AreEqual(1, LockedNotify1.ProductionArg); //this is checking concurrency correctness, as threads were highly probably active during checking
 
 
 			//await first worker at End point
-			var End1 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.End);
+			var End1 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.End);
 			//first worker released spinlock
 			End1.Complete();
 			//first worker done
 
 			//await second worker at Locked point
-			var Locked2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.Locked);
+			var Locked2 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.Locked);
 			//let second worker to continue to End point
 			Locked2.Complete();
 
-			var LockedNotify2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.LockedNotify);
+			var LockedNotify2 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.LockedNotify);
 			Assert.AreEqual(0, LockedNotify2.ProductionArg);
 
 			//await second worker at the End point
-			var End2 = await sequencer.TestPointAsync(ConcurrentSequencingPhase.End);
+			var End2 = await sequencer.TestPointAsync(ConcurrentSequencingEnterPhase.End);
 			//second worker released spinlock
 			End2.Complete();
 			//second worker done

@@ -13,7 +13,7 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 		[Test]
 		public void SyncExceptionReleasingLockTest()
 		{
-			SpinLockUC spinlock = new SpinLockUC();
+			ILockUC spinlock = new SpinLockUC();
 			Assert.Throws<Exception>(() => SyncExceptionTestMethod(spinlock));
 			EntryBlockUC entry = spinlock.TryEnter();
 			Assert.IsTrue(entry.HasEntry);
@@ -22,7 +22,8 @@ namespace GreenSuperGreen.UnifiedConcurrency.Test
 			Assert.IsTrue(entry.HasEntry);
 			entry.Dispose();
 		}
-		public void SyncExceptionTestMethod(SpinLockUC spinlock)
+
+		public void SyncExceptionTestMethod(ILockUC spinlock)
 		{
 			using (spinlock.Enter())
 			{
