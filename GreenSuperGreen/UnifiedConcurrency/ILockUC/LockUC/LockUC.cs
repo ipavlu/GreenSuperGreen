@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace GreenSuperGreen.UnifiedConcurrency
 {
 	/// <summary>
-	/// <para/> <see cref="SpinLockUC"/> is based on .Net <see cref="System.Threading.SpinLock"/>.
+	/// <para/> <see cref="LockUC"/> is based on .Net <see cref="TaskCompletionSource{TObject}"/>.
 	/// <para/> Does not support recursive call and does not protect against recursive call!
 	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
 	/// </summary>

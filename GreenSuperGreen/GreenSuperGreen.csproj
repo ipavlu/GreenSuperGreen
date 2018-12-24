@@ -113,6 +113,7 @@
     <Compile Include="Timing\TimerProcessor\TimerProcessor.cs" />
     <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelEntry.cs" />
     <Compile Include="UnifiedConcurrency\ConcurrencyLimiters\ConcurrencyLevelLimiter.cs" />
+    <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSemaphoreSlimLockUC\AsyncSemaphoreSlimLockUC.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncSpinLockUC\AsyncSpinLockUC.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\AsyncEntryBlockUC.cs" />
     <Compile Include="UnifiedConcurrency\IAsyncLockUC\IAsyncLockUC.cs" />
@@ -125,6 +126,9 @@
     <Compile Include="UnifiedConcurrency\IEntryBlockUC\EntryTypeUC.cs" />
     <Compile Include="UnifiedConcurrency\ILockUC\LockCancellableUC\LockCancellableUC.cs" />
     <Compile Include="UnifiedConcurrency\ILockUC\LockUC\LockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\MutexLockUC\MutexLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SemaphoreLockUC\SemaphoreLockUC.cs" />
+    <Compile Include="UnifiedConcurrency\ILockUC\SemaphoreSlimLockUC\SemaphoreSlimLockUC.cs" />
     <Compile Include="UnifiedConcurrency\ILockUC\SpinLockCancellableUC\SpinLockCancellableUC.cs" />
     <Compile Include="UnifiedConcurrency\ILockUC\SpinLockUC\SpinLockUC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
