@@ -11,9 +11,7 @@
     <owners>ipavlu</owners>
     <licenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/ipavlu/GreenSuperGreen</projectUrl>
-    <!--
-    <iconUrl></iconUrl>
-   -->
+    <!-- <iconUrl></iconUrl> -->
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <!--*-->
     <description>
