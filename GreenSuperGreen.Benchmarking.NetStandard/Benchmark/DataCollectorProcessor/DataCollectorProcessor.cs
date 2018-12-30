@@ -47,7 +47,7 @@ namespace GreenSuperGreen.Benchmarking
 		public static async Task Execute(IPerfCounterCollectorUC perfCollector, ITextWriter textWriter)
 		{
 			Process.GetCurrentProcess().ProcessName.WriteLine();
-			BenchTest.PrintIntro();
+			BenchmarkingInitPoint.PrintIntro();
 
 			string.Empty.WriteLine();
 			string.Empty.WriteLine();
@@ -101,7 +101,7 @@ namespace GreenSuperGreen.Benchmarking
 				}
 			}
 
-			BenchTest.PrintExit();
+			BenchmarkingInitPoint.PrintExit();
 		}
 	}
 }
