@@ -12,7 +12,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <para/> Does not support recursive call and does not protect against recursive call!
 	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
 	/// </summary>
-	internal class SemaphoreSlimLockUC : ILockUC
+	public class SemaphoreSlimLockUC : ILockUC
 	{
 		private SemaphoreSlim Semaphore { get; } = new SemaphoreSlim(1, 1);
 
