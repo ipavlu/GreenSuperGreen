@@ -1,9 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
 
-    <OutputType>Exe</OutputType>
+	<PackAsTool>true</PackAsTool>
+	<ToolCommandName>gsgbenchmark</ToolCommandName>
+	<!--PackageOutputPath>./nupkg</PackageOutputPath-->
+
+	<OutputType>Exe</OutputType>
 
     <NoWin32Manifest>true</NoWin32Manifest>
 
@@ -14,7 +18,18 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 
 
-    <Description>1) Unified Concurrency
+    <Description>
+This package is a .NET Core Global Tool capable to launch .Net Core version of the
+GreenSuperGreen.Benchmarking.Launcher...
+
+Install:	dotnet tool install -g GreenSuperGreen.Benchmarking.Launcher.NetCore
+
+Uninstall:	dotnet tool uninstall -g GreenSuperGreen.Benchmarking.Launcher.NetCore
+
+Run:		gsgbenchmark
+
+
+1) Unified Concurrency
 The main mission is to unify usage of heterogeneous synchronization primitives with interface/pattern based Object Oriented approach. Switching between multiple synchronization primitives with one code line change! Agile Development ready solution to synchronization. Easy upgrade from general threading to async/await thanks to the pattern based design! Reduced code complexity. Easy correctness testing. Simplified performance optimization. Currently implemented synchronization primitives cover:
 
 - wrapper for the .Net SpinLock,
@@ -34,7 +49,8 @@ A strongly typed Sequencer is a powerful threading or async/await based unit tes
 
 3) Concurrent Priority Queues
 Awaitable Concurrent Priority Queue - Optionally awaitable simple to use Concurrent Priority Queue.
-https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Priority-Queue</Description>
+https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Priority-Queue
+	</Description>
 
     <Copyright>Copyright © ipavlu 2017</Copyright>
 
@@ -52,22 +68,24 @@ https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Pri
 
     <Company>ipavlu</Company>
 
-    <PackageTags>1.1.4</PackageTags>
+    <PackageTags>1.1.8</PackageTags>
 
-    <Version>1.1.4</Version>
+    <Version>1.1.8</Version>
 
-    <AssemblyVersion>1.1.4</AssemblyVersion>
+    <AssemblyVersion>1.1.8</AssemblyVersion>
 
-    <FileVersion>1.1.4</FileVersion>
+    <FileVersion>1.1.8</FileVersion>
 
     <Product>GreenSuperGreen.Benchmarking.Launcher.NetCore</Product>
 
     <PackageId>GreenSuperGreen.Benchmarking.Launcher.NetCore</PackageId>
 
+    <SignAssembly>false</SignAssembly>
+
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.1.4" />
+    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.1.8.1" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
   </ItemGroup>
 </Project>

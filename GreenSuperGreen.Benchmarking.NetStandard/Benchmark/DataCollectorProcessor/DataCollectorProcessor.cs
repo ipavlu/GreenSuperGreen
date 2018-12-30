@@ -49,8 +49,7 @@ namespace GreenSuperGreen.Benchmarking
 			Process.GetCurrentProcess().ProcessName.WriteLine();
 			BenchmarkingInitPoint.PrintIntro();
 
-			string.Empty.WriteLine();
-			string.Empty.WriteLine();
+			string.Empty.WriteLine().WriteLine();
 
 			ImmutableArray<int> spinsSet = 101.GenerateSpinsSet();
 
@@ -87,6 +86,7 @@ namespace GreenSuperGreen.Benchmarking
 			IBenchmarkConfiguration sequentialConfig = new BenchmarkConfiguration(sequential, perfCollector, BenchmarkGlobalSettings.TestingTimeSpan, 1000000, textWriter);
 			await (sequential?.ExecuteBenchmark(sequentialConfig) ?? Task.CompletedTask);
 
+			string.Empty.WriteLine().WriteLine();
 
 			foreach (int spins in spinsSet)
 			{

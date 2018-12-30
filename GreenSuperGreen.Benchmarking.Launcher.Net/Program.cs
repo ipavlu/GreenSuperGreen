@@ -9,7 +9,7 @@ namespace GreenSuperGreen.Benchmarking.Launcher
 		{
 			DiagnosticsUC.RegisterProcessInstanceNameFactory(new ProcessInstanceNameFactoryUC());
 			DiagnosticsUC.RegisterPerfCounterFactory(new ProcessorTimePerfCounterFactoryUC());
-			await BenchTest.MainAsync(args);
+			await BenchmarkingInitPoint.MainAsync(args);
 		}
 	}
 }
