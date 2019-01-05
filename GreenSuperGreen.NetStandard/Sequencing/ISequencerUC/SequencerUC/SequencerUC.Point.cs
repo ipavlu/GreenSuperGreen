@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 
@@ -17,8 +18,8 @@ namespace GreenSuperGreen.Sequencing
 								Action<object> injectContinuation = null)
 		where TEnum : struct
 		{
-			var rslt = sequencer.PointAsync(seqPointTypeUC, registration, condition, arg, injectContinuation);
-			rslt.GetResult();//sync waiting unless completed awaiter was provided
+			var result = sequencer.PointAsync(seqPointTypeUC, registration, condition, arg, injectContinuation);
+			result.GetResult();//sync waiting unless completed awaiter was provided
 		}
 
 		/// <summary> Avoiding boxing of <see cref="ValueType"/> argument in case Sequencer is null </summary>
@@ -32,8 +33,8 @@ namespace GreenSuperGreen.Sequencing
 										Action<object> injectContinuation = null)
 		where TEnum : struct
 		{
-			var rslt = sequencer.PointAsyncArg<TEnum, TArg>(seqPointTypeUC, registration, condition, arg, injectContinuation);
-			rslt.GetResult();//sync waiting unless completed awaiter was provided
+			var result = sequencer.PointAsyncArg(seqPointTypeUC, registration, condition, arg, injectContinuation);
+			result.GetResult();//sync waiting unless completed awaiter was provided
 		}
 
 		public
@@ -45,8 +46,8 @@ namespace GreenSuperGreen.Sequencing
 								Action<object> injectContinuation = null)
 		where TEnum : struct
 		{
-			var rslt = sequencer.PointAsync(seqPointTypeUC, registration, arg, injectContinuation);
-			rslt.GetResult();//sync waiting unless completed awaiter was provided
+			var result = sequencer.PointAsync(seqPointTypeUC, registration, arg, injectContinuation);
+			result.GetResult();//sync waiting unless completed awaiter was provided
 		}
 
 		/// <summary> Avoiding boxing of <see cref="ValueType"/> argument in case Sequencer is null </summary>
@@ -59,8 +60,8 @@ namespace GreenSuperGreen.Sequencing
 										Action<object> injectContinuation = null)
 		where TEnum : struct
 		{
-			var rslt = sequencer.PointAsyncArg<TEnum,TArg>(seqPointTypeUC, registration, arg, injectContinuation);
-			rslt.GetResult();//sync waiting unless completed awaiter was provided
+			var result = sequencer.PointAsyncArg(seqPointTypeUC, registration, arg, injectContinuation);
+			result.GetResult();//sync waiting unless completed awaiter was provided
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable ExpressionIsAlwaysNull

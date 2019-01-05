@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using GreenSuperGreen.Exceptions;
 
 // ReSharper disable RedundantDefaultMemberInitializer
 // ReSharper disable CheckNamespace
@@ -11,7 +12,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary>
 	/// <para/> <see cref="AsyncTicketSpinLockUC"/> is based on .Net <see cref="Interlocked"/> operations (atomic instructions).
 	/// <para/> Does not support recursive call and does not protect against recursive call!
-	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered.
+	/// <para/> Enter and Exit can be done on different threads, but same thread should be preferred.
 	/// <para/> TryEnter can not be used! Not supported!
 	/// </summary>
 	public class AsyncTicketSpinLockUC : IAsyncLockUC
@@ -41,10 +42,10 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			return new AsyncEntryBlockUC(EntryTypeUC.Exclusive, EntryCompletion);
 		}
 
-		[Obsolete("AsyncTicketSpinLockUC does not suport TryEnter entry!!!", true)]
-		public AsyncEntryBlockUC TryEnter() { throw new NotImplementedException(); }
+		[Obsolete("AsyncTicketSpinLockUC does not support TryEnter entry!!!", true)]
+		public AsyncEntryBlockUC TryEnter() { throw new IntentionallyNotImplementedException($"{nameof(AsyncTicketSpinLockUC)} does not support TryEnter entry!!!"); }
 
-		[Obsolete("AsyncTicketSpinLockUC does not suport TryEnter entry!!!", true)]
-		public AsyncEntryBlockUC TryEnter(int milliseconds) { throw new NotImplementedException(); }
+		[Obsolete("AsyncTicketSpinLockUC does not support TryEnter entry!!!", true)]
+		public AsyncEntryBlockUC TryEnter(int milliseconds) { throw new IntentionallyNotImplementedException($"{nameof(AsyncTicketSpinLockUC)} does not support TryEnter entry!!!"); }
 	}
 }

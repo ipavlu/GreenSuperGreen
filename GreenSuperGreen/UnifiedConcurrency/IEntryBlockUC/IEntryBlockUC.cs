@@ -1,6 +1,6 @@
 ﻿using System;
-// ReSharper disable RedundantExtendsListEntry
 
+// ReSharper disable RedundantExtendsListEntry
 // ReSharper disable UnusedMemberInSuper.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace

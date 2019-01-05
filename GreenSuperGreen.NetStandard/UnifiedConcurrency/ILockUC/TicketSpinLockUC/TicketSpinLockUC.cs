@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using GreenSuperGreen.Exceptions;
 
 // ReSharper disable RedundantDefaultMemberInitializer
 // ReSharper disable CheckNamespace
@@ -11,7 +12,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary>
 	/// <para/> <see cref="TicketSpinLockUC"/> is based on .Net <see cref="Interlocked"/> operations (atomic instructions).
 	/// <para/> Does not support recursive call and does not protect against recursive call!
-	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered.
+	/// <para/> Enter and Exit can be done on different threads, but same thread should be preferred.
 	/// <para/> TryEnter can not be used! Not supported!
 	/// </summary>
 	public class TicketSpinLockUC : ILockUC
@@ -44,10 +45,10 @@ namespace GreenSuperGreen.UnifiedConcurrency
 			return new EntryBlockUC(EntryTypeUC.Exclusive, EntryCompletion);
 		}
 
-		[Obsolete("TicketSpinLockUC does not suport TryEnter entry!!!", true)]
-		public EntryBlockUC TryEnter() { throw new NotImplementedException(); }
+		[Obsolete("TicketSpinLockUC does not support TryEnter entry!!!", true)]
+		public EntryBlockUC TryEnter() { throw new IntentionallyNotImplementedException($"{nameof(TicketSpinLockUC)} does not support TryEnter entry!!!"); }
 
-		[Obsolete("TicketSpinLockUC does not suport TryEnter entry!!!", true)]
-		public EntryBlockUC TryEnter(int milliseconds) { throw new NotImplementedException(); }
+		[Obsolete("TicketSpinLockUC does not support TryEnter entry!!!", true)]
+		public EntryBlockUC TryEnter(int milliseconds) { throw new IntentionallyNotImplementedException($"{nameof(TicketSpinLockUC)} does not support TryEnter entry!!!"); }
 	}
 }

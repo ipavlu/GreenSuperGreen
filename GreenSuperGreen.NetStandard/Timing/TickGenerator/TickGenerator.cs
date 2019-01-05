@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GreenSuperGreen.Sequencing;
 using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable RedundantJumpStatement
 // ReSharper disable ArgumentsStyleOther
 // ReSharper disable ArgumentsStyleLiteral

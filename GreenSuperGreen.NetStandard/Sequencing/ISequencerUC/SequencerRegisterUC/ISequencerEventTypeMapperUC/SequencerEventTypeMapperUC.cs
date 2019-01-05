@@ -40,10 +40,8 @@ namespace GreenSuperGreen.Sequencing
 		{
 			SequencerEventMapperUC<TEnum>.TestEnum();
 
-			ISequencerEventMapperUC enumValueMapper;
-
 			bool found =
-			Mapper.TryGetValue(SequencerEventMapperUC<TEnum>.GenericInterfaceType, out enumValueMapper)
+			Mapper.TryGetValue(SequencerEventMapperUC<TEnum>.GenericInterfaceType, out var enumValueMapper)
 			&& enumValueMapper != null
 			;
 

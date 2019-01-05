@@ -10,7 +10,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary>
 	/// <para/> <see cref="SpinLockUC"/> is based on .Net <see cref="System.Threading.SpinLock"/>.
 	/// <para/> Does not support recursive call and does not protect against recursive call!
-	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
+	/// <para/> Enter and Exit can be done on different threads, but same thread should be preferred...
 	/// </summary>
 	public class SpinLockUC : ILockUC
 	{
@@ -36,8 +36,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		private void Exit()
 		{
 			_spinLock.Exit(true);
-			//used memory barrier, little less performant,
-			//but ensures fairness on heavy loaded boxes
+			//used memory barrier, little less performing, but ensures fairness on heavy loaded boxes
 		}
 
 		public EntryBlockUC Enter()

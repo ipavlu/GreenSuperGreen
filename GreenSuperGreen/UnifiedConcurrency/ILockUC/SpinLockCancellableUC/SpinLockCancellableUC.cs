@@ -11,7 +11,7 @@
 //	/// <summary>
 //	/// <para/> <see cref="SpinLockCancellableUC"/> is based on .Net <see cref="System.Threading.SpinLock"/>.
 //	/// <para/> Does not support recursive call and does not protect against recursive call!
-//	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
+//	/// <para/> Enter and Exit can be done on different threads, but same thread should be preferred...
 //	/// </summary>
 //	public class SpinLockCancellableUC : ILockUC
 //	{
@@ -49,16 +49,15 @@
 //		private void Exit()
 //		{
 //			_spinLock.Exit(true);
-//			//used memory barrier, little less performant,
-//			//but ensures fairness on heavy loaded boxes
+//			//used memory barrier, little less performing, but ensures fairness on heavy loaded boxes
 //			CheckCancellationRequested();
 //		}
 
 //		public EntryBlockUC Enter() => TryEnter(-1);
 
 //		/// <summary>
-//		/// Inifinite waiting if necessary, but here is simulated by 1ms steps,
-//		/// after each step without access cancellation token is checked for cancellationrequest.
+//		/// Infinite waiting if necessary, but here is simulated by 1ms steps,
+//		/// after each step without access cancellation token is checked for cancellation request.
 //		/// </summary>
 //		public EntryBlockUC TryEnter()
 //		{
@@ -69,9 +68,9 @@
 //		}
 
 //		/// <summary>
-//		/// Inifinite waiting if -1, but here is simulated by 1ms steps,
-//		/// after each step without access cancellation token is checked for cancellationrequest.
-//		/// Otherwise stepping and decrementing waiting time, aslo cancellation token checking.
+//		/// Infinite waiting if -1, but here is simulated by 1ms steps,
+//		/// after each step without access cancellation token is checked for cancellation request.
+//		/// Otherwise stepping and decrementing waiting time, also cancellation token checking.
 //		/// </summary>
 //		public EntryBlockUC TryEnter(int milliseconds)
 //		{

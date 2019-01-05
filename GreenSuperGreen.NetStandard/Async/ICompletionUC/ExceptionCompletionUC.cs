@@ -14,7 +14,7 @@ namespace GreenSuperGreen.Async
 {
 	/// <summary>
 	/// Please note that <see cref="ExceptionCompletionUC{TImplementer}"/> implements
-	/// <see cref="ICompletionUC"/> interface, the complete .net awaitable iterface,
+	/// <see cref="ICompletionUC"/> interface, the complete .net awaitable interface,
 	/// it has everything the await keyword needs. Making own awaitable class
 	/// is greatly simplified. This completion will throw requested exception upon await.
 	/// </summary>

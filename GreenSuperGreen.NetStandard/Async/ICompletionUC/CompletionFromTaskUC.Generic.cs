@@ -14,7 +14,7 @@ namespace GreenSuperGreen.Async
 {
 	/// <summary>
 	/// Please note that <see cref="CompletionFromTaskUC{TImplementer, TResult}"/> implements
-	/// <see cref="ICompletionUC{TResult}"/> interface, the complete .net awaitable iterface,
+	/// <see cref="ICompletionUC{TResult}"/> interface, the complete .net awaitable interface,
 	/// it has everything the await keyword with result needs. Here created from <see cref="Task{TResult}"/>
 	/// </summary>
 	/// <typeparam name="TImplementer">The class inheriting <see cref="CompletionFromTaskUC{TImplementer, TResult}"/></typeparam>
@@ -30,11 +30,7 @@ namespace GreenSuperGreen.Async
 	{
 		private Task<TResult> TaskResult { get; }
 
-		public CompletionFromTaskUC(Task<TResult> task)
-		{
-			if (task == null) throw new ArgumentNullException(nameof(task));
-			TaskResult = task;
-		}
+		public CompletionFromTaskUC(Task<TResult> task) => TaskResult = task ?? throw new ArgumentNullException(nameof(task));
 
 		/// <summary>
 		/// True when awaitable operation is completed, visible in interfaces

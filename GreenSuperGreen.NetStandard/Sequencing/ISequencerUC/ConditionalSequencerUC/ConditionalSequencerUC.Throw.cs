@@ -18,11 +18,11 @@ namespace GreenSuperGreen.Sequencing
 									Exception innerException = null,
 									string message = null,
 									int skipStackFrames = 3,
-									[CallerMemberName] string calllerName = "",
+									[CallerMemberName] string callerName = "",
 									[CallerFilePath] string callerFileName = "",
 									[CallerLineNumber] int callerLineNumber = 0)
 		{
-			sequencer?.Throw(condition, innerException, message, skipStackFrames, calllerName, callerFileName, callerLineNumber);
+			sequencer?.Throw(condition, innerException, message, skipStackFrames, callerName, callerFileName, callerLineNumber);
 		}
 
 
@@ -33,11 +33,11 @@ namespace GreenSuperGreen.Sequencing
 									Exception innerException = null,
 									string message = null,
 									int skipStackFrames = 4,
-									[CallerMemberName] string calllerName = "",
+									[CallerMemberName] string callerName = "",
 									[CallerFilePath] string callerFileName = "",
 									[CallerLineNumber] int callerLineNumber = 0)
 		{
-			sequencer?.Throw(innerException, message, skipStackFrames, calllerName, callerFileName, callerLineNumber);
+			sequencer?.Throw(innerException, message, skipStackFrames, callerName, callerFileName, callerLineNumber);
 		}
 	}
 }

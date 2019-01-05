@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
@@ -71,8 +72,7 @@ namespace GreenSuperGreen.Reporting
 
 			public IReportUC<TReportItemEnum> Report(string report, TReportItemEnum reportItem, ReportActionUC action = ReportActionUC.Update, string appendDelimiter = null)
 			{
-				string current;
-				Items.TryGetValue(reportItem, out current);
+				Items.TryGetValue(reportItem, out var current);
 				appendDelimiter = current == null ? null : appendDelimiter;
 				current = action == ReportActionUC.Update ? report : current;
 				current = action == ReportActionUC.Append ? $"{current}{appendDelimiter}{report}" : current;

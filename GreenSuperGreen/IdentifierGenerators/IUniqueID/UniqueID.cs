@@ -1,4 +1,8 @@
 ﻿using System;
+
+// ReSharper disable CommentTypo
+// ReSharper disable InheritdocConsiderUsage
+// ReSharper disable UnusedMember.Global
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming

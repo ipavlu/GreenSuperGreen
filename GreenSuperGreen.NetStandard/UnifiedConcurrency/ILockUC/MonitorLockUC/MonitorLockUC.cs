@@ -14,7 +14,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <para/> Enter and Exit MUST BE DONE on same thread! The lock is thread affine!
 	/// <para/> awaiting inside entry block NOT SUPPORTED, causing synchronization error!
 	/// </summary>
-	[Obsolete("Potentially harmfull! You would be served better with LockUC! Awaiting inside entry block or attempt to exit entry block in different thread is not supported!")]
+	[Obsolete("Potentially harmful! You would be served better with LockUC! Awaiting inside entry block or attempt to exit entry block in different thread is not supported!")]
 	internal class MonitorLockUC : ILockUC
 	{
 		private object ObjLock { get; } = new object();

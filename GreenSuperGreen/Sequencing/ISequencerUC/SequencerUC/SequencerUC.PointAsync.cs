@@ -22,7 +22,7 @@ namespace GreenSuperGreen.Sequencing
 			sequencer
 			.PointAsync(seqPointTypeUC,
 						registration,
-						() => true,
+						Constants.Boolean.FuncReturnTrue,
 						arg,
 						injectContinuation)
 			;
@@ -43,7 +43,7 @@ namespace GreenSuperGreen.Sequencing
 			sequencer
 			.PointAsyncArg(	seqPointTypeUC,
 							registration,
-							() => true,
+							Constants.Boolean.FuncReturnTrue,
 							arg,
 							injectContinuation)
 			;
@@ -60,8 +60,7 @@ namespace GreenSuperGreen.Sequencing
 								Action<object> injectContinuation = null)
 		where TEnum : struct
 		{
-			SequencerRegisterUC register = sequencer as SequencerRegisterUC;
-			if (register == null || condition == null || !condition()) return CompletedAwaiter;
+			if (!(sequencer is SequencerRegisterUC register) || condition == null || !condition()) return CompletedAwaiter;
 
 			ISequencerExceptionRegister exceptionRegister = register.ExceptionRegister.TryReThrowException();
 			ISequencerTaskRegister taskRegister = register.TaskRegister;
@@ -85,8 +84,7 @@ namespace GreenSuperGreen.Sequencing
 										Action<object> injectContinuation = null)
 		where TEnum : struct
 		{
-			SequencerRegisterUC register = sequencer as SequencerRegisterUC;
-			if (register == null || condition == null || !condition()) return CompletedAwaiter;
+			if (!(sequencer is SequencerRegisterUC register) || condition == null || !condition()) return CompletedAwaiter;
 
 			ISequencerExceptionRegister exceptionRegister = register.ExceptionRegister.TryReThrowException();
 			ISequencerTaskRegister taskRegister = register.TaskRegister;

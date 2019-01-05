@@ -41,8 +41,7 @@ namespace GreenSuperGreen.Sequencing
 
 		public ISequencerPointUC<TEnum> TryGet(TEnum enumValue)
 		{
-			ISequencerPointUC<TEnum> result;
-			Mapper.TryGetValue(enumValue, out result);
+			Mapper.TryGetValue(enumValue, out var result);
 			return result;
 		}
 	}

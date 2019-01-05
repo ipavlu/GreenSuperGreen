@@ -12,7 +12,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary>
 	/// <para/> <see cref="LockUC"/> is based on .Net <see cref="TaskCompletionSource{TObject}"/>.
 	/// <para/> Does not support recursive call and does not protect against recursive call!
-	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
+	/// <para/> Enter and Exit can be done on different threads, but same thread should be preferred...
 	/// </summary>
 	public class LockUC : ILockUC
 	{
@@ -26,9 +26,9 @@ namespace GreenSuperGreen.UnifiedConcurrency
 
 			public bool TrySetResult(EntryBlockUC result)
 			{
-				bool setRslt = TCS.TrySetResult(result);
-				if (StoredTimerProcessorTCS != null && setRslt) TimerProcessorUC.TimerProcessor.UnRegisterAsync(TCS);
-				return setRslt;
+				bool setResult = TCS.TrySetResult(result);
+				if (StoredTimerProcessorTCS != null && setResult) TimerProcessorUC.TimerProcessor.UnRegisterAsync(TCS);
+				return setResult;
 			}
 
 			public static AccessItem NewTCS() => new AccessItem(new TaskCompletionSource<EntryBlockUC>(TaskCreationOptions.RunContinuationsAsynchronously));

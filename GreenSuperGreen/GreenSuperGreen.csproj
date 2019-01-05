@@ -35,6 +35,8 @@
     <Compile Include="Async\TaskCompletionSource\TaskCompletionSourceTools.cs" />
     <Compile Include="Async\TaskCompletionSource\TaskCompletionSourceAccessor.cs" />
     <Compile Include="Console\ConsoleUC.cs" />
+    <Compile Include="Constants\Constants.Boolean.cs" />
+    <Compile Include="Constants\Constants.cs" />
     <Compile Include="Contexts\ExecutionContextExtensions\ExecutionContextExtensions.cs" />
     <Compile Include="Async\ICompletionUC\CompletionFromTaskUC.Generic.cs" />
     <Compile Include="Async\ICompletionUC\CompletionFromTaskUC.cs" />
@@ -52,6 +54,7 @@
     <Compile Include="Async\ICompletionUC\ICompletionUC.Generic.cs" />
     <Compile Include="Async\ICompletionUC\ICompletionUC.cs" />
     <Compile Include="Async\ISimpleCompletionUC\ISimpleCompletionUC.cs" />
+    <Compile Include="Exceptions\IntentionallyNotImplementedException\IntentionallyNotImplementedException.cs" />
     <Compile Include="Exceptions\StackTraceExceptionUC\StackTraceExceptionUC.cs" />
     <Compile Include="GeneralExtensions\Assign\AssignGeneralExtensions.Assign.cs" />
     <Compile Include="GeneralExtensions\Task\TaskConstants.cs" />

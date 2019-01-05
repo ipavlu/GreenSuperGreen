@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+
+// ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantExtendsListEntry
@@ -19,8 +21,16 @@ namespace GreenSuperGreen.UnifiedConcurrency
 
 	public static class EntryAccessUCExtension
 	{
-		public static bool IsExlusive(this EntryTypeUC entryType) => entryType == EntryTypeUC.Exclusive;
-		public static bool IsExlusive(this EntryTypeUC? entryType) => entryType.HasValue && entryType.Value == EntryTypeUC.Exclusive;
+		[Obsolete("In 2.0.0 will be removed, use IsExclusive")]
+		// ReSharper disable once IdentifierTypo
+		public static bool IsExlusive(this EntryTypeUC entryType) => entryType.IsExclusive();
+		public static bool IsExclusive(this EntryTypeUC entryType) => entryType == EntryTypeUC.Exclusive;
+
+		[Obsolete("In 2.0.0 will be removed, use IsExclusive")]
+		// ReSharper disable once IdentifierTypo
+		public static bool IsExlusive(this EntryTypeUC? entryType) => entryType.IsExclusive();
+		public static bool IsExclusive(this EntryTypeUC? entryType) => entryType.HasValue && entryType.Value == EntryTypeUC.Exclusive;
+
 		public static bool IsConcurrent(this EntryTypeUC entryType) => entryType == EntryTypeUC.Concurrent;
 		public static bool IsConcurrent(this EntryTypeUC? entryType) => entryType.HasValue && entryType.Value == EntryTypeUC.Concurrent;
 	}

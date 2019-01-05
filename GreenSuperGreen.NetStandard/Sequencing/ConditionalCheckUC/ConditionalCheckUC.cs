@@ -21,7 +21,7 @@ namespace GreenSuperGreen.Sequencing
 	}
 
 	/// <summary>
-	/// This class is looking for available conditionnals
+	/// This class is looking for available conditionals
 	/// </summary>
 	public static class ConditionalCheckUC
 	{

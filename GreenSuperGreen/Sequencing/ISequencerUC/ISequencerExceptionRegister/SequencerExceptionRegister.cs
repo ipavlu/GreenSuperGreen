@@ -39,7 +39,7 @@ namespace GreenSuperGreen.Sequencing
 		public Exception TryGetExceptionLocked()
 		{
 			if (AggregateException == null) return null;
-			Exceptions.Enqueue(new Exception("Exception detected, throwned elsewhere!"));
+			Exceptions.Enqueue(new Exception("Exception detected, thrown elsewhere!"));
 			return AggregateException = new AggregateException(Exceptions);
 		}
 

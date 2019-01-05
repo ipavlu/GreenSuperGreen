@@ -7,8 +7,7 @@ namespace GreenSuperGreen.Sequencing
 	{
 		public static ISequencerUC TryReThrowException(this ISequencerUC sequencer)
 		{
-			SequencerRegisterUC register = sequencer as SequencerRegisterUC;
-			if (register == null) return sequencer;
+			if (!(sequencer is SequencerRegisterUC register)) return sequencer;
 
 			register.ExceptionRegister.TryReThrowException();
 

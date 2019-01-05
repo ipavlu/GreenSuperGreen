@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
 
