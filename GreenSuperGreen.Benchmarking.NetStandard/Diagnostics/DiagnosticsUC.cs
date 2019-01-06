@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantExtendsListEntry

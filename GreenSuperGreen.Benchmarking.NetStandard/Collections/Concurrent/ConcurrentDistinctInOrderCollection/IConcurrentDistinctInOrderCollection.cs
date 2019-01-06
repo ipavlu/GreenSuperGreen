@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Collections.Concurrent
 {
 	public interface IConcurrentDistinctInOrderCollection<T>

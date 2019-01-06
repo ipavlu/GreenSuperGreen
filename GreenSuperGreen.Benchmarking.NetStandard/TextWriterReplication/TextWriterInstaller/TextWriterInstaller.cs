@@ -1,10 +1,12 @@
 ﻿using System.IO;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.TextWriterReplication
 {
 	public class TextWriterInstaller : ATextWriterInstaller
 	{
-		private bool disposed = false;
+		private bool _disposed;
 
 		public TextWriterInstaller(ITextWriter ancestor, ITextWriterReplicatorManager replicatorManager, TextWriter textWriter, DisposeAncestor disposeAncestor)
 			: base(ancestor, replicatorManager, textWriter, disposeAncestor)
@@ -13,13 +15,13 @@ namespace GreenSuperGreen.TextWriterReplication
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposed) return;
+			if (_disposed) return;
 
 			if (disposing)
 			{
 			}
 
-			disposed = true;
+			_disposed = true;
 			base.Dispose(disposing);
 		}
 

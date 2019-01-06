@@ -5,18 +5,23 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using GreenSuperGreen.Collections.Concurrent;
+// ReSharper disable RedundantExtendsListEntry
+
+// ReSharper disable ForCanBeConvertedToForeach
+// ReSharper disable UnusedMember.Global
+// ReSharper disable CheckNamespace
 
 namespace GreenSuperGreen.TextWriterReplication
 {
 	/// <summary>
 	/// The <see cref="TextWriterReplicatorManager"/> allows to replicate data to other <see cref="TextWriter"/> targets
 	/// </summary>
-	public sealed partial class TextWriterReplicatorManager
+	public sealed class TextWriterReplicatorManager
 		:	TextWriter,
 			ITextWriterReplicatorManager,
 			ITextWriter<TextWriter>
 	{
-		private bool disposed = false;
+		private bool _disposed;
 
 		private IConcurrentDistinctInOrderCollection<TextWriter> TextWriters { get; } = new ConcurrentDistinctInOrderCollection<TextWriter>();
 
@@ -26,7 +31,7 @@ namespace GreenSuperGreen.TextWriterReplication
 		public TextWriter TextWriter => this;
 		public TextWriter TextWriterOfT => this;
 
-		public TextWriterReplicatorManager() : base() { }
+		public TextWriterReplicatorManager() { }
 
 		public TextWriterReplicatorManager(IFormatProvider formatProvider) : base(formatProvider)
 		{
@@ -39,7 +44,7 @@ namespace GreenSuperGreen.TextWriterReplication
 		public TextWriterReplicatorManager(IFormatProvider formatProvider, TextWriter textWriter)
 			: this(formatProvider, new[] { textWriter }) { }
 
-		public TextWriterReplicatorManager(IEnumerable<TextWriter> textWriters) : base()
+		public TextWriterReplicatorManager(IEnumerable<TextWriter> textWriters)
 		{
 			TextWriters.AddRange(textWriters);
 			if (textWriters == null) throw new ArgumentNullException(nameof(textWriters));
@@ -206,13 +211,13 @@ namespace GreenSuperGreen.TextWriterReplication
 			for (int i = 0; i < textWriter.Length; ++i) await textWriter[i].WriteAsync(buffer);
 		}
 
-		public async override Task WriteAsync(char value)
+		public override async Task WriteAsync(char value)
 		{
 			var textWriter = TextWriters.DistinctInOrderArray;
 			for (int i = 0; i < textWriter.Length; ++i) await textWriter[i].WriteAsync(value);
 		}
 		
-		public async override Task WriteAsync(char[] buffer, int index, int count)
+		public override async Task WriteAsync(char[] buffer, int index, int count)
 		{
 			var textWriter = TextWriters.DistinctInOrderArray;
 			for (int i = 0; i < textWriter.Length; ++i) await textWriter[i].WriteAsync(buffer, index, count);
@@ -358,7 +363,7 @@ namespace GreenSuperGreen.TextWriterReplication
 
 		protected override void Dispose(bool disposing)
 		{
-			if (disposed) return;
+			if (_disposed) return;
 
 			if (disposing)
 			{
@@ -367,7 +372,7 @@ namespace GreenSuperGreen.TextWriterReplication
 				TextWriters.Clear();
 			}
 
-			disposed = true;
+			_disposed = true;
 			base.Dispose(disposing);
 		}
 

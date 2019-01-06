@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public interface IBenchmarkManager

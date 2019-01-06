@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public class Benchmark<TSyncPrimitive> : BenchmarkConfiguration, IBenchmark<TSyncPrimitive>
@@ -12,7 +14,7 @@ namespace GreenSuperGreen.Benchmarking
 		protected virtual TSyncPrimitive SharedSyncPrimitiveFactory => default(TSyncPrimitive);
 		protected virtual TSyncPrimitive SyncPrimitiveFactory(IThreadGroupIndex threadGroupIndex) => default(TSyncPrimitive);
 
-		protected virtual BenchmarkWorker[] BenchInstanceGenerator(TSyncPrimitive syncprimitive, IThreadGroupIndex threadGroupIndex)
+		protected virtual BenchmarkWorker[] BenchInstanceGenerator(TSyncPrimitive syncPrimitive, IThreadGroupIndex threadGroupIndex)
 		=> Array.Empty<BenchmarkWorker>()
 		;
 
@@ -37,15 +39,9 @@ namespace GreenSuperGreen.Benchmarking
 		=> BenchInstanceGenerator(CreateOrGetStoredSyncPrimitive(threadGroupIndex), threadGroupIndex)
 		;
 
-		protected virtual string NamePrefix => string.Empty;
-		protected virtual string NameBase => GetType().Name;
-		protected virtual string NamePostfix => string.Empty;
 
-		public string Name => $"{NamePostfix}{NameBase}{NamePostfix}";
+		protected override string NameBase => GetType().Name;
 
-		protected virtual int RawThreadGroups { get; } = 0;
-		public int ThreadGroups => Math.Max(RawThreadGroups, 1);
-		
 		protected Benchmark(IBenchmarkConfiguration test) :  base(test) { }
 
 		public async Task PerfCollectorTryClearAsync(int delay = 100)

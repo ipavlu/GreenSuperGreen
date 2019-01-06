@@ -2,12 +2,26 @@
 using GreenSuperGreen.Diagnostics;
 using GreenSuperGreen.TextWriterReplication;
 
+// ReSharper disable ConstantNullCoalescingCondition
+// ReSharper disable ConstantConditionalAccessQualifier
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public class BenchmarkConfiguration : IBenchmarkConfiguration
 	{
+		private readonly string _nameBase;
 		public IBenchmarkManager BenchmarkManager { get; }
 		public IPerfCounterCollectorUC PerfCollector { get; }
+		protected virtual string NamePrefix => string.Empty;
+		protected virtual string NameBase => _nameBase ?? GetType().Name;
+		protected virtual string NamePostfix => string.Empty;
+		public string Name => $"{NamePrefix}{NameBase}{NamePostfix}";
+
+		protected virtual int RawThreadGroups { get; } = 0;
+		public int ThreadGroups => Math.Max(RawThreadGroups, 1);
+
+		//public int ThreadGroups { get; }
 		public TimeSpan TimeSpan { get; }
 		public long Spins { get; }
 		public ITextWriter TextWriter { get; }
@@ -25,6 +39,7 @@ namespace GreenSuperGreen.Benchmarking
 			TimeSpan = timeSpan;
 			Spins = spins;
 			TextWriter = textWriter;
+			_nameBase = benchmarkManager.Name;
 		}
 
 		public BenchmarkConfiguration(IBenchmarkConfiguration benchmarkConfiguration)

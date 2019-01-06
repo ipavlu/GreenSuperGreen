@@ -1,4 +1,7 @@
-﻿namespace GreenSuperGreen.TextWriterReplication
+﻿
+// ReSharper disable CheckNamespace
+
+namespace GreenSuperGreen.TextWriterReplication
 {
 	public enum DisposeAncestor
 	{

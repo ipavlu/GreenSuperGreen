@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 
+// ReSharper disable RedundantExtendsListEntry
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.TextWriterReplication
 {
 	public interface ITextWriterReplicatorManager : ITextWriter<TextWriter>, ITextWriter, IDisposable

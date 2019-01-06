@@ -1,14 +1,21 @@
 ﻿using System.Threading.Tasks;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
-	public interface IBenchmarkWorker
+	public interface IBenchmarkWorkerData
 	{
 		long ElapsedMilliseconds { get; }
 		int Iterations { get; }
-		string Pair { get; }
 		double ThroughputPerMillisecond { get; }
 
+		string ResourceName { get; }
+
+		string Pair { get; }
+	}
+	public interface IBenchmarkWorker : IBenchmarkWorkerData
+	{
 		Task RunProcessing();
 	}
 }

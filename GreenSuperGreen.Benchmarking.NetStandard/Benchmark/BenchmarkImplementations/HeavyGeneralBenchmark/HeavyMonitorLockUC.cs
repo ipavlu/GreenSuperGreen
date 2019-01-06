@@ -1,5 +1,6 @@
-﻿using System;
-using GreenSuperGreen.UnifiedConcurrency;
+﻿using GreenSuperGreen.UnifiedConcurrency;
+
+// ReSharper disable CheckNamespace
 
 namespace GreenSuperGreen.Benchmarking
 {

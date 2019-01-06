@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public abstract class BenchmarkWorker : BenchmarkConfiguration, IBenchmarkWorker
@@ -11,11 +13,13 @@ namespace GreenSuperGreen.Benchmarking
 		public long ElapsedMilliseconds { get; private set; }
 		public int Iterations { get; private set; }
 		public string Pair { get; }
+		public string ResourceName { get; }
 		public double ThroughputPerMillisecond => ElapsedMilliseconds / (double)(Iterations <= 0 ? 1 : Iterations);
 
-		protected BenchmarkWorker(IBenchmarkConfiguration benchmarkConfiguration, string pair = null)
+		protected BenchmarkWorker(IBenchmarkConfiguration benchmarkConfiguration, string resourceName, string pair)
 		:	base(benchmarkConfiguration)
 		{
+			ResourceName = resourceName ?? string.Empty;
 			Pair = pair ?? string.Empty;
 		}
 
@@ -26,7 +30,7 @@ namespace GreenSuperGreen.Benchmarking
 			for (long t = 0; t < Spins; ++t) { }
 		}
 
-		protected virtual async Task BenchmarkingTarget() { await Task.CompletedTask; throw new NotImplementedException(); }
+		protected virtual async Task BenchmarkingTarget() { await Task.CompletedTask; throw new Exception($"virtual {nameof(BenchmarkingTarget)}() must be overridden!)"); }
 
 		public Task RunProcessing() => Task.Run(Processing);
 

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.TextWriterReplication
 {
 	public abstract class ATextWriterInstaller : ITextWriter
 	{
-		private bool disposed = false;
+		private bool _disposed;
 		public DisposeAncestor DisposeAncestor { get; }
-		private ITextWriter Ancestor { get; }
+		private ITextWriter Ancestor { get; } = null;
 		public ITextWriterReplicatorManager ReplicatorManager { get; }
 
 		public TextWriter TextWriterReplicator => ReplicatorManager.TextWriterReplicator;
@@ -20,9 +22,11 @@ namespace GreenSuperGreen.TextWriterReplication
 			TextWriter textWriter,
 			DisposeAncestor disposeAncestor)
 		{
+			//TODO ancestor is not set in constructor and wont be disposed, but can break existing functionality, must be analyzed!
 			ReplicatorManager = replicatorManager ?? throw new ArgumentNullException(nameof(replicatorManager));
 			TextWriter = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
 			DisposeAncestor = disposeAncestor;
+			//TODO Virtual member call in constructor!
 			Install();
 		}
 
@@ -38,13 +42,14 @@ namespace GreenSuperGreen.TextWriterReplication
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (disposed) return;
+			if (_disposed) return;
 			if (disposing)
 			{
 				Uninstall();
 				if (DisposeAncestor == DisposeAncestor.Yes) Ancestor?.Dispose();
+				//TODO ancestor is not set in constructor and wont be disposed, but can break existing functionality, must be analyzed!
 			}
-			disposed = true;
+			_disposed = true;
 			//base.Dispose(disposing);
 		}
 
