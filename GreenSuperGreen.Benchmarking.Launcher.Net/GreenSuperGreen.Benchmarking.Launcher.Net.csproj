@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard">
-      <Version>1.1.8.1</Version>
+      <Version>1.1.9</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
