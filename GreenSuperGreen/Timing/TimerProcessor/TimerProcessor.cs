@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GreenSuperGreen.Sequencing;
 using GreenSuperGreen.UnifiedConcurrency;
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable RedundantJumpStatement
 // ReSharper disable ForCanBeConvertedToForeach
@@ -66,7 +67,7 @@ namespace GreenSuperGreen.Timing
 	/// <summary>
 	/// TimerProcessor is resource lightweight attempt to handle large numbers of timing items.
 	/// If no items are processed, then ticking is stopped and does not take CPU time, ThreadPool resources.
-	/// Registration is lock free, spin-lock based. Each operation is made to limit spinwaiting to minimum.
+	/// Registration is lock free, spin-lock based. Each operation is made to limit spin-waiting to minimum.
 	/// </summary>
 	public class TimerProcessor : ITimerProcessor, IDisposable
 	{

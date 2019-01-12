@@ -1,5 +1,6 @@
 ﻿using System;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMemberInSuper.Global
@@ -20,14 +21,14 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		/// <summary> Recursive calls not supported. </summary>
 		NonRecursive = (1 << 4),
 		/// <summary>
-		/// <para/> Thread afinity is required by legacy synchronization primitives like .net <see cref="System.Threading.Monitor"/>
+		/// <para/> Thread affinity is required by legacy synchronization primitives like .net <see cref="System.Threading.Monitor"/>
 		/// <para/> Enter and Exit has to be executed on same thread!
 		/// <para/> awaiting between Entry and Exit points will crash synchronization!
 		/// </summary>
 		ThreadAffine = (1 << 5),
 		/// <summary> Enter and Exit is not thread affine, can occur on different threads. </summary>
 		NonThreadAffine = (1 << 6),
-		/// <summary> Entry is cancellable based, improving application shutdown responsivness! </summary>
+		/// <summary> Entry is cancellable based, improving application shutdown responsiveness! </summary>
 		Cancellable = (1 << 7),
 		/// <summary> Non Cancellable. </summary>
 		NonCancellable = (1 << 8),

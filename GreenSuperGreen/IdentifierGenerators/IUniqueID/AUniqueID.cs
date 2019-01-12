@@ -16,13 +16,13 @@ namespace GreenSuperGreen.IdentifierGenerators
 		:		class
 	{
 		/// <summary> 
-		/// The static field is unique per type <see cref="TImplementer"/>, it is used intentionaly.
+		/// The static field is unique per type <see cref="TImplementer"/>, it is used intentionally.
 		/// </summary>
 		private static int _lastID = -1;
 
 		/// <summary>
 		/// If you know who implements this, you can get next id in sequence.
-		/// As id's are not used for counting, ordering, just reasonable indentification,
+		/// As id's are not used for counting, ordering, just reasonable identification,
 		/// then it does not matter if somebody gets next id in the sequence.
 		/// </summary>
 		public static int GenerateID() => Interlocked.Increment(ref _lastID);

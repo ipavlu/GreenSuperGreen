@@ -15,7 +15,7 @@ namespace GreenSuperGreen.Sequencing
 												Exception innerException = null,
 												string message = null,
 												int skipStackFrames = 3,
-												[CallerMemberName] string calllerName = "",
+												[CallerMemberName] string callerName = "",
 												[CallerFilePath] string callerFileName = "",
 												[CallerLineNumber] int callerLineNumber = 0)
 		{
@@ -25,7 +25,7 @@ namespace GreenSuperGreen.Sequencing
 					innerException,
 					message,
 					skipStackFrames,
-					calllerName,
+					callerName,
 					callerFileName,
 					callerLineNumber)
 			;
@@ -37,17 +37,16 @@ namespace GreenSuperGreen.Sequencing
 												Exception innerException = null,
 												string message = null,
 												int skipStackFrames = 2,
-												[CallerMemberName] string calllerName = "",
+												[CallerMemberName] string callerName = "",
 												[CallerFilePath] string callerFileName = "",
 												[CallerLineNumber] int callerLineNumber = 0)
 		{
-			SequencerRegisterUC register = sequencer as SequencerRegisterUC;
-			if (register == null || condition == null || !condition()) return sequencer;
+			if (!(sequencer is SequencerRegisterUC register) || condition == null || !condition()) return sequencer;
 
 			string msg = string.Empty;
 			msg += $"[{nameof(ISequencerUC)}.{nameof(Throw)}]";
 			msg += $"[msg: {message ?? string.Empty}]";
-			msg += $"[MethodName:{calllerName}]";
+			msg += $"[MethodName:{callerName}]";
 			msg += $"[Line:{callerLineNumber}]";
 			msg += $"[FileName:{callerFileName}]";
 

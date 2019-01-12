@@ -39,7 +39,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 		}
 
 		public bool Equals(EntryBlockUC other) => Equals(EntryCompletion, other.EntryCompletion) && EntryTypeUC == other.EntryTypeUC;
-		public override bool Equals(object obj) => obj is EntryBlockUC && Equals((EntryBlockUC)obj);
+		public override bool Equals(object obj) => obj is EntryBlockUC entry && Equals(entry);
 
 		public static bool operator ==(EntryBlockUC a, EntryBlockUC b) => a.Equals(b);
 		public static bool operator !=(EntryBlockUC a, EntryBlockUC b) => !a.Equals(b);

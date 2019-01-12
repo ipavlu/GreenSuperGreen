@@ -14,7 +14,7 @@ namespace GreenSuperGreen.Async
 {
 	/// <summary>
 	/// Please note that <see cref="ACompletionUC{TImplementer}"/> implements
-	/// <see cref="ICompletionUC"/> interface, the complete .net awaitable iterface,
+	/// <see cref="ICompletionUC"/> interface, the complete .net awaitable interface,
 	/// it has everything the await keyword needs. Making own awaitable class
 	/// is greatly simplified.
 	/// </summary>
@@ -31,7 +31,7 @@ namespace GreenSuperGreen.Async
 		/// <summary>
 		/// Think twice before you use <see cref="TaskCompletionSource"/>,
 		/// giving public access to the <see cref="TaskCompletionSource{TObject}"/>
-		/// allows awaiting on the notification Task, effectivelly overriding
+		/// allows awaiting on the notification Task, effectively overriding
 		/// awaiting on interface <see cref="ICompletionUC{TResult}"/>, possibly
 		/// blocking forever...
 		/// </summary>

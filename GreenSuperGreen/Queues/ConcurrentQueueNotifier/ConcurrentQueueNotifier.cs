@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable StringLiteralTypo
 // ReSharper disable IdentifierTypo
 // ReSharper disable InconsistentNaming

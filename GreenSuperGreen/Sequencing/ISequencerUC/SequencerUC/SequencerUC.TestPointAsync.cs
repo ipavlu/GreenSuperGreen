@@ -11,8 +11,7 @@ namespace GreenSuperGreen.Sequencing
 		TestPointAsync<TEnum>(this ISequencerUC sequencer, TEnum registration)
 		where TEnum : struct
 		{
-			SequencerRegisterUC register = sequencer as SequencerRegisterUC;
-			if (register == null) return TestPointUC.EmptyCompleted;
+			if (!(sequencer is SequencerRegisterUC register)) return TestPointUC.EmptyCompleted;
 
 			ISequencerExceptionRegister exceptionRegister = register.ExceptionRegister.TryReThrowException();
 			ISequencerTaskRegister taskRegister = register.TaskRegister;
