@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen", "GreenSuperGreen\GreenSuperGreen.csproj", "{31F7CF88-4A1A-499B-98BF-07D02615D7F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen.Test", "GreenSuperGreen.Test\GreenSuperGreen.Test.csproj", "{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{0E073002-86BD-46A6-98EC-68E7CFA76F9D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Queues", "Queues", "{1037F9B2-6409-42A5-BA90-853F608A112D}"
@@ -29,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen.Benchmarkin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenSuperGreen.Benchmarking.Launcher.NetCore", "GreenSuperGreen.Benchmarking.Launcher.NetCore\GreenSuperGreen.Benchmarking.Launcher.NetCore.csproj", "{F72CDA20-3CD8-4E68-AC5E-040B56A56604}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenSuperGreen.Test", "GreenSuperGreen.Test\GreenSuperGreen.Test.csproj", "{A7D73263-1601-4495-B1D4-07B03497EE6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +39,6 @@ Global
 		{31F7CF88-4A1A-499B-98BF-07D02615D7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31F7CF88-4A1A-499B-98BF-07D02615D7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31F7CF88-4A1A-499B-98BF-07D02615D7F5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA0365E5-6CD3-4E60-A0AF-16BE35B495EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{881233EA-5B90-4FFF-BC28-F2D09DC42325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{881233EA-5B90-4FFF-BC28-F2D09DC42325}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{881233EA-5B90-4FFF-BC28-F2D09DC42325}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +71,10 @@ Global
 		{F72CDA20-3CD8-4E68-AC5E-040B56A56604}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F72CDA20-3CD8-4E68-AC5E-040B56A56604}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F72CDA20-3CD8-4E68-AC5E-040B56A56604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7D73263-1601-4495-B1D4-07B03497EE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7D73263-1601-4495-B1D4-07B03497EE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7D73263-1601-4495-B1D4-07B03497EE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7D73263-1601-4495-B1D4-07B03497EE6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

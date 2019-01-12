@@ -1,5 +1,8 @@
 ﻿using System.IO;
 
+// ReSharper disable UnusedMember.Global
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.TextWriterReplication
 {
 	public static class ITextWriterExtension

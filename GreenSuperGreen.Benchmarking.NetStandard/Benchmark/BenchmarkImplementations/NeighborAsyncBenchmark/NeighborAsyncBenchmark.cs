@@ -1,18 +1,20 @@
 ﻿using System;
 using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
-	public class NeighborAsyncBenchmark<TAsynLockUC> : Benchmark<TAsynLockUC> where TAsynLockUC : class, IAsyncLockUC, new()
+	public class NeighborAsyncBenchmark<TAsyncLockUC> : Benchmark<TAsyncLockUC> where TAsyncLockUC : class, IAsyncLockUC, new()
 	{
-		protected override TAsynLockUC SyncPrimitiveFactory(IThreadGroupIndex threadGroupIndex) => new TAsynLockUC();
+		protected override TAsyncLockUC SyncPrimitiveFactory(IThreadGroupIndex threadGroupIndex) => new TAsyncLockUC();
 		protected override int RawThreadGroups => Environment.ProcessorCount / 2;
 
-		protected override BenchmarkWorker[] BenchInstanceGenerator(TAsynLockUC syncprimitive, IThreadGroupIndex threadGroupIndex) =>
+		protected override BenchmarkWorker[] BenchInstanceGenerator(TAsyncLockUC syncPrimitive, IThreadGroupIndex threadGroupIndex) =>
 			new BenchmarkWorker[]
 			{
-				new AsyncLockWorker(syncprimitive, this, $"{threadGroupIndex}:A"),
-				new AsyncLockWorker(syncprimitive, this, $"{threadGroupIndex}:B")
+				new AsyncLockWorker(syncPrimitive, this, $"{threadGroupIndex}", $"{threadGroupIndex}:A"),
+				new AsyncLockWorker(syncPrimitive, this, $"{threadGroupIndex}",$"{threadGroupIndex}:B")
 			};
 		protected NeighborAsyncBenchmark(IBenchmarkConfiguration test) : base(test) { }
 	}

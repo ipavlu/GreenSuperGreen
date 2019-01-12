@@ -5,7 +5,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GreenSuperGreen.Diagnostics;
+using GreenSuperGreen.Reporting;
 using GreenSuperGreen.TextWriterReplication;
+
+// ReSharper disable UnusedMember.Global
+// ReSharper disable CheckNamespace
 
 namespace GreenSuperGreen.Benchmarking
 {
@@ -50,6 +54,30 @@ namespace GreenSuperGreen.Benchmarking
 			BenchmarkingInitPoint.PrintIntro();
 
 			string.Empty.WriteLine().WriteLine();
+
+			ReportUC
+			.New<BenchInfoNames>(ReportTypeUC.CVS)
+			.NamesAsValues()
+			.ToString()
+			.WriteLine()
+			;
+
+			string procName = ProcessorName();
+			string osName = OperatingSystemName();
+
+			ReportUC
+			.New<BenchInfoNames>(ReportTypeUC.CVS)
+			.Report("SystemInformation:", BenchInfoNames.Name)
+			.Report(procName, BenchInfoNames.NameCPU)
+			.Report(Environment.ProcessorCount.ToString(), BenchInfoNames.CoresCPU)
+			.Report(Environment.OSVersion.ToString(), BenchInfoNames.VersionOS)
+			.Report(osName, BenchInfoNames.NameOS)
+			.ToString()
+			.WriteLine()
+			;
+
+			string.Empty.WriteLine().WriteLine();
+
 
 			ImmutableArray<int> spinsSet = 101.GenerateSpinsSet();
 
@@ -96,12 +124,79 @@ namespace GreenSuperGreen.Benchmarking
 
 					await info.ExecuteBenchmark(new BenchmarkConfiguration(info, perfCollector, BenchmarkGlobalSettings.TestingTimeSpan, spins, textWriter));
 
-					string.Empty.WriteLine();
-					string.Empty.WriteLine();
+					string.Empty.WriteLine().WriteLine();
 				}
 			}
 
 			BenchmarkingInitPoint.PrintExit();
+		}
+
+
+		public static string ProcessorName()
+		{
+			try
+			{
+				using (Process process = new Process())
+				{
+					process.StartInfo.FileName = "cmd.exe";
+					process.StartInfo.Arguments = "/c wmic CPU get NAME";
+					process.StartInfo.UseShellExecute = false;
+					process.StartInfo.RedirectStandardOutput = true;
+					process.StartInfo.RedirectStandardError = true;
+					process.Start();
+					//* Read the output (or the error)
+					string output = process.StandardOutput.ReadToEnd();
+					string err = process.StandardError.ReadToEnd();
+					process.WaitForExit();
+
+					output = output.Replace("\r", string.Empty);
+					output = output.Replace("\n", string.Empty);
+					output = output.Replace("\t", string.Empty);
+					output = output.Replace("\v", string.Empty);
+					output = output.Replace("Name", string.Empty);
+					output = output.Trim();
+
+					return output;
+				}
+			}
+			catch (Exception)
+			{
+				return "Information retrieval has failed!";
+			}
+		}
+
+		public static string OperatingSystemName()
+		{
+			try
+			{
+				using (Process process = new Process())
+				{
+					process.StartInfo.FileName = "cmd.exe";
+					process.StartInfo.Arguments = "/c wmic OS get NAME";
+					process.StartInfo.UseShellExecute = false;
+					process.StartInfo.RedirectStandardOutput = true;
+					process.StartInfo.RedirectStandardError = true;
+					process.Start();
+					//* Read the output (or the error)
+					string output = process.StandardOutput.ReadToEnd();
+					string err = process.StandardError.ReadToEnd();
+					process.WaitForExit();
+
+					output = output.Replace("\r", string.Empty);
+					output = output.Replace("\n", string.Empty);
+					output = output.Replace("\t", string.Empty);
+					output = output.Replace("\v", string.Empty);
+					output = output.Replace("Name", string.Empty);
+					output = output.Split(new[] {"|"}, StringSplitOptions.None).FirstOrDefault() ?? string.Empty;
+					output = output.Trim();
+
+					return output;
+				}
+			}
+			catch (Exception)
+			{
+				return "Information retrieval has failed!";
+			}
 		}
 	}
 }

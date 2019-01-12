@@ -105,7 +105,7 @@ namespace GreenSuperGreen.Reporting
 			public string BuildReport() =>
 			OrderedEnumValues
 			.Select(en => UseNamesAsValues ? en.ToString() : Items[en] ?? string.Empty)
-			.Aggregate(string.Empty, (c, n) => string.IsNullOrEmpty(c)? n : $"{c};{n}", str => LineDelimiter? $"{str}{Environment.NewLine}" : str)
+			.Aggregate(string.Empty, (c, n) => $"{c};{n}", str => LineDelimiter? $"{str}{Environment.NewLine}" : str)
 			;
 
 			public override string ToString() => BuildReport();

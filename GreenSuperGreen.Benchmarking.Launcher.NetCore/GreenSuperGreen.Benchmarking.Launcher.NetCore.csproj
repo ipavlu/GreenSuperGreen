@@ -52,7 +52,7 @@ Awaitable Concurrent Priority Queue - Optionally awaitable simple to use Concurr
 https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Priority-Queue
 	</Description>
 
-    <Copyright>Copyright © ipavlu 2017</Copyright>
+    <Copyright>Copyright © ipavlu 2017-2019</Copyright>
 
     <PackageLicenseUrl>https://github.com/ipavlu/GreenSuperGreen/blob/master/LICENSE</PackageLicenseUrl>
     
@@ -68,13 +68,13 @@ https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Pri
 
     <Company>ipavlu</Company>
 
-    <PackageTags>1.1.8</PackageTags>
+    <PackageTags>1.2.0</PackageTags>
 
-    <Version>1.1.8</Version>
+    <Version>1.2.0</Version>
 
-    <AssemblyVersion>1.1.8</AssemblyVersion>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
 
-    <FileVersion>1.1.8</FileVersion>
+    <FileVersion>1.2.0</FileVersion>
 
     <Product>GreenSuperGreen.Benchmarking.Launcher.NetCore</Product>
 
@@ -85,7 +85,7 @@ https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Pri
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.1.8.1" />
+    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.2.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
   </ItemGroup>
 </Project>

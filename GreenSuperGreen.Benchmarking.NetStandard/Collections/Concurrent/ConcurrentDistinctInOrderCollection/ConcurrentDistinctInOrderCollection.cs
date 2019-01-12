@@ -3,6 +3,8 @@ using System.Collections.Immutable;
 using System.Linq;
 using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Collections.Concurrent
 {
 	public class ConcurrentDistinctInOrderCollection<T> : IConcurrentDistinctInOrderCollection<T>

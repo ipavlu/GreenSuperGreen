@@ -3,6 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using GreenSuperGreen.Reporting;
 
+// ReSharper disable CheckNamespace
+// ReSharper disable InconsistentNaming
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public static class BenchmarkProcessor
@@ -44,6 +47,7 @@ namespace GreenSuperGreen.Benchmarking
 						.Report($"{w.Iterations}", BenchInfoNames.Iterations)
 						.Report($"{w.Spins}", BenchInfoNames.Spins)
 						.Report($"{w.ThroughputPerMillisecond:0.000}", BenchInfoNames.Throughput_ms)
+						.Report(w.ResourceName, BenchInfoNames.ResourceName)
 						.ToString())
 			.Aggregate(string.Empty, (c,n) => string.IsNullOrEmpty(c) ? n : $"{c}{Environment.NewLine}{n}")
 			.WriteLine()

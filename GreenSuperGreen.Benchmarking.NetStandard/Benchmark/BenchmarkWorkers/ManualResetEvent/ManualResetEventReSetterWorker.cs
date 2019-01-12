@@ -1,18 +1,24 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
+// ReSharper disable CheckNamespace
+// ReSharper disable InconsistentNaming
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public class ManualResetEventReSetterWorker : BenchmarkWorker
 	{
-		private ManualResetEvent mre { get; }
-		public ManualResetEventReSetterWorker(ManualResetEvent syncPrimitive, IBenchmarkConfiguration benchmarkConfiguration, string pair = null)
-			: base(benchmarkConfiguration)
-		{ mre = syncPrimitive; }
+		private ManualResetEvent MRE { get; }
+		public ManualResetEventReSetterWorker(	ManualResetEvent syncPrimitive,
+												IBenchmarkConfiguration benchmarkConfiguration,
+												string resourceName,
+												string pair)
+			: base(benchmarkConfiguration, resourceName, pair)
+		{ MRE = syncPrimitive; }
 
 		protected override async Task BenchmarkingTarget()
 		{
-			mre.Reset();
+			MRE.Reset();
 			await Task.CompletedTask;
 		}
 	}

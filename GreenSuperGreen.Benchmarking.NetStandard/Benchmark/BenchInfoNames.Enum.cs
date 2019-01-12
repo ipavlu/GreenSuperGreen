@@ -1,4 +1,7 @@
-﻿namespace GreenSuperGreen.Benchmarking
+﻿// ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+
+namespace GreenSuperGreen.Benchmarking
 {
 	public enum BenchInfoNames
 	{
@@ -17,5 +20,10 @@
 		Throughput_ms = 12,
 		AvgThroughput_ms = 13,
 		MedianThroughput_ms = 14,
+		ResourceName = 15,
+		NameCPU = 16,
+		CoresCPU = 17,
+		VersionOS = 18,
+		NameOS = 19
 	}
 }

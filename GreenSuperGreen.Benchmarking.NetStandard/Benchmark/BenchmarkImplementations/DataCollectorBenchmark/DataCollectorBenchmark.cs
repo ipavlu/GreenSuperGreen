@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using GreenSuperGreen.Diagnostics;
 using GreenSuperGreen.TextWriterReplication;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 	/// <summary>

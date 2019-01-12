@@ -2,14 +2,22 @@
 using GreenSuperGreen.Diagnostics;
 using GreenSuperGreen.TextWriterReplication;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
-	public interface IBenchmarkConfiguration
+	public interface IBenchmarkDataConfiguration
+	{
+		string Name { get; }
+		int ThreadGroups { get; }
+		TimeSpan TimeSpan { get; }
+		long Spins { get; }
+	}
+
+	public interface IBenchmarkConfiguration : IBenchmarkDataConfiguration
 	{
 		IBenchmarkManager BenchmarkManager { get; }
 		IPerfCounterCollectorUC PerfCollector { get; }
-		TimeSpan TimeSpan { get; }
-		long Spins { get; }
 		ITextWriter TextWriter { get; }
 	}
 }

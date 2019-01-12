@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 
+// ReSharper disable RedundantExtendsListEntry
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.TextWriterReplication
 {
 	public interface ITextWriter : IDisposable
@@ -13,7 +16,7 @@ namespace GreenSuperGreen.TextWriterReplication
 		ITextWriter<TInstall> Install<TInstall>(TInstall textWriter, DisposeAncestor disposeAncestor) where TInstall : TextWriter;
 	}
 
-	public interface ITextWriter<T> : ITextWriter, IDisposable
+	public interface ITextWriter<out T> : ITextWriter, IDisposable
 		where T : TextWriter
 	{
 		T TextWriterOfT { get; }

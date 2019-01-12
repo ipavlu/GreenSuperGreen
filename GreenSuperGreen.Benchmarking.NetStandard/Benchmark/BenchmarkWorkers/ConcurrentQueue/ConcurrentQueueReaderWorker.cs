@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Concurrent;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public class ConcurrentQueueReaderWorker : BenchmarkWorker
@@ -10,16 +12,16 @@ namespace GreenSuperGreen.Benchmarking
 		public ConcurrentQueueReaderWorker(
 			ConcurrentQueue<object> queue,
 			IBenchmarkConfiguration benchmarkConfiguration,
-			string pair = null)
-			: base(benchmarkConfiguration)
+			string resourceName,
+			string pair)
+			: base(benchmarkConfiguration, resourceName, pair)
 		{
 			Queue = queue;
 		}
 
 		protected override async Task BenchmarkingTarget()
 		{
-			object rslt;
-			while (!Queue.TryDequeue(out rslt)) { }
+			while (!Queue.TryDequeue(out _)) { }
 			await Task.CompletedTask;
 		}
 	}

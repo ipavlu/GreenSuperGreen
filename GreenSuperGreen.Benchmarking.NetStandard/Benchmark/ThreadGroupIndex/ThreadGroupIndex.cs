@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 	public interface IThreadGroupIndex
@@ -22,7 +24,7 @@ namespace GreenSuperGreen.Benchmarking
 
 		public override int GetHashCode() => Id;
 
-		public override string ToString() => $"{nameof(ThreadGroupIndex)}[{Id}]";
+		public override string ToString() => $"[GrpId:{Id}]";
 
 		public static bool operator ==(ThreadGroupIndex index1, ThreadGroupIndex index2)
 		=> EqualityComparer<ThreadGroupIndex>.Default.Equals(index1, index2)

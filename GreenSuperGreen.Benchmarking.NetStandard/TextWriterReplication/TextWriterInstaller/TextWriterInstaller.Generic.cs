@@ -1,5 +1,7 @@
 ﻿using System.IO;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.TextWriterReplication
 {
 	public class TextWriterInstaller<T> : ATextWriterInstaller<T> where T: TextWriter

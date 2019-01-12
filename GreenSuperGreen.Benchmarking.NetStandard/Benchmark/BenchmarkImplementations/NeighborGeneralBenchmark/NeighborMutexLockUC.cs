@@ -1,5 +1,7 @@
 ﻿using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 #pragma warning disable 618

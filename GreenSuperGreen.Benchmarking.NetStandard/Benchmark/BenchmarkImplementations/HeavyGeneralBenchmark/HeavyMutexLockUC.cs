@@ -1,5 +1,7 @@
 ﻿using GreenSuperGreen.UnifiedConcurrency;
 
+// ReSharper disable CheckNamespace
+
 namespace GreenSuperGreen.Benchmarking
 {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -8,5 +10,4 @@ namespace GreenSuperGreen.Benchmarking
 		public HeavyMutexLockUC(IBenchmarkConfiguration test) : base(test) { }
 	}
 #pragma warning restore CS0618 // Type or member is obsolete
-
 }
