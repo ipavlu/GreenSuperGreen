@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantExtendsListEntry

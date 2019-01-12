@@ -19,9 +19,9 @@ namespace GreenSuperGreen.UnifiedConcurrency
 
 			public bool TrySetResult(EntryBlockUC result)
 			{
-				bool setRslt = TCS.TrySetResult(result);
-				if (StoredTimingProcessorTCS != null && setRslt) TimerProcessorUC.TimerProcessor.UnRegisterAsync(TCS);
-				return setRslt;
+				bool setResult = TCS.TrySetResult(result);
+				if (StoredTimingProcessorTCS != null && setResult) TimerProcessorUC.TimerProcessor.UnRegisterAsync(TCS);
+				return setResult;
 			}
 
 			public static AccessItem NewTCS() => new AccessItem(new TaskCompletionSource<EntryBlockUC>(TaskCreationOptions.RunContinuationsAsynchronously));

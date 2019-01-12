@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 

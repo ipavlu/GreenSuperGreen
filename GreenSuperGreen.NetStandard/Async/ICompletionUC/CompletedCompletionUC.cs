@@ -14,10 +14,10 @@ namespace GreenSuperGreen.Async
 {
 	/// <summary>
 	/// Please note that <see cref="CompletedCompletionUC{TImplementer}"/> implements
-	/// <see cref="ICompletionUC"/> interface, the complete .net awaitable iterface,
+	/// <see cref="ICompletionUC"/> interface, the complete .net awaitable interface,
 	/// it has everything the await keyword needs. Making own awaitable class
 	/// is greatly simplified. This completion is also completed, thus await on this will return
-	/// immediatelly and execution after await will be done synchronously.
+	/// immediately and execution after await will be done synchronously.
 	/// </summary>
 	/// <typeparam name="TImplementer">The class inheriting <see cref="CompletedCompletionUC{TImplementer}"/></typeparam>
 	public class CompletedCompletionUC<TImplementer>

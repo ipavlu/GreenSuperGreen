@@ -10,7 +10,7 @@ namespace GreenSuperGreen.UnifiedConcurrency
 	/// <summary>
 	/// <para/> <see cref="SemaphoreSlimLockUC"/> is based on .Net <see cref="SemaphoreSlim"/>.
 	/// <para/> Does not support recursive call and does not protect against recursive call!
-	/// <para/> Enter and Exit can be done on different threads, but same thread should be preffered...
+	/// <para/> Enter and Exit can be done on different threads, but same thread should be preferred...
 	/// </summary>
 	public class SemaphoreSlimLockUC : ILockUC
 	{

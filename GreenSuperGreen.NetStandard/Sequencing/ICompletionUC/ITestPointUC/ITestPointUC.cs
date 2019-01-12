@@ -1,6 +1,7 @@
 ﻿using System;
 using GreenSuperGreen.Async;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable InconsistentNaming
 // ReSharper disable CheckNamespace
 

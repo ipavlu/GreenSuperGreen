@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable UnusedVariable
 // ReSharper disable InconsistentNaming
@@ -25,7 +27,10 @@ namespace GreenSuperGreen.Reporting
 		ReportTypeUC ReportType { get; }
 		IReportUC<TReportItemEnum> NamesAsValues(bool set = true);
 		IReportUC<TReportItemEnum> NewLine(bool set = true);
-		IReportUC<TReportItemEnum> Report(string report, TReportItemEnum reportItem, ReportActionUC action = ReportActionUC.Update, string appendDelimiter = null);
+		IReportUC<TReportItemEnum> Report(	string report,
+											TReportItemEnum reportItem,
+											ReportActionUC action = ReportActionUC.Update,
+											string appendDelimiter = null);
 		string BuildReport();
 	}
 
@@ -50,29 +55,46 @@ namespace GreenSuperGreen.Reporting
 			private static bool IsNonFlaggedEnum { get; } = !Attribute.IsDefined(EnumType, typeof(FlagsAttribute));
 			private static bool EnumIsOK { get; } = IsInt32 && IsEnum && IsNonFlaggedEnum;
 
+			private static readonly ImmutableArray<TReportItemEnum> OrderedEnumValues = ImmutableArray<TReportItemEnum>.Empty;
+
+			static ReportCVS()
+			{
+				if (!EnumIsOK) return;
+
+				Enum
+				.GetValues(typeof(TReportItemEnum))
+				.Cast<TReportItemEnum>()
+				.Select(key => new KeyValuePair<TReportItemEnum,int>(key, (int)(object)key))
+				.OrderBy(kvp => kvp.Value)
+				.Select(x => x.Key)
+				.ToImmutableArray()
+				.AssignOut(out OrderedEnumValues)
+				;
+			}
+
 			public ReportTypeUC ReportType { get; } = ReportTypeUC.CVS;
 			private bool LineDelimiter { get; set; }
 			private bool UseNamesAsValues { get; set; }
 
 
-			private Dictionary<TReportItemEnum,string> Items { get; } =
-			Enum
-			.GetValues(typeof(TReportItemEnum))
-			.Cast<object>()
-			.OrderBy(en => (int)en)
-			.Select(en => (TReportItemEnum)en)
-			.ToDictionary(en => en, en => (string)null)
-			;
+			private Dictionary<TReportItemEnum, string> Items { get; } = OrderedEnumValues.ToDictionary(x => x, x => (string)null);
 
-			public ReportCVS() { if (!EnumIsOK) throw new InvalidOperationException("Incorrect Enum, must be non flagged enum with underlying type int");}
+			public ReportCVS()
+			{
+				if (EnumIsOK) return;
+				string message = $"Something is wrong with enum type {nameof(TReportItemEnum)}:{EnumType.Name}!";
+				message = !IsEnum ? $"{message}{Environment.NewLine}Type: {EnumType.Name} is not an enum type!" : message;
+				message = IsEnum && !IsNonFlaggedEnum ? $"{message}{Environment.NewLine}EnumType: {EnumType.Name} can not be flagged enum!" : message;
+				message = IsEnum && !IsInt32  ? $"{message}{Environment.NewLine}EnumType: {EnumType.Name} has wrong underlying type {UnderlyingType.Name}: {typeof(int).Name} is required!" : message;
+				throw new  InvalidOperationException(message);
+			}
 
 			public IReportUC<TReportItemEnum> NewLine(bool set = true) { LineDelimiter = set; return this; }
 			public IReportUC<TReportItemEnum> NamesAsValues(bool set = true) { UseNamesAsValues = set; return this; }
 
 			public IReportUC<TReportItemEnum> Report(string report, TReportItemEnum reportItem, ReportActionUC action = ReportActionUC.Update, string appendDelimiter = null)
 			{
-				string current;
-				Items.TryGetValue(reportItem, out current);
+				Items.TryGetValue(reportItem, out var current);
 				appendDelimiter = current == null ? null : appendDelimiter;
 				current = action == ReportActionUC.Update ? report : current;
 				current = action == ReportActionUC.Append ? $"{current}{appendDelimiter}{report}" : current;
@@ -81,11 +103,8 @@ namespace GreenSuperGreen.Reporting
 			}
 
 			public string BuildReport() =>
-			Enum
-			.GetValues(typeof(TReportItemEnum))
-			.Cast<object>()
-			.OrderBy(en => (int) en)
-			.Select(en => UseNamesAsValues ? en.ToString() : Items[(TReportItemEnum)en] ?? string.Empty)
+			OrderedEnumValues
+			.Select(en => UseNamesAsValues ? en.ToString() : Items[en] ?? string.Empty)
 			.Aggregate(string.Empty, (c, n) => string.IsNullOrEmpty(c)? n : $"{c};{n}", str => LineDelimiter? $"{str}{Environment.NewLine}" : str)
 			;
 

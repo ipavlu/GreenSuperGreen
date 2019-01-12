@@ -75,7 +75,7 @@ namespace GreenSuperGreen.Sequencing
 		}
 
 		public void Run(object obj, Action<ISequencerUC,object> action)
-		=> Run(obj, xobj => action(SequencerUC, xobj))
+		=> Run(obj, xObj => action(SequencerUC, xObj))
 		;
 
 		public void Run(object obj, Action<object> action)

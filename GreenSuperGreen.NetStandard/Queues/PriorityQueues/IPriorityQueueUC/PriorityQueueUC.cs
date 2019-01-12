@@ -3,22 +3,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
-// ReSharper disable InvertIf
-// ReSharper disable SuggestVarOrType_SimpleTypes
-// ReSharper disable SuggestVarOrType_BuiltInTypes
-// ReSharper disable LoopCanBeConvertedToQuery
-// ReSharper disable SuggestVarOrType_Elsewhere
-// ReSharper disable ConvertIfStatementToReturnStatement
-// ReSharper disable MemberCanBeProtected.Global
-// ReSharper disable TypeParameterCanBeVariant
 // ReSharper disable UnusedMember.Global
-// ReSharper disable StaticMemberInGenericType
-// ReSharper disable UnusedMember.Local
-// ReSharper disable UnusedMemberInSuper.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable ForCanBeConvertedToForeach
 // ReSharper disable CheckNamespace
-// ReSharper disable InconsistentNaming
 
 namespace GreenSuperGreen.Queues
 {
@@ -95,6 +81,7 @@ namespace GreenSuperGreen.Queues
 		public virtual void Enqueue(TPrioritySelectorEnum prioritySelector, IList<TItem> items)
 		{
 			if (items == null || items.Count <= 0) return;
+			// ReSharper disable once ForCanBeConvertedToForeach
 			for (int i = 0; i < items.Count; ++i)
 			{
 				Enqueue(prioritySelector, items[i]);
@@ -113,14 +100,12 @@ namespace GreenSuperGreen.Queues
 		}
 
 		public virtual bool TryDequeu(out TItem item, TPrioritySelectorEnum? prioritySelector = null)
-		{
-			TPrioritySelectorEnum? priority;
-			return TryDequeu(out item, out priority, prioritySelector);
-		}
+		=> TryDequeu(out item, out _, prioritySelector)
+		;
 
 		/// <summary>
 		/// <para/> if <see cref="prioritySelector"/> is null, then trying dequeue based on descending priorities,
-		/// <para/> if <see cref="prioritySelector"/> is supported value, then overriding descending priorities and taking only from seleced priority,
+		/// <para/> if <see cref="prioritySelector"/> is supported value, then overriding descending priorities and taking only from selected priority,
 		/// <para/> if <see cref="prioritySelector"/> is not supported value => Exception
 		/// </summary>
 		public virtual bool TryDequeu(out TItem item, out TPrioritySelectorEnum? priority, TPrioritySelectorEnum? prioritySelector = null)
@@ -138,6 +123,7 @@ namespace GreenSuperGreen.Queues
 				return false;
 			}
 
+			// ReSharper disable once ForCanBeConvertedToForeach
 			for (int i = 0; i < DescendingPriorities.Length;++i)
 			{
 				if (GetQueue(DescendingPriorities[i]).TryDequeue(out item))
@@ -151,8 +137,7 @@ namespace GreenSuperGreen.Queues
 
 		private string PriorityStatusToString(TPrioritySelectorEnum priority)
 		{
-			ConcurrentQueue<TItem> queue;
-			PriorityQueues.TryGetValue(priority, out queue);
+			PriorityQueues.TryGetValue(priority, out var queue);
 			int cnt = queue?.Count ?? -1;
 			if (queue == null) return $"[{priority}:queue does not exist!]";
 			if (cnt <= 0) return $"[{priority}:empty]";
@@ -175,8 +160,7 @@ namespace GreenSuperGreen.Queues
 		/// <returns></returns>
 		private ConcurrentQueue<TItem> GetQueue(TPrioritySelectorEnum prioritySelector)
 		{
-			ConcurrentQueue<TItem> queue;
-			if (!PriorityQueues.TryGetValue(prioritySelector, out queue))
+			if (!PriorityQueues.TryGetValue(prioritySelector, out var queue))
 			{
 				string msg = $"The value of {nameof(TPrioritySelectorEnum)}.{prioritySelector} is not supported!";
 				Exception ex = new ArgumentException(msg);
@@ -204,6 +188,8 @@ namespace GreenSuperGreen.Queues
 			}
 
 			int cnt = 0;
+			// ReSharper disable once ForCanBeConvertedToForeach
+			// ReSharper disable once LoopCanBeConvertedToQuery
 			for (int i = 0; i < DescendingPriorities.Length; ++i)
 			{
 				cnt += GetQueue(DescendingPriorities[i]).Count;
@@ -225,6 +211,8 @@ namespace GreenSuperGreen.Queues
 				return (GetQueue(prioritySelector.Value).Count) > 0;
 			}
 
+			// ReSharper disable once ForCanBeConvertedToForeach
+			// ReSharper disable once LoopCanBeConvertedToQuery
 			for (int i = 0; i < DescendingPriorities.Length; ++i)
 			{
 				if (GetQueue(DescendingPriorities[i]).Count > 0) return true;

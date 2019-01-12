@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+// ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
 // ReSharper disable RedundantAssignment
 
@@ -26,11 +27,11 @@ namespace GreenSuperGreen
 			return assign;
 		}
 
-		public static IEnumerable<TAssign> Assign<TAssign>(this IEnumerable<TAssign> ienumerable, Action<TAssign> assignAction = null)
+		public static IEnumerable<TAssign> Assign<TAssign>(this IEnumerable<TAssign> enumerable, Action<TAssign> assignAction = null)
 		{
-			if (ienumerable == null) throw new ArgumentNullException(nameof(ienumerable));
+			if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));
 
-			using (IEnumerator<TAssign> enumerator = ienumerable.GetEnumerator())
+			using (IEnumerator<TAssign> enumerator = enumerable.GetEnumerator())
 			{
 				while (enumerator.MoveNext())
 				{

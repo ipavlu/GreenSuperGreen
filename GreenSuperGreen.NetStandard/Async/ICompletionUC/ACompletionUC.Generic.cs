@@ -91,7 +91,7 @@ namespace GreenSuperGreen.Async
 		/// activated by inheritor of awaitable operation when operation is completed,
 		/// signalling that continuation below await keyword can be executed.
 		/// </summary>
-		protected bool SetCompletion(TResult rslt) => TaskCompletionSource.TrySetResult(rslt);
+		protected bool SetCompletion(TResult result) => TaskCompletionSource.TrySetResult(result);
 
 		/// <summary>
 		/// SetException is protected, invisible to interfaces,
