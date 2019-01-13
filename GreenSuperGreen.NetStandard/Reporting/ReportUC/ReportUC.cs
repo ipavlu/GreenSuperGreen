@@ -102,11 +102,15 @@ namespace GreenSuperGreen.Reporting
 				return this;
 			}
 
-			public string BuildReport() =>
-			OrderedEnumValues
-			.Select(en => UseNamesAsValues ? en.ToString() : Items[en] ?? string.Empty)
-			.Aggregate(string.Empty, (c, n) => $"{c};{n}", str => LineDelimiter? $"{str}{Environment.NewLine}" : str)
-			;
+			public string BuildReport()
+			{
+				int i = -1;
+				return
+				OrderedEnumValues
+				.Select(en => UseNamesAsValues ? en.ToString() : Items[en] ?? string.Empty)
+				.Aggregate(string.Empty, (c, n) => ++i == 0 ? $"{n}" : $"{c};{n}", str => LineDelimiter ? $"{str}{Environment.NewLine}" : str)
+				;
+			}
 
 			public override string ToString() => BuildReport();
 		}

@@ -24,8 +24,9 @@ namespace GreenSuperGreen.Benchmarking
 
 		private static void PrintTestMenu() => TestsMenu.WriteLine();
 
-		public static void PrintIntro() => "Enjoy! GreenSuperGreen.Benchmarking.NetStandard ipavlu 2017".WriteLine();
-		public static void PrintExit() => "Exit: GreenSuperGreen.Benchmarking.NetStandard ipavlu 2017".WriteLine();
+		public static string ProductVersionCopyright { get; } = $"{AssemblyInfo.AssemblyInfo.Product.Product} v{AssemblyInfo.AssemblyInfo.Version.Version} {AssemblyInfo.AssemblyInfo.Copyright.Copyright}";
+		public static void PrintIntro() => $"Enjoy! {ProductVersionCopyright}".WriteLine();
+		public static void PrintExit() => $"Exit: {ProductVersionCopyright}".WriteLine();
 
 		public static async Task MainAsync(string[] args)
 		{
