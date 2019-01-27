@@ -68,13 +68,13 @@ https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Pri
 
     <Company>ipavlu</Company>
 
-    <PackageTags>1.2.2</PackageTags>
+    <PackageTags>1.2.3</PackageTags>
 
-    <Version>1.2.2.2</Version>
+    <Version>1.2.3</Version>
 
-    <AssemblyVersion>1.2.2.2</AssemblyVersion>
+    <AssemblyVersion>1.2.3</AssemblyVersion>
 
-    <FileVersion>1.2.2.2</FileVersion>
+    <FileVersion>1.2.3</FileVersion>
 
     <Product>GreenSuperGreen.Benchmarking.Launcher.NetCore</Product>
 
@@ -85,7 +85,7 @@ https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Pri
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.2.2.2" />
+    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.2.3" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
   </ItemGroup>
 </Project>

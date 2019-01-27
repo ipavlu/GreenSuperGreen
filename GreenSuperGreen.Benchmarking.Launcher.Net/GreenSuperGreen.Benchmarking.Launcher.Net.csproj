@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard">
-      <Version>1.2.2.2</Version>
+      <Version>1.2.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
