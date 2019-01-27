@@ -4,7 +4,7 @@
 
 namespace GreenSuperGreen.Benchmarking
 {
-	internal class HeavyTicketSpinLockUC : HeavyGeneralBenchmark<TicketSpinLockUC>
+	public class HeavyTicketSpinLockUC : HeavyGeneralBenchmark<TicketSpinLockUC>
 	{
 		public HeavyTicketSpinLockUC(IBenchmarkConfiguration test) : base(test) { }
 	}

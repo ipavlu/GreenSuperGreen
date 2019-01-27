@@ -4,7 +4,7 @@
 
 namespace GreenSuperGreen.Benchmarking
 {
-	internal class NeighborSemaphoreSlimLockUC : NeighborGeneralBenchmark<SemaphoreSlimLockUC>
+	public class NeighborSemaphoreSlimLockUC : NeighborGeneralBenchmark<SemaphoreSlimLockUC>
 	{
 		public NeighborSemaphoreSlimLockUC(IBenchmarkConfiguration test) : base(test) { }
 	}

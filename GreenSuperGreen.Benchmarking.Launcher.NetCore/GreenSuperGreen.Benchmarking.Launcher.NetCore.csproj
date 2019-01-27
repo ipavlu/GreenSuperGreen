@@ -70,11 +70,11 @@ https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Pri
 
     <PackageTags>1.2.2</PackageTags>
 
-    <Version>1.2.2.1</Version>
+    <Version>1.2.2.2</Version>
 
-    <AssemblyVersion>1.2.2.1</AssemblyVersion>
+    <AssemblyVersion>1.2.2.2</AssemblyVersion>
 
-    <FileVersion>1.2.2.1</FileVersion>
+    <FileVersion>1.2.2.2</FileVersion>
 
     <Product>GreenSuperGreen.Benchmarking.Launcher.NetCore</Product>
 
@@ -85,7 +85,7 @@ https://www.codeproject.com/Articles/1222893/Optionally-Awaitable-Concurrent-Pri
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.2.2.1" />
+    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard" Version="1.2.2.2" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.1" />
   </ItemGroup>
 </Project>

@@ -32,7 +32,7 @@ namespace GreenSuperGreen.Benchmarking
 
 		public static ImmutableArray<IBenchmarkManager> BenchmarkManagersBuilder() =>
 		new List<IBenchmarkManager>()
-		.AddBenchInfo<HeavySequential>("0", Collector.Skip)
+		.AddBenchInfo<HeavySequential>("0", Collector.Collect)
 		.AddBenchInfo<DataCollectorBenchmark>("collect", Collector.Skip)
 
 		.AddBenchInfo<HeavyLockUC>("1", Collector.Collect)

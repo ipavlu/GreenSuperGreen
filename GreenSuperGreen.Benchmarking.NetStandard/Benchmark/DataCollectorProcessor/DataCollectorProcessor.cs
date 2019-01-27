@@ -110,9 +110,9 @@ namespace GreenSuperGreen.Benchmarking
 
 			await Task.Delay(2000);
 
-			IBenchmarkManager sequential = BenchmarkManagersConfig.BenchmarkManagers.FirstOrDefault(x => x.IsSequential);
-			IBenchmarkConfiguration sequentialConfig = new BenchmarkConfiguration(sequential, perfCollector, BenchmarkGlobalSettings.TestingTimeSpan, 1000000, textWriter);
-			await (sequential?.ExecuteBenchmark(sequentialConfig) ?? Task.CompletedTask);
+			//IBenchmarkManager sequential = BenchmarkManagersConfig.BenchmarkManagers.FirstOrDefault(x => x.IsSequential);
+			//IBenchmarkConfiguration sequentialConfig = new BenchmarkConfiguration(sequential, perfCollector, BenchmarkGlobalSettings.TestingTimeSpan, 1000000, textWriter);
+			//await (sequential?.ExecuteBenchmark(sequentialConfig) ?? Task.CompletedTask);
 
 			string.Empty.WriteLine().WriteLine();
 
