@@ -13,6 +13,8 @@ namespace GreenSuperGreen.Benchmarking
 		public static async Task Execute<TSyncPrimitive>(IBenchmark<TSyncPrimitive> benchmark)
 			where TSyncPrimitive : class
 		{
+			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true, compacting: true);
+
 			ReportUC
 			.New<BenchInfoNames>(ReportTypeUC.CVS)
 			.NamesAsValues()
