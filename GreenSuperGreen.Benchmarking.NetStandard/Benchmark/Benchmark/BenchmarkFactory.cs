@@ -1,5 +1,5 @@
 ﻿using System;
-using Concurrent.FastReflection.NetCore;
+using Concurrent.FastReflection.NetStandard;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable CheckNamespace
@@ -20,15 +20,13 @@ namespace GreenSuperGreen.Benchmarking
 
 		public BenchmarkFactory()
 		{
-			var ctor = BenchmarkType.DelegateForCtor<TBenchmark>(typeof(IBenchmarkConfiguration));
+			var ctor = BenchmarkType.DelegateForCtor<TBenchmark>(BenchmarkType.Module, typeof(IBenchmarkConfiguration));
 			ConstructorInvoker = ctor;
 		}
 
 		public IBenchmark GetBenchmark(IBenchmarkConfiguration benchmarkConfiguration)
 		{
-			var aa = ConstructorInvoker?.Invoke(new object[]{ benchmarkConfiguration});
-			var bb = (IBenchmark) aa;
-			return bb;
+			return ConstructorInvoker?.Invoke(new object[] { benchmarkConfiguration });
 		} 
 	}
 }

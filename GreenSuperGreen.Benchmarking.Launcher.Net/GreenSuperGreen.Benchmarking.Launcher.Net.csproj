@@ -9,6 +9,7 @@
     <RootNamespace>GreenSuperGreen.Benchmarking.Launcher</RootNamespace>
     <AssemblyName>GreenSuperGreen.Benchmarking.Launcher.Net</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -48,7 +49,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -71,11 +72,6 @@
     <None Include="package.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard">
-      <Version>1.2.3</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 and x64%29</ProductName>
@@ -86,6 +82,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GreenSuperGreen.Benchmarking.NetStandard">
+      <Version>1.2.6.4</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
