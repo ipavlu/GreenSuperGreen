@@ -10,6 +10,7 @@
     <RootNamespace>GreenSuperGreen</RootNamespace>
     <AssemblyName>GreenSuperGreen.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -99,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GreenSuperGreen">
-      <Version>1.2.3</Version>
+      <Version>1.2.6.1</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
       <Version>1.4.0</Version>

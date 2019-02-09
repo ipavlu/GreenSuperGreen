@@ -4,7 +4,7 @@
     <!--*-->
     <id>GreenSuperGreen.Test</id>
     <!--*-->
-    <version>1.2.3</version>
+    <version>1.2.6.1</version>
     <title>GreenSuperGreen.Test</title>
     <!--*-->
     <authors>ipavlu</authors>
@@ -27,15 +27,15 @@
     <!--*-->
     <releaseNotes>Main development is shifting from Net46 version toward NetStandard version. Net46 version will be maintained as long as compatibility allow.</releaseNotes>
     <copyright>Copyright © ipavlu 2017-2019</copyright>
-    <tags>1.2.3</tags>
+    <tags>1.2.6.1</tags>
     <dependencies>
       <group targetFramework="net46">
-		  <dependency id="GreenSuperGreen" version="1.2.3" />
-		  <dependency id="MSTest.TestAdapter" version="1.4.0" />
-		  <dependency id="NUnit" version="3.11.0" />
-		  <dependency id="NUnit3TestAdapter" version="3.12.0" />
-		  <dependency id="System.Collections.Immutable" version="1.5.0" />
-	  </group>
+        <dependency id="GreenSuperGreen" version="1.2.6.1" />
+        <dependency id="MSTest.TestAdapter" version="1.4.0" />
+        <dependency id="NUnit" version="3.11.0" />
+        <dependency id="NUnit3TestAdapter" version="3.12.0" />
+        <dependency id="System.Collections.Immutable" version="1.5.0" />
+      </group>
     </dependencies>
   </metadata>
 </package>
