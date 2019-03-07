@@ -4,7 +4,7 @@
     <!--*-->
     <id>GreenSuperGreen.Benchmarking.Launcher.Net</id>
     <!--*-->
-    <version>1.2.6.4</version>
+    <version>1.2.6.5</version>
     <title>GreenSuperGreen.Benchmarking.Launcher.Net</title>
     <!--*-->
     <authors>ipavlu</authors>
@@ -45,7 +45,7 @@
     <copyright>Copyright © ipavlu 2017-2019</copyright>
     <tags>1.2.6.1</tags>
     <dependencies>
-      <dependency id="GreenSuperGreen.Benchmarking.NetStandard" version="1.2.6.4" />
+      <dependency id="GreenSuperGreen.Benchmarking.NetStandard" version="1.2.6.5" />
     </dependencies>
   </metadata>
 </package>
