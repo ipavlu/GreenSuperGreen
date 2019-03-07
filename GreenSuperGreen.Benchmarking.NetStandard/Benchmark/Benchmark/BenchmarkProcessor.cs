@@ -92,7 +92,7 @@ namespace GreenSuperGreen.Benchmarking
 							.Report($"{avgSpins}", BenchInfoNames.Spins)
 							.Report($"{avgIterations}", BenchInfoNames.AvgIterations)
 							.ToString())
-			.Aggregate((c, n) => $"{c}{Environment.NewLine}{n}")
+			.Aggregate(string.Empty, (c, n) => string.IsNullOrEmpty(c) ? n : $"{c}{Environment.NewLine}{n}")
 			.WriteLine()
 			;
 
