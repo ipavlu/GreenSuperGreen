@@ -7,19 +7,17 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class MonitorLockEnter : ATestingJob, ITestingJob
+	public sealed class SemaphoreLockUCTryEnter : ATestingJob, ITestingJob
 	{
-		public MonitorLockEnter(int count) : base(count) { }
+		public SemaphoreLockUCTryEnter(int count) : base(count) { }
 
-		#pragma warning disable 618
-			private ILockUC Lock { get; } = new MonitorLockUC();
-		#pragma warning restore 618
+		private ILockUC Lock { get; } = new SemaphoreLockUC();
 
 		protected override bool ExclusiveAccess()
 		{
-			using (EntryBlockUC entry = Lock.Enter())
+			using (EntryBlockUC entry = Lock.TryEnter())
 			{
-				if (!entry.HasEntry) throw new Exception("hmmmmmmmmm");
+				if (!entry.HasEntry) return true;//no entry, keep trying
 				return ProcessExclusively();
 			}
 		}
@@ -30,9 +28,9 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	{
 		/// <summary> About 30 seconds </summary>
 		[Test]
-		public async Task MonitorLockEnterTest()
+		public async Task SemaphoreLockUCTryEnterTest()
 		{
-			using (ITestingJob job = new LockEnter(1000000))
+			using (ITestingJob job = new SemaphoreLockUCTryEnter(10000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

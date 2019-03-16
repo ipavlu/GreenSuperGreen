@@ -7,21 +7,17 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class AsyncLockTryEnterDelay : AAsyncTestingJob, ITestingJob
+	public sealed class AsyncLockUCEnter : ATestingJobAsync, ITestingJob
 	{
-		public int Delay { get; }
-		public AsyncLockTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
+		public AsyncLockUCEnter(int count) : base(count) { }
 
 		private IAsyncLockUC Lock { get; } = new AsyncLockUC();
 
 		protected override async Task<bool> ExclusiveAccess()
 		{
-			using (EntryBlockUC entry = await Lock.TryEnter(Delay))
+			using (EntryBlockUC entry = await Lock.Enter())
 			{
-				if (!entry.HasEntry)
-				{
-					return true;//no entry, keep trying
-				}
+				if (!entry.HasEntry) throw new Exception("should not happen");
 				return ProcessExclusively();
 			}
 		}
@@ -30,11 +26,10 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	[TestFixture]
 	public partial class UnifiedConcurrency
 	{
-		/// <summary> About 15 seconds </summary>
 		[Test]
-		public async Task AsyncLockTryEnterDelayTest()
+		public async Task AsyncLockUCEnterTest()
 		{
-			using (ITestingJob job = new AsyncLockTryEnterDelay(1000000, 1500))
+			using (ITestingJob job = new AsyncLockUCEnter(10000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

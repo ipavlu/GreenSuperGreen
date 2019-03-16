@@ -2,16 +2,12 @@
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using GreenSuperGreen;
 
 // ReSharper disable RedundantExtendsListEntry
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public interface ITestingJob : IDisposable
-	{
-		Task Execute(int tasks);
-	}
-
 	public abstract class ATestingJob : ITestingJob, IDisposable
 	{
 		private ConcurrentQueue<int> Source { get; } = new ConcurrentQueue<int>();
@@ -26,11 +22,11 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 
 		public async Task Execute(int taskCount)
 		{
-			Task[] tasks =
 			Enumerable
 			.Range(0, taskCount)
-			.Select(i => Task.Run(() => TaskExecute()))
+			.Select(i => Task.Run((Action)TaskExecute))
 			.ToArray()
+			.AssignOut(out Task[] tasks)
 			;
 
 			await Task.WhenAll(tasks);
@@ -47,8 +43,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 
 		protected bool ProcessExclusively()
 		{
-			int data;
-			if (Source.TryDequeue(out data))
+			if (Source.TryDequeue(out int data))
 			{
 				Destination.Enqueue(data);
 				return true;
@@ -62,8 +57,7 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 			if (Destination.Count != Count) throw new Exception("Destination count is incorrect!");
 			for (int i = 0; i < Count; i++)
 			{
-				int data;
-				if (!Destination.TryDequeue(out data)) throw new Exception("Destination is missing some data");
+				if (!Destination.TryDequeue(out int data)) throw new Exception("Destination is missing some data");
 				if (data != i) throw new Exception("Locking process has been compromised, non exclusive access!!!");
 			}
 		}

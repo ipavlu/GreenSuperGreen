@@ -7,17 +7,17 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class AsyncLockEnter : AAsyncTestingJob, ITestingJob
+	public sealed class AsyncSemaphoreSlimLockUCEnter : ATestingJobAsync, ITestingJob
 	{
-		public AsyncLockEnter(int count) : base(count) { }
+		public AsyncSemaphoreSlimLockUCEnter(int count) : base(count) { }
 
-		private IAsyncLockUC Lock { get; } = new AsyncLockUC();
+		private IAsyncLockUC Lock { get; } = new AsyncSemaphoreSlimLockUC();
 
 		protected override async Task<bool> ExclusiveAccess()
 		{
 			using (EntryBlockUC entry = await Lock.Enter())
 			{
-				if (!entry.HasEntry) throw new Exception("hmmmmmmmmm");
+				if (!entry.HasEntry) throw new Exception("should not happen");
 				return ProcessExclusively();
 			}
 		}
@@ -27,9 +27,9 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	public partial class UnifiedConcurrency
 	{
 		[Test]
-		public async Task AsyncLockEnterTest()
+		public async Task AsyncSemaphoreSlimLockUCEnterTest()
 		{
-			using (ITestingJob job = new AsyncLockEnter(1000000))
+			using (ITestingJob job = new AsyncSemaphoreSlimLockUCEnter(10000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

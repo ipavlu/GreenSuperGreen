@@ -7,18 +7,16 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class MonitorTryEnterDelay : ATestingJob, ITestingJob
+	public sealed class AsyncLockUCTryEnterDelay : ATestingJobAsync, ITestingJob
 	{
 		public int Delay { get; }
-		public MonitorTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
+		public AsyncLockUCTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
 
-		#pragma warning disable 618
-			private ILockUC Lock { get; } = new MonitorLockUC();
-		#pragma warning restore 618
+		private IAsyncLockUC Lock { get; } = new AsyncLockUC();
 
-		protected override bool ExclusiveAccess()
+		protected override async Task<bool> ExclusiveAccess()
 		{
-			using (EntryBlockUC entry = Lock.TryEnter(Delay))
+			using (EntryBlockUC entry = await Lock.TryEnter(Delay))
 			{
 				if (!entry.HasEntry)
 				{
@@ -32,10 +30,11 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	[TestFixture]
 	public partial class UnifiedConcurrency
 	{
+		/// <summary> About 15 seconds </summary>
 		[Test]
-		public async Task MonitorTryEnterDelayTest()
+		public async Task AsyncLockUCTryEnterDelayTest()
 		{
-			using (ITestingJob job = new MonitorTryEnterDelay(1000000, 15))
+			using (ITestingJob job = new AsyncLockUCTryEnterDelay(10000, 1500))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

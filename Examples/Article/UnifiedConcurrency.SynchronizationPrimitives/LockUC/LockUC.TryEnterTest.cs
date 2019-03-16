@@ -7,16 +7,17 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class SpinLockEnter : ATestingJob, ITestingJob
+	public sealed class LockUCTryEnter : ATestingJob, ITestingJob
 	{
-		public SpinLockEnter(int count) : base(count) { }
+		public LockUCTryEnter(int count) : base(count) { }
 
-		private ILockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new LockUC();
 
 		protected override bool ExclusiveAccess()
 		{
-			using (Lock.Enter())
+			using (EntryBlockUC entry = Lock.TryEnter())
 			{
+				if (!entry.HasEntry) return true;//no entry, keep trying
 				return ProcessExclusively();
 			}
 		}
@@ -25,10 +26,11 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	[TestFixture]
 	public partial class UnifiedConcurrency
 	{
+		/// <summary> About 30 seconds </summary>
 		[Test]
-		public async Task SpinLockEnterTest()
+		public async Task LockUCTryEnterTest()
 		{
-			using (ITestingJob job = new SpinLockEnter(1000000))
+			using (ITestingJob job = new LockUCTryEnter(10000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

@@ -7,18 +7,21 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class SpinLockTryEnterDelay : ATestingJob, ITestingJob
+	public sealed class SemaphoreSlimLockUCTryEnterDelay : ATestingJob, ITestingJob
 	{
 		public int Delay { get; }
-		public SpinLockTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
+		public SemaphoreSlimLockUCTryEnterDelay(int count, int delay) : base(count) { Delay = delay; }
 
-		private ILockUC Lock { get; } = new SpinLockUC();
+		private ILockUC Lock { get; } = new SemaphoreSlimLockUC();
 
 		protected override bool ExclusiveAccess()
 		{
 			using (EntryBlockUC entry = Lock.TryEnter(Delay))
 			{
-				if (!entry.HasEntry) return true;//no entry, keep trying
+				if (!entry.HasEntry)
+				{
+					return true;//no entry, keep trying
+				}
 				return ProcessExclusively();
 			}
 		}
@@ -27,10 +30,11 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	[TestFixture]
 	public partial class UnifiedConcurrency
 	{
+		/// <summary> About 30 seconds </summary>
 		[Test]
-		public async Task SpinLockTryEnterDelayTest()
+		public async Task SemaphoreSlimLockUCTryEnterDelayTest()
 		{
-			using (ITestingJob job = new SpinLockTryEnterDelay(1000000, 15))
+			using (ITestingJob job = new SemaphoreSlimLockUCTryEnterDelay(10000, 15))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

@@ -7,17 +7,17 @@ using NUnit.Framework;
 
 namespace UnifiedConcurrency.SynchronizationPrimitives
 {
-	public sealed class LockEnter : ATestingJob, ITestingJob
+	public sealed class TicketSpinLockUCEnter : ATestingJob, ITestingJob
 	{
-		public LockEnter(int count) : base(count) { }
+		public TicketSpinLockUCEnter(int count) : base(count) { }
 
-		private ILockUC Lock { get; } = new LockUC();
+		private ILockUC Lock { get; } = new TicketSpinLockUC();
 
 		protected override bool ExclusiveAccess()
 		{
 			using (EntryBlockUC entry = Lock.Enter())
 			{
-				if (!entry.HasEntry) throw new Exception("hmmmmmmmmm");
+				if (!entry.HasEntry) throw new Exception("should not happen");
 				return ProcessExclusively();
 			}
 		}
@@ -28,9 +28,9 @@ namespace UnifiedConcurrency.SynchronizationPrimitives
 	{
 		/// <summary> About 30 seconds </summary>
 		[Test]
-		public async Task LockEnterTest()
+		public async Task TicketSpinLockUCEnterTest()
 		{
-			using (ITestingJob job = new LockEnter(1000000))
+			using (ITestingJob job = new TicketSpinLockUCEnter(10000))
 			{
 				await job.Execute(Environment.ProcessorCount);
 			}

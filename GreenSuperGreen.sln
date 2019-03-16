@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Queues", "Queues", "{1037F9B2-6409-42A5-BA90-853F608A112D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Article", "Article", "{63715652-FD2A-44F6-B37E-7EE6FD3ECBDD}"
+	ProjectSection(SolutionItems) = preProject
+		Examples\Article\UnifiedConcurrency.SynchronizationPrimitives\UnifiedConcurrency.SynchronizationPrimitives.sln = Examples\Article\UnifiedConcurrency.SynchronizationPrimitives\UnifiedConcurrency.SynchronizationPrimitives.sln
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenSuperGreen.NetStandard", "GreenSuperGreen.NetStandard\GreenSuperGreen.NetStandard.csproj", "{881233EA-5B90-4FFF-BC28-F2D09DC42325}"
 EndProject
