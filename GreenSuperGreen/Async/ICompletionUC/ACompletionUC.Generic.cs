@@ -1,8 +1,9 @@
-﻿using System;
+﻿using GreenSuperGreen.IdentifierGenerators;
+using System;
 using System.Runtime.CompilerServices;
 using System.Security;
+using System.Threading;
 using System.Threading.Tasks;
-using GreenSuperGreen.IdentifierGenerators;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable InconsistentNaming
@@ -37,6 +38,7 @@ namespace GreenSuperGreen.Async
 		/// blocking forever...
 		/// </summary>
 		private TaskCompletionSource<TResult> TaskCompletionSource { get; }
+		protected Task<TResult> TaskTCS => TaskCompletionSource.Task;
 
 		private ConfiguredTaskAwaitable<TResult>.ConfiguredTaskAwaiter ConfiguredTaskAwaiter { get; }
 
@@ -99,5 +101,21 @@ namespace GreenSuperGreen.Async
 		/// exception will be redirected to await context.
 		/// </summary>
 		protected bool SetException(Exception ex) => TaskCompletionSource.TrySetException(ex);
+
+
+		/// <summary>
+		/// SetCancellation is protected, invisible to interfaces,
+		/// activated by inheritor of awaitable operation when operation is cancelled,
+		/// signalling cancellation
+		/// </summary>
+		protected bool SetCancellation() => TaskCompletionSource.TrySetCanceled();
+
+
+		/// <summary>
+		/// SetCancellation is protected, invisible to interfaces,
+		/// activated by inheritor of awaitable operation when operation is cancelled,
+		/// signalling cancellation
+		/// </summary>
+		protected bool SetCancellation(CancellationToken ctoken) => TaskCompletionSource.TrySetCanceled(ctoken);
 	}
 }
